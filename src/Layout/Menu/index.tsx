@@ -46,8 +46,8 @@ const Menu = () => {
               },
             },
 
-            className: `bg-zinc-200 dark:bg-zinc-700 border-zinc-400 
-            bg-opacity-95 dark:bg-opacity-95 dark:border-zinc-500 border`,
+            className: `bg-zinc-200/95 dark:bg-zinc-700 border-zinc-400 
+            dark:border-zinc-500 border`,
           },
         }}
       />

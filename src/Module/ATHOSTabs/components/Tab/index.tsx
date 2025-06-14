@@ -21,9 +21,15 @@ export const ATTab = (props: TabProps) => {
   const { label, active, isActive, className: clsnm, style: styl } = props;
   const tabRef = useRef<HTMLDivElement>(null);
   const gap = useSelector((state: ATState) => state.ATHOSTabsPropsReducer.gap);
-  const activeTabDimLeft = useSelector((state: ATState) => state.ActiveTabDimReducer.left);
-  const globalClassName = useSelector((state: ATState) => state.ATHOSTabsPropsReducer.className?.tab);
-  const globalTabStyle = useSelector((state: ATState) => state.ATHOSTabsPropsReducer.colors?.tab);
+  const activeTabDimLeft = useSelector(
+    (state: ATState) => state.ActiveTabDimReducer.left
+  );
+  const globalClassName = useSelector(
+    (state: ATState) => state.ATHOSTabsPropsReducer.className?.tab
+  );
+  const globalTabStyle = useSelector(
+    (state: ATState) => state.ATHOSTabsPropsReducer.colors?.tab
+  );
   const style = styl || globalTabStyle;
   const className = clsnm || globalClassName;
 
@@ -31,25 +37,30 @@ export const ATTab = (props: TabProps) => {
 
   useEffect(() => {
     if (isActive && tabRef.current) {
+      const top = tabRef.current.getBoundingClientRect().top;
       const left = tabRef.current.getBoundingClientRect().left;
       const width = tabRef.current.getBoundingClientRect().width;
       const height = tabRef.current.getBoundingClientRect().height;
-      dispatch(setActiveTabDim({ left, width, height }));
+      dispatch(setActiveTabDim({ top, left, width, height }));
       if (activeTabDimLeft && activeTabDimLeft > left) {
         dispatch(swipeLeft());
       } else if (activeTabDimLeft && activeTabDimLeft < left) {
         dispatch(swipeRight());
       }
     }
-  }, [isActive, tabRef.current]);
+  }, [activeTabDimLeft, dispatch, isActive]);
 
   return (
     <div
       style={isActive ? style?.active : style?.default}
       ref={tabRef}
       onClick={active}
-      className={` ${isActive ? `${className?.active}` : `${className?.default}`}
-         !bg-transparent z-10 cursor-pointer transition-colors duration-500 select-none px-3 py-2 ${gap ? "" : "pb-2"}  `}
+      className={` ${
+        isActive ? `${className?.active}` : `${className?.default}`
+      }
+         !bg-transparent z-10 cursor-pointer transition-colors duration-500 select-none px-3 py-2 ${
+           gap ? "" : "pb-2"
+         }  `}
     >
       {label}
     </div>
@@ -57,12 +68,20 @@ export const ATTab = (props: TabProps) => {
 };
 
 export const ATTabOverlay = () => {
-  const activeTabDim = useSelector((state: ATState) => state.ActiveTabDimReducer);
-  const isInited = useSelector((state: ATState) => state.ActiveTabDimReducer.init);
+  const activeTabDim = useSelector(
+    (state: ATState) => state.ActiveTabDimReducer
+  );
+  const isInited = useSelector(
+    (state: ATState) => state.ActiveTabDimReducer.init
+  );
   const gap = useSelector((state: ATState) => state.ATHOSTabsPropsReducer.gap);
   const dispatch = useDispatch();
-  const globalClassName = useSelector((state: ATState) => state.ATHOSTabsPropsReducer.className?.tab);
-  const globalTabStyle = useSelector((state: ATState) => state.ATHOSTabsPropsReducer.colors?.tab);
+  const globalClassName = useSelector(
+    (state: ATState) => state.ATHOSTabsPropsReducer.className?.tab
+  );
+  const globalTabStyle = useSelector(
+    (state: ATState) => state.ATHOSTabsPropsReducer.colors?.tab
+  );
 
   useEffect(() => {
     if (!isInited) {
@@ -70,17 +89,20 @@ export const ATTabOverlay = () => {
         dispatch(setInit());
       }, duration * 1000);
     }
-  }, [isInited]);
+  }, [dispatch, isInited]);
   return (
     <motion.div
       style={globalTabStyle?.active}
       animate={{
+        top: activeTabDim.top,
         left: activeTabDim.left,
         width: activeTabDim.width,
         height: activeTabDim.height,
       }}
       transition={isInited ? transition : { duration: 0 }}
-      className={`${globalClassName?.active} cursor-pointer select-none absolute ${!gap ? "rounded-b-none" : ""} z-0
+      className={`${
+        globalClassName?.active
+      } cursor-pointer select-none absolute ${!gap ? "rounded-b-none" : ""} z-0
     p-2 rounded-xl bg-black`}
     />
   );

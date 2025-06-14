@@ -12,15 +12,15 @@ const ThemeSwitcher = () => {
       onClick={() => dispatch(tooogleTheme())}
       className={`w-16 h-10 flex rounded-full p-1 
 cursor-pointer text-black dark:text-zinc-200 
-bg-yellow-200 dark:bg-slate-800 transition-colors
-bg-opacity-50 border-zinc-300 dark:border-zinc-600 border
+bg-yellow-200 dark:bg-slate-800/50 transition-colors
+ border-zinc-300 dark:border-zinc-600 border
 ${theme === "light" ? "justify-start" : "justify-end"}`}
     >
       <motion.div
         layout
         className="h-full flex items-center justify-center aspect-square rounded-full dark:border-slate-800
-     border-yellow-500 bg-yellow-400 dark:bg-slate-700 
-      bg-opacity-50 transition-colors border dark:text-slate-100 text-slate-700"
+     border-yellow-500 bg-yellow-400/50 dark:bg-slate-700/50 
+       transition-colors border dark:text-slate-100 text-slate-700"
       >
         {theme === "light" ? <FaSun /> : <FaMoon />}
       </motion.div>

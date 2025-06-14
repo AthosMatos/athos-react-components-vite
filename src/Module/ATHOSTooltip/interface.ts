@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 export interface ATHOSTooltipProps {
   children: ReactNode;
   forceOpen?: boolean;
-  position?: "top" | "bottom";
+  position?: "top" | "bottom" | "left" | "right";
   followCursor?: boolean;
   tooltipContent: ReactNode;
   gap?: number;

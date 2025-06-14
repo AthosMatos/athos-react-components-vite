@@ -46,6 +46,8 @@ const useADTCellCol = ({
     (extraColumns?.length && extraCol && extraColumns.find((xc) => xc.id == extraCol.split("-isExtraCol-")[1])?.style) ||
     (colConfig && colConfig[column]?.style);
 
+  const formatter = colConfig && colConfig[column]?.formatter;
+
   const hasExtraCol = useMemo(
     () => !!(extraColumns?.length && extraCol && extraColumns.find((exc) => exc.id == extraCol.split("-isExtraCol-")[1])?.cellComponent),
     [extraColumns, extraCol]
@@ -60,17 +62,19 @@ const useADTCellCol = ({
       row[column].length > maxCharToCut
     ) {
       setShowTooltip(true);
-      return row[column].slice(0, maxCharToCut) + "...";
+      return formatter ? formatter(row[column].slice(0, maxCharToCut) + "...") : row[column].slice(0, maxCharToCut) + "...";
     }
     setShowTooltip(false);
-    return row[column];
+    return formatter ? formatter(row[column]) : row[column];
   }, [startShort, row, column, maxCharToCut, short, hasExtraCol]);
 
   const cell = useMemo(() => {
     if (hasExtraCol) {
-      return extraColumns?.find((exc) => exc.id == extraCol.split("-isExtraCol-")[1])?.cellComponent?.(row);
+      return extraColumns
+        ?.find((exc) => exc.id == extraCol.split("-isExtraCol-")[1])
+        ?.cellComponent?.(formatter ? formatter(row[column]) : row[column]);
     } else if (colConfig && colConfig[column]?.cellComponent) {
-      return colConfig[column]?.cellComponent(row);
+      return colConfig[column]?.cellComponent(formatter ? formatter(row[column]) : row[column]);
     }
     const customColumns = customCols?.find((col) => col.newLabel === column)?.render?.(row);
     return customColumns || rowValue;

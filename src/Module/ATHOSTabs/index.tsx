@@ -16,7 +16,7 @@ const AT = (props: ATHOSTabsProps) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setProps(props));
-  }, [props]);
+  }, [dispatch, props]);
   return (
     <motion.div
       className="flex flex-col"
@@ -31,20 +31,32 @@ const AT = (props: ATHOSTabsProps) => {
         gap: props.gap,
       }}
     >
-      <div className="flex">
-        {props.tabs.map((tab, index) => (
+      <div className="flex w-full justify-between">
+        <div className="flex flex-wrap">
+          {props.tabs.map((tab, index) => (
+            <ATTab
+              key={index}
+              label={tab.title.component || tab.title.value}
+              active={() => setActiveTab(index)}
+              isActive={activeTab === index}
+              className={tab.title.className}
+              style={tab.title.style}
+            />
+          ))}
+          {props.tabs.length > 0 && <ATTabOverlay />}
+        </div>
+        {props.addTab && (
           <ATTab
-            key={index}
-            label={tab.title.value}
-            active={() => setActiveTab(index)}
-            isActive={activeTab === index}
-            className={tab.title.className}
-            style={tab.title.style}
+            label={props.addTab.icon}
+            active={() => props.addTab?.onClick?.()}
+            isActive={false}
+            className={{ default: props.addTab.className }}
           />
-        ))}
-        <ATTabOverlay />
+        )}
       </div>
-      <ATBody gap={props.gap} activeTab={activeTab} />
+      {props.tabs.length > 0 && (
+        <ATBody gap={props.gap} activeTab={activeTab} />
+      )}
     </motion.div>
   );
 };

@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { PagingState as FilteringState, PageSizesType } from "./interfaces";
+import { FilteringState, PageSizesType } from "./interfaces";
+import { applyAllFilters } from "./utils";
 
 const initialState: FilteringState = {
   filteredData: [],
@@ -11,33 +12,64 @@ const initialState: FilteringState = {
   columnOrder: [],
   orderSorted: { column: null, state: -1 },
   defaultDataOrder: [],
+  preFilteredData: [],
+  baseData: [],
+  rowFilters: {},
+  currencyFilters: {},
+  dateFilters: {},
 };
 
 const Slice = createSlice({
   name: "ADTFilteredProps",
   initialState,
   reducers: {
-    filterBySearch: (
-      state,
-      action: PayloadAction<{
-        searchFilter: string;
-        data: any[];
-      }>
-    ) => {
-      const { searchFilter, data } = action.payload;
-      state.searchFilter = searchFilter;
+    filterByDate: (state, action: PayloadAction<{ column: string; values: { min: string; max: string } }>) => {
       state.page = 1;
-      const start = 0;
-      const end = state.pageSize;
-      const filtered = data
-        ?.filter((row) => {
-          return Object.values(row).some((value: any) => {
-            return value.toString().toLowerCase().includes(searchFilter.toLowerCase());
-          });
-        })
-        .slice(start, end);
-      state.filteredData = filtered;
+      state.dateFilters[action.payload.column] = action.payload.values;
+      const filtered = applyAllFilters(state);
+      state.preFilteredData = filtered;
+      state.filteredData = filtered.slice(0, state.pageSize);
     },
+
+    filterByRowCurrency: (state, action: PayloadAction<{ column: string; values: { min: string; max: string } }>) => {
+      state.page = 1;
+      state.currencyFilters[action.payload.column] = action.payload.values;
+      const filtered = applyAllFilters(state);
+      state.preFilteredData = filtered;
+      state.filteredData = filtered.slice(0, state.pageSize);
+    },
+
+    filterByRowValue: (state, action: PayloadAction<{ column: string; values: any[] }>) => {
+      state.page = 1;
+      const { column, values } = action.payload;
+      if (values.length === 0) {
+        delete state.rowFilters[column];
+      } else {
+        state.rowFilters[column] = values;
+      }
+      const filtered = applyAllFilters(state);
+      state.preFilteredData = filtered;
+      state.filteredData = filtered.slice(0, state.pageSize);
+    },
+
+    filterBySearch: (state, action: PayloadAction<string>) => {
+      state.page = 1;
+      state.searchFilter = action.payload;
+      const filtered = applyAllFilters(state);
+      state.preFilteredData = filtered;
+      state.filteredData = filtered.slice(0, state.pageSize);
+    },
+
+    resetAllFilters: (state) => {
+      state.page = 1;
+      state.preFilteredData = state.baseData;
+      state.filteredData = state.baseData.slice(0, state.pageSize);
+      state.rowFilters = {};
+      state.currencyFilters = {};
+      state.dateFilters = {};
+      state.searchFilter = "";
+    },
+
     movePage: (
       state,
       action: PayloadAction<{
@@ -46,19 +78,18 @@ const Slice = createSlice({
         page: number;
         canGoForward: boolean;
         canGoBack: boolean;
-        data: any[];
       }>
     ) => {
       // if (state.movingPage) return;
 
-      const { to, totalPages, page, canGoBack, canGoForward, data } = action.payload;
+      const { to, totalPages, page, canGoBack, canGoForward } = action.payload;
       if (to === page) return;
 
       if (typeof to === "number" && to > 0 && to <= totalPages) {
         state.page = to;
         const start = (to - 1) * state.pageSize;
         const end = start + state.pageSize;
-        const filter = data.slice(start, end);
+        const filter = state.preFilteredData.slice(start, end);
         state.filteredData = filter;
 
         return;
@@ -75,7 +106,7 @@ const Slice = createSlice({
         state.page -= 1;
       }
       const end = start + state.pageSize;
-      const filter = data.slice(start, end);
+      const filter = state.preFilteredData.slice(start, end);
       state.filteredData = filter;
     },
     changePageSize: (state, action: PayloadAction<PageSizesType>) => {
@@ -85,6 +116,12 @@ const Slice = createSlice({
       const start = (state.page - 1) * state.pageSize;
       const end = start + state.pageSize;
       state.filteredData = action.payload.slice(start, end);
+    },
+    setPreFilteredData: (state, action: PayloadAction<any[]>) => {
+      state.preFilteredData = action.payload;
+    },
+    setBaseData: (state, action: PayloadAction<any[]>) => {
+      state.baseData = action.payload;
     },
     setFilteredColumns: (state, action: PayloadAction<any[]>) => {
       state.filteredColumns = action.payload;
@@ -105,17 +142,14 @@ const Slice = createSlice({
         state.filteredColumns = state.columnOrder.filter((col) => newCols.includes(col));
       }
     },
-    sortDataByColumn: (
-      state,
-      action: PayloadAction<{
-        column: string;
-        data: any[];
-      }>
-    ) => {
+    resetColumns: (state) => {
+      state.filteredColumns = state.columnOrder;
+    },
+    sortDataByColumn: (state, action: PayloadAction<string>) => {
       const filter = () => {
         const start = (state.page - 1) * state.pageSize;
         const end = start + state.pageSize;
-        const sorted = [...data].sort((a, b) => {
+        const sorted = [...state.preFilteredData].sort((a, b) => {
           const A = a[column];
           const B = b[column];
           if (A < B) return -1;
@@ -126,7 +160,7 @@ const Slice = createSlice({
       };
 
       //order states, -1 = not sorted, 0 = ascending, 1 = descending
-      const { column: col, data } = action.payload;
+      const col = action.payload;
       let column = col;
       if (col.includes("-isExtraCol-")) {
         column = col.split("-isExtraCol-")[0];
@@ -159,12 +193,18 @@ export const {
   filterBySearch,
   setFilteredData,
   movePage,
+  resetColumns,
   filterColumns,
   setFilteredColumns,
   changePageSize,
   setFirstOpen,
-
+  setPreFilteredData,
+  setBaseData,
   sortDataByColumn,
+  filterByRowValue,
+  filterByRowCurrency,
+  filterByDate,
+  resetAllFilters,
 } = Slice.actions;
 
 const ADTFilteringReducer = Slice.reducer;

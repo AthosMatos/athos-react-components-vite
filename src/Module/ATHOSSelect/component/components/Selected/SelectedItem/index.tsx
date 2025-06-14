@@ -12,7 +12,8 @@ const SelectedItem = ({
   lastSelected?: boolean;
 }) => {
   const { updating, multiSelectLabelClassName } = useATHOSSelectContext();
-  const multiSelClass = "py-1 px-2 rounded-md text-sm w-max " + multiSelectLabelClassName;
+  const multiSelClass =
+    "py-1 px-2 rounded-md text-sm w-max " + multiSelectLabelClassName;
   const defaultClassName = `flex cursor-pointer select-none`;
 
   return (
@@ -23,7 +24,11 @@ const SelectedItem = ({
       layout={"preserve-aspect"}
       className={`${defaultClassName} ${isMultiSelect ? multiSelClass : ""}`}
     >
-      {updating && lastSelected ? <VscLoading className="animate-spin" /> : children}
+      {updating && lastSelected ? (
+        <VscLoading className="animate-spin" />
+      ) : (
+        children
+      )}
     </motion.div>
   );
 };

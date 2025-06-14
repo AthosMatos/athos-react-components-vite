@@ -10,9 +10,15 @@ interface ATBodyProps {
 
 const ATBody = (props: ATBodyProps) => {
   const { activeTab, gap } = props;
-  const body = useSelector((state: ATState) => state.ATHOSTabsPropsReducer.tabs[activeTab]?.content);
-  const globalBodyClassName = useSelector((state: ATState) => state.ATHOSTabsPropsReducer.className?.body);
-  const globalBodyStyle = useSelector((state: ATState) => state.ATHOSTabsPropsReducer.colors?.body);
+  const body = useSelector(
+    (state: ATState) => state.ATHOSTabsPropsReducer.tabs[activeTab]?.content
+  );
+  const globalBodyClassName = useSelector(
+    (state: ATState) => state.ATHOSTabsPropsReducer.className?.body
+  );
+  const globalBodyStyle = useSelector(
+    (state: ATState) => state.ATHOSTabsPropsReducer.colors?.body
+  );
   const className = body?.className || globalBodyClassName;
   const style = body?.style || globalBodyStyle;
   // const swipeDir = useSelector((state: ATState) => state.BodyDirReducer.direction);
@@ -70,7 +76,7 @@ const ATBody = (props: ATBodyProps) => {
     >
       <AnimatePresence mode="wait">
         <motion.div key={activeTab} {...Anim} transition={transition}>
-          {body?.value}
+          {body?.component || body?.value}
         </motion.div>
       </AnimatePresence>
     </motion.div>

@@ -1,4 +1,5 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, Dispatch, SetStateAction, useContext, useEffect, useMemo, useState } from "react";
+
 import { ATHOSColors } from "../../../colors/colors";
 import { ATHOSInputProps } from "../interfaces";
 
@@ -10,12 +11,12 @@ interface ATHOSInputContextProps {
   outlineColor: string;
   textColor: string;
   iconColor: string;
-  setIsFocused: (value: boolean) => void;
-  setIsHovered: (value: boolean) => void;
-  setShowPassword: (value: boolean) => void;
-  setChecked: (value: boolean) => void;
-  setFiles: (value: FileList | null) => void;
-  setHasEdited: (value: boolean) => void;
+  setIsFocused: Dispatch<SetStateAction<boolean>>;
+  setIsHovered: Dispatch<SetStateAction<boolean>>;
+  setShowPassword: Dispatch<SetStateAction<boolean>>;
+  setChecked: Dispatch<SetStateAction<boolean>>;
+  setFiles: Dispatch<SetStateAction<FileList | null>>;
+  setHasEdited: Dispatch<SetStateAction<boolean>>;
   files: FileList | null;
   updating: boolean;
   isHovered: boolean;
@@ -27,13 +28,19 @@ interface ATHOSInputContextProps {
 const ATHOSInputContext = createContext({} as ATHOSInputContextProps);
 
 export const ATHOSInputProvider = ({ children, props }: { children: React.ReactNode; props: ATHOSInputProps }) => {
-  const { error, colors: styles, isSubmitting, onblur: blur, onfocus: focus, disabled } = props;
+  const { error, type, colors: styles, isSubmitting, onblur: blur, onfocus: focus, disabled } = props;
   const [isFocused, setIsFocused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [hasEdited, setHasEdited] = useState(false);
   const [updating, setUpdating] = useState(false);
   const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    if (props.type === "check") {
+      setChecked(!!props.value);
+    }
+  }, [props.value, props.type]);
 
   const [files, setFiles] = useState<FileList | null>(null);
   const onFocus = () => {
@@ -94,12 +101,13 @@ export const ATHOSInputProvider = ({ children, props }: { children: React.ReactN
 
   const backgroundColor = useMemo(() => {
     const defaultColor = styles?.backgroundColor || ATHOSColors.gray.lighter;
+    if (checked) return styles?.check?.borderColor || ATHOSColors.red.light;
     if (disabled) return styles?.disabled?.backgroundColor || ATHOSColors.gray.light_2;
-    if (hasError) ATHOSColors.red.default;
+    if (hasError) return ATHOSColors.red.default;
     if (isFocused) return styles?.focused?.backgroundColor || defaultColor;
     if (isHovered) return styles?.hover?.backgroundColor || defaultColor;
     return defaultColor;
-  }, [hasError, isFocused, isHovered, styles, disabled]);
+  }, [hasError, isFocused, isHovered, styles, disabled, checked]);
 
   const outlineColor = useMemo(() => {
     const defaultColor = styles?.borderColor || ATHOSColors.gray.light;
@@ -112,12 +120,13 @@ export const ATHOSInputProvider = ({ children, props }: { children: React.ReactN
 
   const textColor = useMemo(() => {
     const defaultColor = styles?.textColor || ATHOSColors.gray.dark;
+    if (type === "check") return styles?.check?.centerColor || ATHOSColors.white.eggshell;
     if (disabled) return styles?.disabled?.textColor || ATHOSColors.gray.default;
     if (hasError) return ATHOSColors.red.default;
     if (isFocused) return styles?.focused?.textColor || defaultColor;
     if (isHovered) return styles?.hover?.textColor || defaultColor;
     return defaultColor;
-  }, [hasError, isFocused, isHovered, styles, disabled]);
+  }, [hasError, isFocused, isHovered, styles, disabled, type]);
 
   const iconColor = useMemo(() => {
     const defaultColor = styles?.iconColor || ATHOSColors.gray.dark;

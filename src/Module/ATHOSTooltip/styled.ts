@@ -11,5 +11,5 @@ export const ATTooltipWrapper = styled(motion.div)`
   font-size: 0.9rem;
   padding: 0.5rem;
   border-radius: 0.3rem;
-  z-index: 9999;
+  z-index: 999999999999999;
 `;

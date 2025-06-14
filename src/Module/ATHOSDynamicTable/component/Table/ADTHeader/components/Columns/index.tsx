@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
-import { FaFilter } from "react-icons/fa";
+import { FaColumns } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { ATHOSPopUp } from "../../../../../../ATHOSPopUp/component";
 import { ADTState } from "../../../../redux/store";
-import { ItemWrapper, ListWrapperClassname } from "../../styledWrappers";
+import { ButtonWrapper, ListWrapperClassname } from "../../styledWrappers";
 import ColGroup from "./ColGroup";
 
 const ADTColumnsFilter = () => {
@@ -12,7 +12,7 @@ const ADTColumnsFilter = () => {
   const { columns, filteredColumns, name } = useSelector((state: ADTState) => ({
     columns: state.ADTPropsReducer.columns,
     filteredColumns: state.ADTFilteringReducer.filteredColumns,
-    name: state.ADTPropsReducer.tableFilterName,
+    name: state.ADTPropsReducer.tableColFilterName,
   }));
 
   const activeCols = useMemo(() => columns?.filter((col) => filteredColumns.includes(col)) || [], [columns, filteredColumns]);
@@ -21,12 +21,12 @@ const ADTColumnsFilter = () => {
 
   return (
     <ATHOSPopUp
-      position="left-top"
+      position="bottom-right"
       onToggle={(isOpen) => setIsOpen(isOpen)}
-      contentWrapperClassName={ListWrapperClassname}
-      content={<ColGroup cols={cols} isOn={(col) => filteredColumns.includes(col)} />}
+      contentWrapperClassName={`${ListWrapperClassname} bg-white/85 dark:bg-zinc-800`}
+      content={<ColGroup activeCols={activeCols.length} cols={cols} />}
     >
-      <ItemWrapper open={isOpen} label={name || "Filtrar Colunas"} icon={<FaFilter size={16} />} />
+      <ButtonWrapper open={isOpen} label={name || "Colunas"} icon={<FaColumns size={16} />} />
     </ATHOSPopUp>
   );
 };

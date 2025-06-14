@@ -10,7 +10,7 @@ export type GlobalConfig = {
   maxWidth?: number; //implement
   minWidth?: number; //implement
   minColWidthToShort?: number; //imrpove add stages like short, medium, long
-  cellComponent?: (cell: any) => React.ReactNode;
+  cellComponent?: (cell: ReactNode) => React.ReactNode;
 };
 export type SpecificColConfig = {
   maxCharToCut?: number;
@@ -18,7 +18,8 @@ export type SpecificColConfig = {
   maxWidth?: number; //implement
   minWidth?: number; //implement
   minColWidthToShort?: number; //imrpove add stages like short, medium, long
-  cellComponent?: (cell: any) => React.ReactNode;
+  cellComponent?: (cell: ReactNode) => React.ReactNode;
+  formatter?: (value: any) => ReactNode;
 } & TdefaultStyles;
 
 export type ExtraColConfig<T> = {
@@ -29,7 +30,7 @@ export type ExtraColConfig<T> = {
   maxWidth?: number; //implement
   minWidth?: number; //implement
   minColWidthToShort?: number; //imrpove add stages like short, medium, long
-  cellComponent?: (cell: any) => React.ReactNode;
+  cellComponent?: (cell: ReactNode) => React.ReactNode;
 } & TdefaultStyles;
 
 export type ADTLabelI<T> = {
@@ -105,7 +106,12 @@ export type TableStyle<T> = {
     rowSpacingColor?: string;
     selectedIconColor?: string;
   };
-
+  header?: {
+    color?: {
+      value?: string;
+      className?: string;
+    };
+  };
   cellTextColor?: {
     global?: string;
     specific?: CellColumnTextTableStyle<T> & CellColumnTextTableStyleCustomLabelADD;
@@ -114,6 +120,7 @@ export type TableStyle<T> = {
     global?: string;
     specific?: ColumnTextTableStyle<T> & ColumnTextTableStyleCustomLabelADD;
   };
+  highlightColor?: string;
 };
 
 /* type HeaderStyle = {
@@ -137,6 +144,16 @@ type FooterStyle = {
     extraPages?: TdefaultStyles;
   };
 }; */
+
+export type FilterConfig = {
+  isDateRange?: boolean;
+  isValueRange?: boolean;
+};
+
+type TableColFilter<T> = {
+  [key in keyof T]?: FilterConfig | boolean;
+};
+
 type ResizableConfig = {
   autoBorder?: boolean;
 };
@@ -149,7 +166,8 @@ export type DynamicTableProps<T> = {
       onClick: (selectedData: T[]) => void;
     }[];
   };
-  tableFilterName?: string;
+  tableColFilterName?: string;
+  colsToFilter?: TableColFilter<T>;
   loading?: boolean | string;
   boldColumns?: boolean;
   wrapperClassName?: string;

@@ -1,6 +1,6 @@
 import CodeWrapper from "../../../components/CodeWrapper";
 
-import { ATHOSTabs } from "../../ATHOSTabs";
+import { ATHOSTabs } from "../../ATHOSSwitcher/ATHOSTabs";
 import { ATHOSCollapse } from "../component";
 import { collapsecodestrings } from "./codeStrings";
 import { Docs } from "./docs";

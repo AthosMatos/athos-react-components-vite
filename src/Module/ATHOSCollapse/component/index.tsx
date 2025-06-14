@@ -19,6 +19,7 @@ interface ATHOSCollapseProps {
   toggleOnWrapperClick?: boolean;
   fade?: boolean;
   hideOnClickOutside?: boolean;
+  forceOpen?: boolean;
 }
 
 const variants = {
@@ -86,6 +87,7 @@ export const ATHOSCollapse = ({
   toggleOnWrapperClick,
   fade,
   hideOnClickOutside,
+  forceOpen,
 }: ATHOSCollapseProps) => {
   const [isOpen, setIsOpen] = useState(initialOpen || false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -130,6 +132,12 @@ export const ATHOSCollapse = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (forceOpen !== undefined) {
+      setIsOpen(forceOpen);
+    }
+  }, [forceOpen]);
+
   return (
     <motion.div
       style={{
@@ -159,7 +167,7 @@ export const ATHOSCollapse = ({
             ? variants.leftandrightWithFade
             : variants.leftandright
         }
-        className="flex overflow-hidden"
+        className={`flex overflow-hidden`}
         transition={CollapseTransition}
       >
         <div className={`min-w-max min-h-max ${collapsedClassName}`}>{collpasedComponent}</div>

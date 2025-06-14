@@ -95,7 +95,7 @@ const ATHOSDropDownPage = () => {
               setIsOpened(isOpen);
             }}
             className="bg-zinc-800 border border-zinc-600 p-1"
-            labelClassName="text-zinc-200 p-2 rounded-md hover:bg-zinc-700 transition-all active:bg-zinc-600 active:scale-95"
+            listButtonsClassName="text-zinc-200 p-2 rounded-md hover:bg-zinc-700 transition-all active:bg-zinc-600 active:scale-95"
           >
             <div className="bg-zinc-500 p-2">{isOpened ? "Click to Open" : "Click to Close"}</div>
           </ATHOSDropDown>
@@ -140,7 +140,7 @@ const ATHOSDropDownPage = () => {
               setIsOpened(isOpen);
             }}
             className="bg-zinc-800 border border-zinc-600 p-1"
-            labelClassName="text-zinc-200 w-max p-2 rounded-md hover:bg-zinc-700 transition-all active:bg-zinc-600 active:scale-95"
+            listButtonsClassName="text-zinc-200 w-max p-2 rounded-md hover:bg-zinc-700 transition-all active:bg-zinc-600 active:scale-95"
           >
             <div className="bg-zinc-500 p-2">{isOpened ? "Click to Open" : "Click to Close"}</div>
           </ATHOSDropDown>

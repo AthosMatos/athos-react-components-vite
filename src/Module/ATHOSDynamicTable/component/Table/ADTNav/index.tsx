@@ -17,7 +17,7 @@ const PageButton = ({ num, move, selected }: { num: number | string; move: (to: 
   return (
     <p
       onClick={() => {
-        typeof num == "number" && move(num);
+        if (typeof num == "number") move(num);
       }}
       className={`flex 
         text-zinc-600 dark:text-zinc-300
@@ -49,7 +49,8 @@ const NavButton = ({ onClick, children, disabled }: NavButtonProps) => {
 };
 
 const ADTNav = () => {
-  const { totalItems, page, pageSize, data } = useSelectors_ADTNav();
+  const { page, pageSize } = useSelectors_ADTNav();
+  const totalItems = useSelector((state: ADTState) => state.ADTFilteringReducer.preFilteredData.length);
   const dispatch = useDispatch();
   const canGoForward = useMemo(() => page * pageSize < totalItems, [totalItems, page, pageSize]);
   const canGoBack = useMemo(() => page > 1, [page]);
@@ -72,7 +73,6 @@ const ADTNav = () => {
         page,
         to,
         totalPages,
-        data,
       })
     );
   };
@@ -117,6 +117,7 @@ const ADTNav = () => {
                   <PageButton key={num} move={move} num={num} selected={num === page} />
                 ) : (
                   <ATHOSPopUp
+                    key={num}
                     content={
                       <div className="flex flex-col gap-2 dark:bg-black bg-zinc-200 p-2 rounded-md border border-zinc-300  border-opacity-40">
                         <div>
@@ -134,7 +135,7 @@ const ADTNav = () => {
                         </div>
                         <div className="max-w-48 overflow-auto">
                           <div className="flex gap-1 w-fit ">
-                            {pagesInBetween.map((pib, i) => (
+                            {pagesInBetween.map((pib) => (
                               <PageButton key={pib} move={move} num={pib} selected={pib === page} />
                             ))}
                           </div>

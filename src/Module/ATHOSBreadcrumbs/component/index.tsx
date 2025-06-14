@@ -44,7 +44,7 @@ const ATHOSBreadcrumbs = () => {
                 buttonClassName={`transition-[padding] outline outline-1 outline-b-0 ${
                   isOpen ? "bg-zinc-100 outline-zinc-300 px-2" : "outline-transparent"
                 } py-1 ${isOpen ? "rounded-t-lg" : "rounded-lg"}`}
-                labelClassName="px-2 py-1 rounded-md outline-1 outline"
+                listButtonsClassName="px-2 py-1 rounded-md outline-1 outline"
                 labels={item.dropdown.map((opt) => {
                   return {
                     label: opt.label,

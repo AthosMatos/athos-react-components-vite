@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { ATHOSDropDown } from "../../../../../../ATHOSDropDown/component";
 import { LabelI } from "../../../../../../ATHOSDropDown/component/interfaces";
 import { ADTState } from "../../../../redux/store";
-import { ItemWrapper, ListButtonClassname, ListWrapperClassname } from "../../styledWrappers";
+import { ButtonWrapper, ListBgWrapperClassname, ListButtonClassname } from "../../styledWrappers";
 
 const ADTSelectedFuncs = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,18 +22,50 @@ const ADTSelectedFuncs = () => {
     funcs &&
     funcs.length > 0 && (
       <ATHOSDropDown
-        position="left-top"
+        disabled={selectedData.length === 0}
+        position="bottom-right"
+        matchChildrenWidth
         onToggle={(isOpen) => setIsOpen(isOpen)}
         labels={funcs?.map((func) => {
           return { label: func.label, onClick: () => func.onClick(selectedData) } as LabelI;
         })}
-        className={ListWrapperClassname}
-        labelClassName={ListButtonClassname}
+        className={ListBgWrapperClassname}
+        listButtonsClassName={ListButtonClassname}
       >
-        <ItemWrapper open={isOpen} label={name || "Funcionalidades em Lote"} icon={<FaLayerGroup size={16} />} />
+        <ButtonWrapper open={isOpen} label={name || "Funcionalidades em Lote"} icon={<FaLayerGroup size={16} />} />
       </ATHOSDropDown>
     )
   );
 };
 
 export default ADTSelectedFuncs;
+
+interface ADTDefaultSelectedFuncsPropsBase {
+  children?: React.ReactNode;
+}
+
+interface ADTDefaultSelectedFuncsPropsLabels extends ADTDefaultSelectedFuncsPropsBase {
+  labels: LabelI[];
+}
+interface ADTDefaultSelectedFuncsPropsCols extends ADTDefaultSelectedFuncsPropsBase {
+  cols: LabelI[][];
+}
+type ADTDefaultSelectedFuncsProps = ADTDefaultSelectedFuncsPropsLabels | ADTDefaultSelectedFuncsPropsCols;
+
+export const ADTDefaultSelectedFuncs = (props: ADTDefaultSelectedFuncsProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const dropdownProps = "labels" in props ? { labels: props.labels } : { cols: props.cols };
+
+  return (
+    <ATHOSDropDown
+      position="left-top"
+      onToggle={(isOpen) => setIsOpen(isOpen)}
+      {...dropdownProps}
+      className={ListBgWrapperClassname}
+      listButtonsClassName={ListButtonClassname}
+    >
+      <ButtonWrapper open={isOpen} icon={props.children} />
+    </ATHOSDropDown>
+  );
+};

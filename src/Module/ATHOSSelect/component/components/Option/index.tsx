@@ -17,7 +17,7 @@ interface ListItemI {
   isLastSelected: boolean;
 }
 
-const ListItem = ({
+const Option = ({
   option,
   onClick,
   isOpened,
@@ -47,7 +47,7 @@ const ListItem = ({
         isSelected ? selectedClassName : ""
       }`}
     >
-      {option.label}
+      {option.component || option.label}
       <AnimatePresence>
         {isSelected ? (
           updating && isLastSelected ? (
@@ -63,4 +63,4 @@ const ListItem = ({
   );
 };
 
-export default ListItem;
+export default Option;

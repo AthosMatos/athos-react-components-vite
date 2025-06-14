@@ -10,29 +10,30 @@ interface SInputProps {
   onChange: (event: any) => void;
   wRef?: any;
 }
-/* 
-${
-    openSearch
-      ? `w-2/5 max-w-[300px] px-2 focus:bg-snow 
-  bg-zinc-50 border
-   border-zinc-200 opacity-100`
-      : "hidden"
-  }
-*/
+
 const SInput = ({ onChange, wRef }: SInputProps) => {
+  const searchFilter = useSelector((state: ADTState) => state.ADTFilteringReducer.searchFilter);
   return (
     <motion.input
+      value={searchFilter}
       ref={wRef}
       placeholder="Search"
       onChange={onChange}
-      className={`rounded-md transition-colors outline-none h-9 max-w-[300px] 
+      className={`rounded-lg transition-colors outline-none h-9 max-w-[300px] 
         bg-transparent 
-        focus:bg-zinc-200 dark:focus:bg-zinc-800
+         dark:focus:bg-zinc-800
          border
-        border-zinc-200 dark:border-zinc-600 focus:border-zinc-300`}
-      initial={{ width: 0, opacity: 0, paddingLeft: 0, paddingRight: 0 }}
-      animate={{ width: "clamp(100px,66%,300px)", opacity: 1, paddingLeft: "0.5rem", paddingRight: "0.5rem" }}
-      exit={{ width: 0, opacity: 0, paddingLeft: 0, paddingRight: 0 }}
+        border-zinc-200 dark:border-zinc-600 focus:border-zinc-400`}
+      initial={{ width: 0, opacity: 0, paddingLeft: 0, paddingRight: 0, marginLeft: 0, marginRight: 0 }}
+      animate={{
+        width: "clamp(100px,66%,300px)",
+        opacity: 1,
+        paddingLeft: "0.5rem",
+        paddingRight: "0.5rem",
+        marginLeft: "0.5rem",
+        marginRight: "0.5rem",
+      }}
+      exit={{ width: 0, opacity: 0, paddingLeft: 0, paddingRight: 0, marginLeft: 0, marginRight: 0 }}
       transition={{
         duration: 0.53,
         ease: "easeOut",
@@ -47,7 +48,6 @@ export const ADTSearch = memo(() => {
   const toggleSearch = () => {
     setOpenSearch(!openSearch);
   };
-  const data = useSelector((state: ADTState) => state.ADTPropsReducer.data);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -59,19 +59,7 @@ export const ADTSearch = memo(() => {
   return (
     <>
       <AnimatePresence>
-        {openSearch && (
-          <SInput
-            wRef={inputRef}
-            onChange={(event) =>
-              dispatch(
-                filterBySearch({
-                  data,
-                  searchFilter: event.target.value,
-                })
-              )
-            }
-          />
-        )}
+        {openSearch && <SInput wRef={inputRef} onChange={(event) => dispatch(filterBySearch(event.target.value))} />}
       </AnimatePresence>
       <IconWrapper open={openSearch} onClick={toggleSearch}>
         <FaSearch className="text-base" />
@@ -79,3 +67,5 @@ export const ADTSearch = memo(() => {
     </>
   );
 });
+
+ADTSearch.displayName = "ADTSearch";

@@ -1,4 +1,6 @@
+import { AnimatePresence } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { ATHOSTooltipProps } from "./interface";
 import { ATTooltipWrapper } from "./styled";
 
@@ -7,6 +9,8 @@ export const ATHOSTooltip = (props: ATHOSTooltipProps) => {
   const [open, setOpen] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const childRef = useRef<HTMLDivElement>(null);
+  // Store the last cursor position
+  const lastCursorPosition = useRef<{ x: number; y: number } | null>(null);
 
   const FollowChildPos = (mousePageX: number, mousePageY: number) => {
     if (!childRef.current || !tooltipRef.current) {
@@ -25,6 +29,9 @@ export const ATHOSTooltip = (props: ATHOSTooltipProps) => {
     const compensateY = mousePageY - tooltipRect.height + gap;
 
     if (followCursor) {
+      // Store the current cursor position
+      lastCursorPosition.current = { x: mousePageX, y: mousePageY };
+
       if (compensateY > 0) tooltipRef.current.style.top = `${compensateY}px`;
       if (compensateX > 0) tooltipRef.current.style.left = `${compensateX}px`;
     } else {
@@ -58,6 +65,19 @@ export const ATHOSTooltip = (props: ATHOSTooltipProps) => {
       return;
     }
 
+    // If following cursor and we have a last cursor position, use it
+    if (followCursor && lastCursorPosition.current) {
+      const { x: mouseX, y: mouseY } = lastCursorPosition.current;
+      const tooltipRect = tooltipRef.current.getBoundingClientRect();
+      const compensateX = mouseX - tooltipRect.width / 2;
+      const compensateY = mouseY - tooltipRect.height + gap;
+
+      if (compensateY > 0) tooltipRef.current.style.top = `${compensateY}px`;
+      if (compensateX > 0) tooltipRef.current.style.left = `${compensateX}px`;
+      return;
+    }
+
+    // Fallback to original positioning logic
     const childRect = childRef.current.getBoundingClientRect();
     const tooltipRect = tooltipRef.current.getBoundingClientRect();
 
@@ -95,18 +115,23 @@ export const ATHOSTooltip = (props: ATHOSTooltipProps) => {
 
   return (
     <>
-      {(forceOpen || open) && (
-        <ATTooltipWrapper
-          initial={{ opacity: 0 }}
-          transition={{ duration: 0.14 }}
-          /* exit={{ opacity: 0 }} */
-          animate={{ opacity: 1 }}
-          ref={tooltipRef}
-          className={className}
-          style={style}
-        >
-          {tooltipContent}
-        </ATTooltipWrapper>
+      {createPortal(
+        <AnimatePresence>
+          {(forceOpen || open) && (
+            <ATTooltipWrapper
+              initial={{ opacity: 0 }}
+              transition={{ duration: 0.14 }}
+              exit={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              ref={tooltipRef}
+              className={className}
+              style={style}
+            >
+              {tooltipContent}
+            </ATTooltipWrapper>
+          )}
+        </AnimatePresence>,
+        document.body
       )}
 
       <div

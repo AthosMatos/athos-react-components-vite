@@ -1,6 +1,5 @@
 import { FaSearch } from "react-icons/fa";
 import { ATHOSInput } from "../../../../ATHOSInput/component";
-import { ATHOSColors } from "../../../../colors/colors";
 import { useATHOSSelectContext } from "../../context";
 
 const SearchBar = () => {
@@ -9,7 +8,7 @@ const SearchBar = () => {
     searchValue,
     setSearchValue,
   } = useATHOSSelectContext();
-
+  if (typeof search === "boolean") return null;
   return (
     <ATHOSInput
       innerPadding={{
@@ -19,11 +18,8 @@ const SearchBar = () => {
       icon={<FaSearch />}
       placeholder={search?.placeholder || "Procurar"}
       className={`rounded-lg sticky top-0 z-10 w-full`}
-      colors={{
-        borderColor: search?.borderColor || "transparent",
-        textColor: search?.textColor || ATHOSColors.gray.darker,
-        backgroundColor: search?.backgroundColor || "#F6F6F6",
-      }}
+      inputClassName={search?.className}
+      colors={search?.colors}
       onChange={(e) => {
         setSearchValue(e.target.value);
       }}

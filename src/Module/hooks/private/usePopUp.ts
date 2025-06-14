@@ -89,3 +89,5 @@ export const usePopUp = ({ position = "top", matchChildrenWidth = false, spacing
   }, [isOpened]);
   return { id, pos, gap, childRef, contentRef, setIsOpened, isOpened };
 };
+
+export type usePopUpHookReturn = ReturnType<typeof usePopUp>;

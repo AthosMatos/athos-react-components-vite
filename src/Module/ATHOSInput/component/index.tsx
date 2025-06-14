@@ -1,7 +1,7 @@
 import { ATHOSInputProps } from "./interfaces";
 import { AIWrapper } from "./styled";
 
-import { useMemo, useRef } from "react";
+import { useMemo } from "react";
 import { v4 } from "uuid";
 import { ATHOSInputProvider } from "./context";
 import { Input } from "./sections/input";
@@ -16,7 +16,12 @@ export const ATHOSInput = (props: ATHOSInputProps) => {
 
   return (
     <ATHOSInputProvider props={{ ...props, id }}>
-      <AIWrapper className={`${props.className} ${props.type === "check" ? "justify-center" : ""}`} style={props.style}>
+      <AIWrapper
+        className={`${props.className} ${
+          props.type === "check" ? "justify-center" : ""
+        }`}
+        style={props.style}
+      >
         <Label />
         <Input />
       </AIWrapper>

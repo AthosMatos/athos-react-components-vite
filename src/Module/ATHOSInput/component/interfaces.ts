@@ -1,5 +1,9 @@
 export interface ATHOSInputStyles {
   borderColor?: string;
+  check?: {
+    borderColor?: string;
+    centerColor?: string;
+  };
   backgroundColor?: string;
   textColor?: string;
   iconColor?: string;
@@ -37,7 +41,8 @@ export type ATHOSInputType =
   | "file"
   | "check";
 
-export interface ATHOSInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface ATHOSInputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   type?: ATHOSInputType;
   label?: string;
   error?: string;
@@ -45,9 +50,12 @@ export interface ATHOSInputProps extends React.InputHTMLAttributes<HTMLInputElem
   colors?: ATHOSInputStyles;
   onblur?: () => void | Promise<void>;
   onfocus?: () => void | Promise<void>;
+  onCheck?: (checked: boolean) => void | Promise<void>;
   isSubmitting?: boolean;
   innerPadding?: {
     vertical?: string;
     horizontal?: string;
   };
+  inputClassName?: string;
+  inputWrapperClassName?: string;
 }

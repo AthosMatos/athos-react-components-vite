@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { IoMenu } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { v4 } from "uuid";
 import { AppState } from "../../../main";
-import { ATHOSDropDown } from "../../ATHOSDropDown/component";
 import { ATHOSInput } from "../../ATHOSInput/component";
 import { ATHOSDynamicTable } from "../component";
+import { ADTDefaultSelectedFuncs } from "../component/Table/ADTHeader/components/SelectedFuncs";
 import { rd } from "./data";
 import { tdata } from "./data-CC71BNrg8tmzETG2KjpiS";
 
@@ -39,6 +38,8 @@ const ComarcaComponent = ({
   );
 };
 
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { ATHOSColors } from "../../colors/colors";
 const ATHOSDynamicTablePage = () => {
   const theme = useSelector((state: AppState) => state.ThemeReducer.theme);
   const isDark = theme === "dark";
@@ -82,61 +83,54 @@ const ATHOSDynamicTablePage = () => {
         loading={loading ? "Carregando..." : loading}
         extraCellColumns={[
           {
-            label: "Ações",
-            component: (compdata) => {
-              const [isOpen, setIsOpen] = useState(false);
-              return (
-                <ATHOSDropDown
-                  onToggle={(isOpen) => setIsOpen(isOpen)}
-                  position="left-top"
-                  className="bg-white border dark:bg-smooth-dark-grey p-1 rounded-md flex flex-col dark:border-zinc-600 gap-1 dark:bg-zinc-900 dark:bg-opacity-80 backdrop-blur-md"
-                  buttonClassName={`p-1 self-center justify-self-center text-base rounded-md 
-                    ${isOpen ? "bg-black bg-opacity-5 dark:bg-white dark:bg-opacity-10" : ""}`}
-                  labelClassName="bg-zinc-100 transition-colors w-full dark:bg-zinc-800 p-2 rounded-md border border-transparent hover:border-zinc-300 dark:hover:border-zinc-600"
-                  cols={[
-                    [
-                      {
-                        label: "Remover",
-                        onClick: () => {
-                          const newData = data.filter((dt) => dt.id !== compdata.id);
-                          setData(newData);
-                        },
-                      },
-                    ],
-                    [
-                      {
-                        label: "Adicionar",
-                        onClick: () => {
-                          const newData = data.map((dt) => (dt.id === compdata.id ? { ...dt, name: "edited" } : dt));
-                          setData(newData);
-                        },
-                      },
-                    ],
-                  ]}
-                >
-                  <IoMenu />
-                </ATHOSDropDown>
-              );
-            },
+            //label: "Ações",
+            component: (compdata) => (
+              <ADTDefaultSelectedFuncs
+                labels={[
+                  {
+                    label: "Remover",
+                    onClick: () => {
+                      const newData = data.filter((dt) => dt.id !== compdata.id);
+                      setData(newData);
+                    },
+                  },
+                  {
+                    label: "Adicionar",
+                    onClick: () => {
+                      const newData = [...data, { id: v4(), name: "new" }] as any;
+                      setData(newData);
+                    },
+                  },
+                ]}
+              >
+                <BsThreeDotsVertical />
+              </ADTDefaultSelectedFuncs>
+            ),
           },
         ]}
-        customColumns={[
+        /* customColumns={[
           {
             newLabel: "New Label",
             colsToGet: ["address", "currency", "email"],
             index: 1,
-            render: (data) => {
+            render: () => {
               //console.log("data", data);
               return <div>Custom Col</div>;
             },
           },
-        ]}
+        ]} */
         persistPrimaryColumn={{
           backgroundColor: isDark ? "rgb(41, 41, 41)" : "rgba(233, 233, 233)",
           borderColor: isDark ? "rgba(255, 255, 255, 0.13)" : "rgba(0, 0, 0, 0.13)",
         }}
         // persistPrimaryColumn={false}
         boldColumns
+        colsToFilter={{
+          address: true,
+          country: true,
+          currency: { isValueRange: true },
+          email: true,
+        }}
         tableSelectedFuncs={{
           funcs: [
             {
@@ -149,7 +143,7 @@ const ATHOSDynamicTablePage = () => {
             },
             {
               label: "Adicionar",
-              onClick: (selectedData) => {
+              onClick: () => {
                 const newData = [...data, { id: v4(), name: "new" }] as any;
                 setData(newData);
               },
@@ -167,12 +161,18 @@ const ATHOSDynamicTablePage = () => {
           },
         }}
         tableStyle={{
+          highlightColor: ATHOSColors.aqua.default,
           selected: {
             rowColor: "#e2f1f0",
             rowBorderColor: "#a1d4ce",
             selectedIconColor: "#1FB5AD",
             rowSpacingColor: !isDark ? "rgb(255, 255, 255)" : "rgb(19, 19, 19)",
             rowTextColor: "#1FB5AD",
+          },
+          header: {
+            color: {
+              className: "text-zinc-400 dark:text-white",
+            },
           },
         }}
         //paddingInCells={"0.4rem"}
@@ -183,6 +183,9 @@ const ATHOSDynamicTablePage = () => {
       />
 
       <ATHOSDynamicTable
+        colsToFilter={{
+          dtDataHoraEnvio: { isDateRange: true },
+        }}
         //boldColumns
         selectedRowsToast={{
           containerColor: {
@@ -204,6 +207,14 @@ const ATHOSDynamicTablePage = () => {
         globalConfig={{
           maxCharToCut: 10,
           minColWidthToShort: 150,
+        }}
+        colConfig={{
+          dtDataHoraEnvio: {
+            formatter: (value) => {
+              const date = new Date(value);
+              return date.toLocaleDateString("pt-BR");
+            },
+          },
         }}
         extraCellColumns={[
           {
@@ -242,7 +253,7 @@ const ATHOSDynamicTablePage = () => {
             column: "txNumero",
             label: "N T",
             cellComponent: (data) => {
-              return <div className="bg-red-500 text-zinc-200">{data.txNumero}</div>;
+              return <div className="bg-red-500 text-zinc-200">{data}</div>;
             },
           },
           {

@@ -1,21 +1,21 @@
 import { useATHOSSelectContext } from "../../context";
 import { ATHOSSelectPropsList } from "../../intefaces";
-import ListItem from "../ListItem";
+import Option from "../Option";
 
-const Labels = (props: ATHOSSelectPropsList) => {
-  const { labelClassName, labelsStyle } = props;
+const Options = (props: ATHOSSelectPropsList) => {
+  const { optionClassName, labelsStyle } = props;
   const { select, labels, selectedItems: selected, isOpened, setLastSelected, lastSelected } = useATHOSSelectContext();
 
   return (
     <>
       {labels?.map((option) => (
-        <ListItem
+        <Option
           isOpened={isOpened}
           key={option.value}
           selectedClassName={props.selectedLabelClassName}
           selectedStyle={props.selectedLabelStyle}
           style={labelsStyle}
-          className={labelClassName}
+          className={optionClassName}
           option={option}
           onClick={() => {
             select(option.value);
@@ -29,4 +29,4 @@ const Labels = (props: ATHOSSelectPropsList) => {
   );
 };
 
-export default Labels;
+export default Options;

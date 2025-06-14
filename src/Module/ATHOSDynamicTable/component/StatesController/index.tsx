@@ -4,7 +4,7 @@ import { v4 } from "uuid";
 import { fillIds } from "../../../utils/data-utils";
 import { DynamicTableProps } from "../interfaces";
 import { setTotalItems } from "../redux/CustomStates/provider";
-import { setFilteredColumns, setFilteredData } from "../redux/Filtering/provider";
+import { setBaseData, setFilteredColumns, setFilteredData, setPreFilteredData } from "../redux/Filtering/provider";
 import { ADTPropsState } from "../redux/props/interfaces";
 import { fillADTProps, setColumns } from "../redux/props/provider";
 
@@ -78,6 +78,8 @@ export function ADTStatesController<T>({ props }: { props: DynamicTableProps<T> 
       dispatch(setColumns(columns));
       dispatch(setTotalItems(data.length));
       dispatch(setFilteredData(dataWithIds));
+      dispatch(setPreFilteredData(dataWithIds));
+      dispatch(setBaseData(dataWithIds));
     }
   }, [columns]);
 }

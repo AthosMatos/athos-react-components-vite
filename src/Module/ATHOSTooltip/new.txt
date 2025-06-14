@@ -1,0 +1,28 @@
+import { useMemo } from "react";
+import type { ATHOSTooltipProps } from "./interface";
+
+export const ATHOSTooltip = (props: ATHOSTooltipProps) => {
+  const { children, forceOpen, position = "top", followCursor, tooltipContent, gap = 2, className, style } = props;
+
+  const tooltipPosition = useMemo(() => {
+    switch (position) {
+      case "top":
+        return "tooltip-top";
+      case "bottom":
+        return "tooltip-bottom";
+      case "left":
+        return "tooltip-left";
+      case "right":
+        return "tooltip-right";
+      default:
+        return "tooltip-top";
+    }
+  }, [position]);
+
+  return (
+    <div className={`tooltip ${forceOpen ? "tooltip-open" : ""} ${className || ""} ${tooltipPosition}`} style={{ ...style, gap }}>
+      <div className="tooltip-content">{tooltipContent}</div>
+      {children}
+    </div>
+  );
+};

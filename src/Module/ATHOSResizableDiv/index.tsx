@@ -57,7 +57,10 @@ export const ATHOSResizableDiv = (props: ResizableDivProps) => {
           e.currentTarget.style.cursor = "default";
         }}
         className={`${props.outerClassName} !relative`}
-        style={props.OuterContainerStyle}
+        style={{
+          ...props.OuterContainerStyle,
+          userSelect: toogle && isDown ? "none" : "auto",
+        }}
       >
         <RDWrapper className={props.className} style={props.style}>
           {props.children}

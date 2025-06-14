@@ -1,11 +1,12 @@
+"use client";
+
 import { AnimatePresence, motion } from "motion/react";
-import { useRef } from "react";
 import { CgSpinner } from "react-icons/cg";
 import { FaFile } from "react-icons/fa";
 import { useATHOSInputContext } from "../context";
 import { AIEyeIcon, AIEyeOffIcon, AIIconWrapper, AIInput, AIInputWrapper, AILockIcon, AIUserIcon } from "../styled";
 
-const AnimLoading = motion(CgSpinner);
+const AnimLoading = motion.create(CgSpinner);
 const variants = {
   closed: {
     opacity: 0,
@@ -44,27 +45,31 @@ export const Input = () => {
     textColor,
     checked,
   } = useATHOSInputContext();
-  const { disabled, placeholder, icon, type, innerPadding, value, onChange, onFocus, onBlur, id } = props;
-  const inputRef = useRef<HTMLInputElement>(null);
+  const {
+    disabled,
+    placeholder,
+    icon,
+    type,
+    innerPadding,
+    value,
+    onChange,
+    onFocus,
+    onBlur,
+    onCheck,
+    id,
+    inputClassName,
+    inputWrapperClassName,
+  } = props;
+
   return (
     <AIInputWrapper
       paddingHorizontal={innerPadding?.horizontal}
       onClick={(e) => {
-        type == "check" && setChecked(!checked);
-        /*  if (isFocused) {
-          inputRef.current?.blur();
-          setIsFocused(false);
-        } else {
-          inputRef.current?.focus();
-          setIsFocused(true);
-        } */
+        if (type == "check") {
+          setChecked(!checked);
+          if (onCheck) onCheck(!checked);
+        }
       }}
-      /* onFocus={() => {
-        alert("focus");
-      }}
-      onBlur={() => {
-        alert("blur");
-      }} */
       disabled={disabled}
       error={hasError}
       focused={isFocused}
@@ -72,8 +77,8 @@ export const Input = () => {
       outlineColor={outlineColor}
       textColor={textColor}
       className={`select-none ${type === "check" ? "!rounded-full aspect-square !cursor-pointer" : ""} ${
-        checked ? "transition-colors !bg-red-500" : ""
-      } ${type === "file" ? "!pr-0" : ""} `}
+        checked ? "transition-colors" : ""
+      } ${type === "file" ? "!pr-0" : ""} ${inputWrapperClassName}`}
     >
       <div
         style={{
@@ -85,7 +90,13 @@ export const Input = () => {
       >
         {type === "check" ? (
           checked && (
-            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} className="bg-white w-full h-full rounded-full" />
+            <motion.div
+              style={{ backgroundColor: textColor }}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0 }}
+              className="w-full h-full rounded-full"
+            />
           )
         ) : (
           <>
@@ -117,7 +128,7 @@ export const Input = () => {
               id={id}
               //ref={inputRef}
               disabled={disabled}
-              className="w-full"
+              className={`w-full ${inputClassName}`}
               value={value}
               onChange={(e) => {
                 onChange && onChange(e);

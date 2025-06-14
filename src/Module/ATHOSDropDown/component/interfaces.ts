@@ -6,13 +6,14 @@ interface ATHOSDDDPPBaseProps {
   position?: PopUpPosition;
   style?: React.CSSProperties;
   className?: string;
-  labelClassName?: string;
+  listButtonsClassName?: string;
   labelsStyle?: React.CSSProperties;
   spacing?: number;
   matchChildrenWidth?: boolean;
   onToggle?: (isOpen: boolean) => void;
   buttonClassName?: string;
   buttonStyle?: CSSProperties;
+  disabled?: boolean;
 }
 
 export interface LabelI {

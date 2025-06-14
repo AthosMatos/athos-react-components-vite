@@ -10,7 +10,7 @@ import ADTBorder from "./ADTBorder";
 import ColOrderFilter from "./ColOrderFilter";
 
 const ADTCol = ({ column, index }: { column: string; index: number }) => {
-  const { colConfig, persistPrimaryColumn, spacingBetweenColumns, extraColumns, tableStyle, boldHeader, paddingHeader, tableName, data } =
+  const { colConfig, persistPrimaryColumn, spacingBetweenColumns, extraColumns, tableStyle, boldHeader, paddingHeader, tableName } =
     useSelector((state: ADTState) => ({
       spacingBetweenColumns: state.ADTPropsReducer.spacingBetweenColumns,
       persistPrimaryColumn: state.ADTPropsReducer.persistPrimaryColumn,
@@ -19,7 +19,6 @@ const ADTCol = ({ column, index }: { column: string; index: number }) => {
       tableName: state.ADTPropsReducer.tableName,
       paddingHeader: state.ADTPropsReducer.spacingHeader,
       boldHeader: state.ADTPropsReducer.boldColumns,
-      data: state.ADTPropsReducer.data,
       extraColumns: state.ADTPropsReducer.extraColumns,
     }));
   const globalConfig = useSelector((state: ADTState) => state.ADTPropsReducer.globalConfig);
@@ -73,7 +72,7 @@ const ADTCol = ({ column, index }: { column: string; index: number }) => {
   const dispatch = useDispatch();
 
   const sort = () => {
-    dispatch(sortDataByColumn({ column, data }));
+    dispatch(sortDataByColumn(column));
   };
 
   const setcolshort = (short: boolean) => {
