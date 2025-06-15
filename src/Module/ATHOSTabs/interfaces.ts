@@ -1,4 +1,4 @@
-import { JSX, ReactNode } from "react";
+import { ReactNode } from "react";
 interface TabClassNameProps {
   default?: string;
   active?: string;
@@ -11,13 +11,11 @@ export interface TabColorsProps {
 export interface ATHOSTabProps {
   title: {
     value?: ReactNode;
-    component?: JSX.Element;
     className?: TabClassNameProps;
     style?: TabColorsProps;
   };
   content: {
     value?: ReactNode;
-    component?: JSX.Element;
     className?: string;
     style?: React.CSSProperties;
   };

@@ -13,6 +13,8 @@ interface SInputProps {
 
 const SInput = ({ onChange, wRef }: SInputProps) => {
   const searchFilter = useSelector((state: ADTState) => state.ADTFilteringReducer.searchFilter);
+  const colors = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.header?.functionsColors?.body?.search);
+
   return (
     <motion.input
       value={searchFilter}
@@ -20,10 +22,7 @@ const SInput = ({ onChange, wRef }: SInputProps) => {
       placeholder="Search"
       onChange={onChange}
       className={`rounded-lg transition-colors outline-none h-9 max-w-[300px] 
-        bg-transparent 
-         dark:focus:bg-zinc-800
-         border
-        border-zinc-200 dark:border-zinc-600 focus:border-zinc-400`}
+        ${colors?.className} `}
       initial={{ width: 0, opacity: 0, paddingLeft: 0, paddingRight: 0, marginLeft: 0, marginRight: 0 }}
       animate={{
         width: "clamp(100px,66%,300px)",
@@ -49,6 +48,7 @@ export const ADTSearch = memo(() => {
     setOpenSearch(!openSearch);
   };
   const inputRef = useRef<HTMLInputElement>(null);
+  const colors = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.header?.functionsColors?.icons);
 
   useEffect(() => {
     if (openSearch) {
@@ -62,7 +62,7 @@ export const ADTSearch = memo(() => {
         {openSearch && <SInput wRef={inputRef} onChange={(event) => dispatch(filterBySearch(event.target.value))} />}
       </AnimatePresence>
       <IconWrapper open={openSearch} onClick={toggleSearch}>
-        <FaSearch className="text-base" />
+        <FaSearch className={`text-base ${colors?.className}`} />
       </IconWrapper>
     </>
   );

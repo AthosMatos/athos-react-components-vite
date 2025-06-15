@@ -15,10 +15,18 @@ interface TabProps {
     default?: string;
   };
   style?: TabColorsProps;
+  isExtra?: boolean;
 }
 
 export const ATTab = (props: TabProps) => {
-  const { label, active, isActive, className: clsnm, style: styl } = props;
+  const {
+    label,
+    active,
+    isActive,
+    className: clsnm,
+    style: styl,
+    isExtra,
+  } = props;
   const tabRef = useRef<HTMLDivElement>(null);
   const gap = useSelector((state: ATState) => state.ATHOSTabsPropsReducer.gap);
   const activeTabDimLeft = useSelector(
@@ -58,9 +66,11 @@ export const ATTab = (props: TabProps) => {
       className={` ${
         isActive ? `${className?.active}` : `${className?.default}`
       }
-         !bg-transparent z-10 cursor-pointer transition-colors duration-500 select-none px-3 py-2 ${
-           gap ? "" : "pb-2"
-         }  `}
+         ${
+           isExtra ? "" : "!bg-transparent"
+         } z-10 cursor-pointer transition-colors duration-500 select-none px-3 py-2 ${
+        gap ? "" : "pb-2"
+      }  `}
     >
       {label}
     </div>

@@ -36,7 +36,7 @@ const AT = (props: ATHOSTabsProps) => {
           {props.tabs.map((tab, index) => (
             <ATTab
               key={index}
-              label={tab.title.component || tab.title.value}
+              label={tab.title.value}
               active={() => setActiveTab(index)}
               isActive={activeTab === index}
               className={tab.title.className}
@@ -51,6 +51,7 @@ const AT = (props: ATHOSTabsProps) => {
             active={() => props.addTab?.onClick?.()}
             isActive={false}
             className={{ default: props.addTab.className }}
+            isExtra
           />
         )}
       </div>

@@ -10,17 +10,17 @@ import ADTSelectedFuncs from "./components/SelectedFuncs";
 const ADTHeader = () => {
   const loading = useSelector((state: ADTState) => state.ADTPropsReducer.loading);
   const dataLen = useSelector((state: ADTState) => state.ADTPropsReducer.data)?.length;
-  const className = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.header?.color?.className);
-  const color = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.header?.color?.value);
+  const iconsColors = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.header?.functionsColors?.icons);
+
   return (
-    <div className="flex mb-2 justify-between">
+    <div className={`flex mb-2 justify-between ${iconsColors?.className || "text-zinc-300"}`}>
       <ADTInfo />
       {dataLen > 0 && !loading && (
         <div
           style={{
-            color: color,
+            color: iconsColors?.style?.color,
           }}
-          className={`flex flex-wrap ${className || "text-zinc-300"} select-none flex-1 justify-end items-center`}
+          className={`flex flex-wrap select-none flex-1 justify-end items-center`}
         >
           <ADTSelectedFuncs />
           <ADTColumnsFilter />

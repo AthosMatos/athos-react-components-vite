@@ -76,7 +76,7 @@ const ATBody = (props: ATBodyProps) => {
     >
       <AnimatePresence mode="wait">
         <motion.div key={activeTab} {...Anim} transition={transition}>
-          {body?.component || body?.value}
+          {body?.value}
         </motion.div>
       </AnimatePresence>
     </motion.div>

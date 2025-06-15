@@ -12,12 +12,13 @@ const ADTFilter = () => {
   const { name } = useSelector((state: ADTState) => ({
     name: state.ADTPropsReducer.tableColFilterName,
   }));
+  const colors = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.header?.functionsColors?.body);
 
   return (
     <ATHOSPopUp
       position="bottom-right"
       onToggle={(isOpen) => setIsOpen(isOpen)}
-      contentWrapperClassName={`${ListWrapperClassname} bg-white/85 dark:bg-zinc-800`}
+      contentWrapperClassName={`${ListWrapperClassname} ${colors?.className}`}
       content={<Filter />}
     >
       <ButtonWrapper open={isOpen} label={name || "Filtros"} icon={<FaFilter size={16} />} />

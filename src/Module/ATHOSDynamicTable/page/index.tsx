@@ -170,7 +170,7 @@ const ATHOSDynamicTablePage = () => {
             rowTextColor: "#1FB5AD",
           },
           header: {
-            color: {
+            functionsColors: {
               className: "text-zinc-400 dark:text-white",
             },
           },

@@ -107,10 +107,20 @@ export type TableStyle<T> = {
     selectedIconColor?: string;
   };
   header?: {
-    color?: {
-      value?: string;
-      className?: string;
+    functionsColors?: {
+      icons: TdefaultStyles & {
+        open?: TdefaultStyles;
+      };
+      body?: TdefaultStyles & {
+        itemsAmount?: TdefaultStyles;
+        itemsAmountLabel?: TdefaultStyles;
+        clearFilters?: TdefaultStyles;
+        listItem?: TdefaultStyles;
+        search?: TdefaultStyles;
+      };
     };
+    title?: TdefaultStyles;
+    subtitle?: TdefaultStyles;
   };
   cellTextColor?: {
     global?: string;
