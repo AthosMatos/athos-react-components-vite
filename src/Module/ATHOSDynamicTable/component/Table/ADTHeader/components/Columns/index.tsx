@@ -18,12 +18,13 @@ const ADTColumnsFilter = () => {
   const activeCols = useMemo(() => columns?.filter((col) => filteredColumns.includes(col)) || [], [columns, filteredColumns]);
   const inactiveCols = useMemo(() => columns?.filter((col) => !filteredColumns.includes(col)) || [], [columns, filteredColumns]);
   const cols = useMemo(() => [...activeCols, ...inactiveCols], [activeCols, inactiveCols]);
+  const colors = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.header?.functionsColors?.body);
 
   return (
     <ATHOSPopUp
       position="bottom-right"
       onToggle={(isOpen) => setIsOpen(isOpen)}
-      contentWrapperClassName={`${ListWrapperClassname} bg-white/85 dark:bg-zinc-800`}
+      contentWrapperClassName={`${ListWrapperClassname} ${colors?.className}`}
       content={<ColGroup activeCols={activeCols.length} cols={cols} />}
     >
       <ButtonWrapper open={isOpen} label={name || "Colunas"} icon={<FaColumns size={16} />} />

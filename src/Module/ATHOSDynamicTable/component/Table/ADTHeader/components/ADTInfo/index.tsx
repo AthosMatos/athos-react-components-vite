@@ -14,15 +14,21 @@ const ADTInfo = () => {
     return pgzx > totalItems ? totalItems : pgzx;
   }, [pgzx, totalItems]);
 
-  const headerTitleColor = undefined;
-  const headerSubTitleColor = undefined;
+  const headerTitleColor = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.header?.title);
+  const headerSubTitleColor = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.header?.subtitle);
   return (
     <div className="flex flex-col gap-0">
-      <h1 style={{ color: headerTitleColor }} className="text-xl text-zinc-800 dark:text-zinc-200 font-semibold leading-5">
+      <h1
+        style={headerTitleColor?.style}
+        className={`text-xl font-semibold leading-5 ${headerTitleColor?.className || "text-zinc-800 dark:text-zinc-200"}`}
+      >
         {tableName}
       </h1>
       {dataLen > 0 && !loading && (
-        <p style={{ color: headerSubTitleColor }} className="text-md text-zinc-500 dark:text-zinc-400 font-light">
+        <p
+          style={headerSubTitleColor?.style}
+          className={`text-md font-light ${headerSubTitleColor?.className || "text-zinc-500 dark:text-zinc-400"}`}
+        >
           {pageSize} items / {totalItems} total
         </p>
       )}

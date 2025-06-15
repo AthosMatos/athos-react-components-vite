@@ -6,13 +6,14 @@ import ADTColCheckBox from "./ADTColCheckBox";
 import ADTColExtraCellCols from "./ADTColExtraCellCols";
 
 const ADTColumns = () => {
-  const { filteredColumns } = useSelector((state: ADTState) => ({
+  const { filteredColumns, selectable } = useSelector((state: ADTState) => ({
     filteredColumns: state.ADTFilteringReducer.filteredColumns,
+    selectable: state.ADTPropsReducer.selectable,
   }));
 
   return (
     <ADTTR>
-      <ADTColCheckBox />
+      {selectable && <ADTColCheckBox />}
       {filteredColumns?.map((column, index) => (
         <ADTCol index={index} key={column} column={column} />
       ))}

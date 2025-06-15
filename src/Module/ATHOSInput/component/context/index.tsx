@@ -1,4 +1,12 @@
-import { createContext, Dispatch, SetStateAction, useContext, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import { ATHOSColors } from "../../../colors/colors";
 import { ATHOSInputProps } from "../interfaces";
@@ -27,8 +35,22 @@ interface ATHOSInputContextProps {
 
 const ATHOSInputContext = createContext({} as ATHOSInputContextProps);
 
-export const ATHOSInputProvider = ({ children, props }: { children: React.ReactNode; props: ATHOSInputProps }) => {
-  const { error, type, colors: styles, isSubmitting, onblur: blur, onfocus: focus, disabled } = props;
+export const ATHOSInputProvider = ({
+  children,
+  props,
+}: {
+  children: React.ReactNode;
+  props: ATHOSInputProps;
+}) => {
+  const {
+    error,
+    type,
+    colors: styles,
+    isSubmitting,
+    onblur: blur,
+    onfocus: focus,
+    disabled,
+  } = props;
   const [isFocused, setIsFocused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -38,9 +60,9 @@ export const ATHOSInputProvider = ({ children, props }: { children: React.ReactN
 
   useEffect(() => {
     if (props.type === "check") {
-      setChecked(!!props.value);
+      setChecked(!!props.value || !!props.checked);
     }
-  }, [props.value, props.type]);
+  }, [props.value, props.type, props.checked]);
 
   const [files, setFiles] = useState<FileList | null>(null);
   const onFocus = () => {
@@ -97,12 +119,16 @@ export const ATHOSInputProvider = ({ children, props }: { children: React.ReactN
     }
   }, [isSubmitting]);
 
-  const hasError = useMemo(() => !(error == undefined || error == null), [error]);
+  const hasError = useMemo(
+    () => !(error == undefined || error == null),
+    [error]
+  );
 
   const backgroundColor = useMemo(() => {
     const defaultColor = styles?.backgroundColor || ATHOSColors.gray.lighter;
     if (checked) return styles?.check?.borderColor || ATHOSColors.red.light;
-    if (disabled) return styles?.disabled?.backgroundColor || ATHOSColors.gray.light_2;
+    if (disabled)
+      return styles?.disabled?.backgroundColor || ATHOSColors.gray.light_2;
     if (hasError) return ATHOSColors.red.default;
     if (isFocused) return styles?.focused?.backgroundColor || defaultColor;
     if (isHovered) return styles?.hover?.backgroundColor || defaultColor;
@@ -120,8 +146,10 @@ export const ATHOSInputProvider = ({ children, props }: { children: React.ReactN
 
   const textColor = useMemo(() => {
     const defaultColor = styles?.textColor || ATHOSColors.gray.dark;
-    if (type === "check") return styles?.check?.centerColor || ATHOSColors.white.eggshell;
-    if (disabled) return styles?.disabled?.textColor || ATHOSColors.gray.default;
+    if (type === "check")
+      return styles?.check?.centerColor || ATHOSColors.white.eggshell;
+    if (disabled)
+      return styles?.disabled?.textColor || ATHOSColors.gray.default;
     if (hasError) return ATHOSColors.red.default;
     if (isFocused) return styles?.focused?.textColor || defaultColor;
     if (isHovered) return styles?.hover?.textColor || defaultColor;
@@ -173,7 +201,9 @@ export const ATHOSInputProvider = ({ children, props }: { children: React.ReactN
 export const useATHOSInputContext = () => {
   const context = useContext(ATHOSInputContext);
   if (!context) {
-    throw new Error("useATHOSInputContext must be used within a ATHOSInputProvider");
+    throw new Error(
+      "useATHOSInputContext must be used within a ATHOSInputProvider"
+    );
   }
   return context;
 };

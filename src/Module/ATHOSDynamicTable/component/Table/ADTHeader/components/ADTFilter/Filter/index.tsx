@@ -61,7 +61,7 @@ const FilterColsCurrency = ({ col }: { col: string }) => {
 
 const FilterCols = ({ col, config, data }: { col: string; config: boolean | FilterConfig | undefined; data: any[] }) => {
   const selected = useSelector((state: ADTState) => state.ADTFilteringReducer.rowFilters[col]);
-
+  const colors = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.header?.functionsColors?.body);
   const dispatch = useDispatch();
   if (typeof config === "object") {
     if (config.isDateRange) {
@@ -93,7 +93,7 @@ const FilterCols = ({ col, config, data }: { col: string; config: boolean | Filt
         className: "!text-sm",
       }}
       multiSelect={{ amountBeforeShortening: 2 }}
-      optionClassName="p-1"
+      optionClassName={`p-1 ${colors?.listItem?.className}`}
       selectedLabelClassName="text-zinc-900"
       key={col}
       inline
@@ -113,6 +113,7 @@ const Filter = () => {
   const lines = useSelector((state: ADTState) => state.ADTFilteringReducer.preFilteredData.length);
   const data = useSelector((state: ADTState) => state.ADTPropsReducer.data);
   const dispatch = useDispatch();
+  const colors = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.header?.functionsColors?.body);
 
   const resetFilter = () => {
     dispatch(resetAllFilters());
@@ -122,12 +123,12 @@ const Filter = () => {
     <div className="min-w-xs p-3 gap-5 flex flex-col">
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center gap-1 text-zinc-500">
-          <h1 className="bg-zinc-200 px-1 rounded-sm">{lines}</h1>
-          <p className="">Linhas</p>
+          <h1 className={`px-1 rounded-sm ${colors?.itemsAmount?.className}`}>{lines}</h1>
+          <p className={`${colors?.itemsAmountLabel?.className}`}>Linhas</p>
         </div>
         <button
-          className="cursor-pointer transition-colors opacity-70 hover:opacity-100"
-          style={{ color: highlightColor }}
+          className={`cursor-pointer transition-colors opacity-70 hover:opacity-100 ${colors?.clearFilters?.className}`}
+          style={{ color: colors?.clearFilters?.style?.color || highlightColor || "inherit" }}
           onClick={resetFilter}
         >
           Limpar Filtros

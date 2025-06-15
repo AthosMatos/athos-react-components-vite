@@ -14,6 +14,7 @@ const ColGroup = ({ cols, activeCols }: ColGroupProps) => {
   const highlightColor = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.highlightColor);
   const filteredColumns = useSelector((state: ADTState) => state.ADTFilteringReducer.filteredColumns);
   const dispatch = useDispatch();
+  const colors = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.header?.functionsColors?.body);
 
   const filterOutCol = (col: string) => {
     dispatch(filterColumns(col));
@@ -26,12 +27,12 @@ const ColGroup = ({ cols, activeCols }: ColGroupProps) => {
     <div className="min-w-xs p-3 gap-5 flex flex-col">
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center gap-1 text-zinc-500">
-          <h1 className="bg-zinc-200 px-1 rounded-sm">{activeCols}</h1>
-          <p className="">Colunas</p>
+          <h1 className={`${colors?.itemsAmount?.className} px-1 rounded-sm`}>{activeCols}</h1>
+          <p className={`${colors?.itemsAmountLabel?.className}`}>Colunas</p>
         </div>
         <button
-          className="cursor-pointer transition-colors opacity-70 hover:opacity-100"
-          style={{ color: highlightColor }}
+          className={`cursor-pointer transition-colors opacity-70 hover:opacity-100 ${colors?.clearFilters?.className}`}
+          style={{ color: colors?.clearFilters?.style?.color || highlightColor || "inherit" }}
           onClick={resetFilter}
         >
           Limpar Filtros
@@ -42,9 +43,9 @@ const ColGroup = ({ cols, activeCols }: ColGroupProps) => {
           {cols.map((col) => (
             <ListButtons
               key={col}
-              className={`${
-                filteredColumns.includes(col) ? `` : "opacity-35 "
-              } text-zinc-900 items-center flex justify-between cursor-pointer`}
+              className={`${filteredColumns.includes(col) ? `` : "opacity-35 "} ${
+                colors?.listItem?.className
+              } items-center flex justify-between cursor-pointer`}
               onClick={() => filterOutCol(col)}
             >
               {col}

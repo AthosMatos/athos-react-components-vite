@@ -17,7 +17,10 @@ const ADTCells = () => {
     pageSize,
     filteredData,
     selectedRows,
+    rowClassName,
     selected: selectedColor,
+    rowClick,
+    selectable,
   } = useSelector((state: ADTState) => ({
     filteredColumns: state.ADTFilteringReducer.filteredColumns,
     extraCellColumns: state.ADTPropsReducer.extraCellColumns,
@@ -25,6 +28,9 @@ const ADTCells = () => {
     filteredData: state.ADTFilteringReducer.filteredData,
     selectedRows: state.ADTSelectReducer.selectedRows,
     selected: state.ADTPropsReducer.tableStyle?.selected,
+    rowClassName: state.ADTPropsReducer.tableStyle?.rowClassName,
+    rowClick: state.ADTPropsReducer.globalConfig?.rowClick,
+    selectable: state.ADTPropsReducer.selectable,
   }));
 
   return filteredData?.map((row, rowIndex) => (
@@ -35,18 +41,23 @@ const ADTCells = () => {
       exit="hidden"
       variants={variants} */
       animate={{
-        backgroundColor: selectedRows.includes(row.uniqueId) ? selectedColor?.rowColor : "transparent",
+        backgroundColor: selectedRows.includes(row.uniqueId)
+          ? selectedColor?.rowColor
+          : "transparent",
       }}
-      className="transition-colors"
+      className={`transition-colors ${rowClassName} `}
       layout="position"
       transition={{ duration: 0.2 }}
+      onClick={() => rowClick?.(row)}
     >
-      <ADTCellCheckBox
-        index={rowIndex}
-        isLast={rowIndex === pageSize - 1}
-        rowId={row.uniqueId}
-        isCheck={selectedRows.includes(row.uniqueId)}
-      />
+      {selectable && (
+        <ADTCellCheckBox
+          index={rowIndex}
+          isLast={rowIndex === pageSize - 1}
+          rowId={row.uniqueId}
+          isCheck={selectedRows.includes(row.uniqueId)}
+        />
+      )}
       {filteredColumns.map((column, index) => (
         <ADTCellColumn
           hasExtraCols={!!extraCellColumns}
