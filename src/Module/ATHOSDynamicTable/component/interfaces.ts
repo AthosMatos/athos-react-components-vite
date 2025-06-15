@@ -5,12 +5,13 @@ type TdefaultStyles = {
   className?: string;
 };
 
-export type GlobalConfig = {
+export type GlobalConfig<T> = {
   maxCharToCut?: number;
   maxWidth?: number; //implement
   minWidth?: number; //implement
   minColWidthToShort?: number; //imrpove add stages like short, medium, long
   cellComponent?: (cell: ReactNode) => React.ReactNode;
+  rowClick?: (rowData: T) => void;
 };
 export type SpecificColConfig = {
   maxCharToCut?: number;
@@ -122,6 +123,9 @@ export type TableStyle<T> = {
     title?: TdefaultStyles;
     subtitle?: TdefaultStyles;
   };
+  nav?: {
+    className?: string;
+  };
   cellTextColor?: {
     global?: string;
     specific?: CellColumnTextTableStyle<T> & CellColumnTextTableStyleCustomLabelADD;
@@ -131,6 +135,7 @@ export type TableStyle<T> = {
     specific?: ColumnTextTableStyle<T> & ColumnTextTableStyleCustomLabelADD;
   };
   highlightColor?: string;
+  rowClassName?: string;
 };
 
 /* type HeaderStyle = {
@@ -169,6 +174,8 @@ type ResizableConfig = {
 };
 
 export type DynamicTableProps<T> = {
+  extraFuncs?: ReactNode;
+  selectable?: boolean;
   tableSelectedFuncs?: {
     title?: string;
     funcs?: {
@@ -188,7 +195,7 @@ export type DynamicTableProps<T> = {
   resizeable?: boolean | ResizableConfig;
   tableStyle?: TableStyle<T>;
   colConfig?: ColConfig<T>;
-  globalConfig?: GlobalConfig;
+  globalConfig?: GlobalConfig<T>;
   columnsToHide?: (keyof T)[];
   columnsToShow?: (keyof T)[];
   customColumns?: {
