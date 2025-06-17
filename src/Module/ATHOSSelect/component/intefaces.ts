@@ -24,7 +24,7 @@ interface ATHOSSelectBaseProps {
   label?: string;
   disabled?: boolean;
   error?: string;
-  selected?: (string | number)[] | string | number;
+  selected?: (string | number)[] | string | number | null;
   position?: PopUpPosition;
   style?: React.CSSProperties;
   className?: string;
@@ -43,7 +43,9 @@ interface ATHOSSelectBaseProps {
   listContainerStyle?: CSSProperties;
   multiSelect?: MultiSelectType;
   multiSelectLabelClassName?: string;
-  onChange?: ((selected: (string | number)[]) => Promise<any>) | ((selected: (string | number)[]) => void);
+  onChange?:
+    | ((selected: (string | number)[]) => Promise<any>)
+    | ((selected: (string | number)[]) => void);
   search?:
     | {
         placeholder?: string;

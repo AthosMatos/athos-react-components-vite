@@ -7,16 +7,48 @@ import { getCellWrapperStyle, tdClassName } from "../../funcs";
 import useADTCellCol from "./hooks";
 import { ADTCellColumnProps } from "./interfaces";
 
-const ADTCellColumn = ({ row, rowIndex, hasExtraCols, index, isLastRow, isCheck, col, isLastCol }: ADTCellColumnProps) => {
-  const persistPrimaryColumn = useSelector((state: ADTState) => state.ADTPropsReducer.persistPrimaryColumn);
-  const extraColumns = useSelector((state: ADTState) => state.ADTPropsReducer.extraColumns);
-  const spacingBetweenColumns = useSelector((state: ADTState) => state.ADTPropsReducer.spacingBetweenColumns);
-  const spacingBetweenCells = useSelector((state: ADTState) => state.ADTPropsReducer.spacingBetweenCells);
-  const selectedColor = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.selected);
-  const rowSpacingColor = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.selected?.rowSpacingColor);
-  const rowColor = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.selected?.rowColor);
-  const rowBorderColor = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.selected?.rowBorderColor);
-  const paddingInCells = useSelector((state: ADTState) => state.ADTPropsReducer.paddingInCells);
+const ADTCellColumn = ({
+  row,
+  rowIndex,
+  hasExtraCols,
+  index,
+  isLastRow,
+  isCheck,
+  col,
+  isLastCol,
+}: ADTCellColumnProps) => {
+  const persistPrimaryColumn = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.persistPrimaryColumn
+  );
+  const extraColumns = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.extraColumns
+  );
+  const spacingBetweenColumns = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.spacingBetweenColumns
+  );
+  const spacingBetweenCells = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.spacingBetweenCells
+  );
+  const selectedColor = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.tableStyle?.selected
+  );
+  const rowSpacingColor = useSelector(
+    (state: ADTState) =>
+      state.ADTPropsReducer.tableStyle?.selected?.rowSpacingColor
+  );
+  const rowColor = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.tableStyle?.selected?.rowColor
+  );
+  const rowBorderColor = useSelector(
+    (state: ADTState) =>
+      state.ADTPropsReducer.tableStyle?.selected?.rowBorderColor
+  );
+  const paddingInCells = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.paddingInCells
+  );
+  const primary = useSelector(
+    (state: ADTState) => !!state.ADTPropsReducer.persistPrimaryColumn
+  );
 
   const extraCol = useMemo(() => {
     if (extraColumns?.length && col.includes("-isExtraCol-")) {
@@ -45,7 +77,9 @@ const ADTCellColumn = ({ row, rowIndex, hasExtraCols, index, isLastRow, isCheck,
   });
   const cellWrapperProps = {
     id,
-    className: `${tdClassName(index, persistPrimaryColumn)} ${isLastRow && !isCheck ? "rounded-ee-md" : ""}`,
+    className: `${tdClassName(index, persistPrimaryColumn)} ${
+      isLastRow && !isCheck && primary ? "rounded-ee-md" : ""
+    }`,
     style: {
       color: textColor,
       paddingTop: paddingInCells,
@@ -58,14 +92,21 @@ const ADTCellColumn = ({ row, rowIndex, hasExtraCols, index, isLastRow, isCheck,
       /* borderBottomRightRadius: isLastCol && !hasExtraCols && "6px",
       borderTopRightRadius: isLastCol && !hasExtraCols && "6px", */
       left: index === 0 ? "36px" : undefined,
-      borderTopColor: index === 0 && typeof persistPrimaryColumn == "object" ? persistPrimaryColumn.backgroundColor : rowSpacingColor,
+      borderTopColor:
+        index === 0 && typeof persistPrimaryColumn == "object"
+          ? persistPrimaryColumn.backgroundColor
+          : rowSpacingColor,
       borderTopWidth: spacingBetweenCells,
       ...persistStyle,
     },
     animate: {
       ...(isCheck && {
-        boxShadow: `0 1px 0 ${rowBorderColor || rowColor} inset, 0 -1px 0  ${rowBorderColor || rowColor} inset ${
-          isLastCol && !hasExtraCols ? `, -1px 0 0 ${rowBorderColor || rowColor} inset` : ""
+        boxShadow: `0 1px 0 ${rowBorderColor || rowColor} inset, 0 -1px 0  ${
+          rowBorderColor || rowColor
+        } inset ${
+          isLastCol && !hasExtraCols
+            ? `, -1px 0 0 ${rowBorderColor || rowColor} inset`
+            : ""
         }`,
       }),
       ...(isCheck && {
@@ -77,9 +118,17 @@ const ADTCellColumn = ({ row, rowIndex, hasExtraCols, index, isLastRow, isCheck,
   const tooltipContent = row[actualcolumn];
 
   return (
-    <ADTCellColWrapper persistent={!!persistPrimaryColumn} {...cellWrapperProps}>
+    <ADTCellColWrapper
+      persistent={!!persistPrimaryColumn}
+      {...cellWrapperProps}
+    >
       {showTooltip ? (
-        <ATHOSTooltip className="max-w-80" followCursor tooltipContent={tooltipContent} forceOpen={touch}>
+        <ATHOSTooltip
+          className="max-w-80"
+          followCursor
+          tooltipContent={tooltipContent}
+          forceOpen={touch}
+        >
           {Cell}
         </ATHOSTooltip>
       ) : (

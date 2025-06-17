@@ -23,7 +23,13 @@ const Slice = createSlice({
   name: "ADTFilteredProps",
   initialState,
   reducers: {
-    filterByDate: (state, action: PayloadAction<{ column: string; values: { min: string; max: string } }>) => {
+    filterByDate: (
+      state,
+      action: PayloadAction<{
+        column: string;
+        values: { min: string; max: string };
+      }>
+    ) => {
       state.page = 1;
       state.dateFilters[action.payload.column] = action.payload.values;
       const filtered = applyAllFilters(state);
@@ -31,7 +37,13 @@ const Slice = createSlice({
       state.filteredData = filtered.slice(0, state.pageSize);
     },
 
-    filterByRowCurrency: (state, action: PayloadAction<{ column: string; values: { min: string; max: string } }>) => {
+    filterByRowCurrency: (
+      state,
+      action: PayloadAction<{
+        column: string;
+        values: { min: string; max: string };
+      }>
+    ) => {
       state.page = 1;
       state.currencyFilters[action.payload.column] = action.payload.values;
       const filtered = applyAllFilters(state);
@@ -39,7 +51,10 @@ const Slice = createSlice({
       state.filteredData = filtered.slice(0, state.pageSize);
     },
 
-    filterByRowValue: (state, action: PayloadAction<{ column: string; values: any[] }>) => {
+    filterByRowValue: (
+      state,
+      action: PayloadAction<{ column: string; values: any[] }>
+    ) => {
       state.page = 1;
       const { column, values } = action.payload;
       if (values.length === 0) {
@@ -125,21 +140,26 @@ const Slice = createSlice({
     },
     setFilteredColumns: (state, action: PayloadAction<any[]>) => {
       state.filteredColumns = action.payload;
+    },
+    setColumnOrder: (state, action: PayloadAction<any[]>) => {
       state.columnOrder = action.payload;
     },
-
     setFirstOpen: (state, action: PayloadAction<boolean>) => {
       state.firstOpen = action.payload;
     },
 
     filterColumns: (state, action: PayloadAction<string>) => {
       if (state.filteredColumns.includes(action.payload)) {
-        state.filteredColumns = state.filteredColumns.filter((column) => column !== action.payload);
+        state.filteredColumns = state.filteredColumns.filter(
+          (column) => column !== action.payload
+        );
       } else {
         //based on the order of the columns
         const newCols = [...state.filteredColumns, action.payload];
         //reorder the columns
-        state.filteredColumns = state.columnOrder.filter((col) => newCols.includes(col));
+        state.filteredColumns = state.columnOrder.filter((col) =>
+          newCols.includes(col)
+        );
       }
     },
     resetColumns: (state) => {
@@ -205,6 +225,7 @@ export const {
   filterByRowCurrency,
   filterByDate,
   resetAllFilters,
+  setColumnOrder,
 } = Slice.actions;
 
 const ADTFilteringReducer = Slice.reducer;

@@ -13,18 +13,37 @@ interface NavButtonProps {
   disabled: boolean;
 }
 
-const PageButton = ({ num, move, selected }: { num: number | string; move: (to: number | "prev" | "next") => void; selected: boolean }) => {
+const PageButton = ({
+  num,
+  move,
+  selected,
+}: {
+  num: number | string;
+  move: (to: number | "prev" | "next") => void;
+  selected: boolean;
+}) => {
+  const colors = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.tableStyle?.nav?.pageButton
+  );
   return (
     <p
       onClick={() => {
         if (typeof num == "number") move(num);
       }}
       className={`flex 
-        text-zinc-600 dark:text-zinc-300
+        ${
+          colors?.disabled?.className ||
+          `text-zinc-600 dark:text-zinc-300 hover:border-zinc-300 hover:border`
+        }
         text-sm
 cursor-pointer w-5 h-5 rounded-[0.2rem] transition-all duration-100
-items-center justify-center hover:border-zinc-300 hover:border
-${selected ? "dark:bg-zinc-700 bg-zinc-200 border border-zinc-300 dark:border-zinc-600" : "opacity-50"}`}
+items-center justify-center 
+${
+  selected
+    ? colors?.enabled?.className ||
+      "dark:bg-zinc-700 bg-zinc-200 border border-zinc-300 dark:border-zinc-600"
+    : "opacity-50"
+}`}
     >
       {num}
     </p>
@@ -32,16 +51,26 @@ ${selected ? "dark:bg-zinc-700 bg-zinc-200 border border-zinc-300 dark:border-zi
 };
 
 const NavButton = ({ onClick, children, disabled }: NavButtonProps) => {
+  const colors = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.tableStyle?.nav?.buttons
+  );
   return (
     <div
       onClick={disabled ? undefined : onClick}
       className={`transition-all 
-        dark:bg-zinc-800 hover:dark:bg-zinc-700 hover:bg-zinc-200 
         active:scale-95 
+       ${
+         colors?.enabled?.className ||
+         ` dark:bg-zinc-800 hover:dark:bg-zinc-700 hover:bg-zinc-200 
         text-zinc-400 dark:text-zinc-300 
-        hover:dark:border-zinc-600 border border-zinc-300 dark:border-zinc-700
+        hover:dark:border-zinc-600 border border-zinc-300 dark:border-zinc-700`
+       }
         rounded-lg duration-100
-        w-9 h-9 flex items-center justify-center ${disabled ? "opacity-30 cursor-not-allowed" : "cursor-pointer"}`}
+        w-9 h-9 flex items-center justify-center ${
+          disabled
+            ? colors?.disabled?.className || "opacity-30 cursor-not-allowed"
+            : "cursor-pointer"
+        }`}
     >
       {children}
     </div>
@@ -50,13 +79,25 @@ const NavButton = ({ onClick, children, disabled }: NavButtonProps) => {
 
 const ADTNav = () => {
   const { page, pageSize } = useSelectors_ADTNav();
-  const totalItems = useSelector((state: ADTState) => state.ADTFilteringReducer.preFilteredData.length);
+  const totalItems = useSelector(
+    (state: ADTState) => state.ADTFilteringReducer.preFilteredData.length
+  );
   const dispatch = useDispatch();
-  const canGoForward = useMemo(() => page * pageSize < totalItems, [totalItems, page, pageSize]);
+  const canGoForward = useMemo(
+    () => page * pageSize < totalItems,
+    [totalItems, page, pageSize]
+  );
   const canGoBack = useMemo(() => page > 1, [page]);
-  const totalPages = useMemo(() => Math.ceil(totalItems / pageSize), [totalItems, pageSize]);
-  const dataLen = useSelector((state: ADTState) => state.ADTPropsReducer.data)?.length;
-  const selectedpages = useSelector((state: ADTState) => state.ADTSelectReducer.selectedPages);
+  const totalPages = useMemo(
+    () => Math.ceil(totalItems / pageSize),
+    [totalItems, pageSize]
+  );
+  const dataLen = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.data
+  )?.length;
+  const selectedpages = useSelector(
+    (state: ADTState) => state.ADTSelectReducer.selectedPages
+  );
   const move = (to: number | "prev" | "next") => {
     if (
       (typeof to == "number" && selectedpages.includes(to)) ||
@@ -79,13 +120,22 @@ const ADTNav = () => {
   useEffect(() => {
     if (!selectedpages.includes(page)) dispatch(setCheckState(0));
   }, [page]);
-  const loading = useSelector((state: ADTState) => state.ADTPropsReducer.loading);
+  const loading = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.loading
+  );
 
   const pageButtonsMap =
-    totalPages <= 6 ? Array.from({ length: totalPages }, (_, i) => i + 1) : [1, 2, 3, "...", totalPages - 2, totalPages - 1, totalPages];
+    totalPages <= 6
+      ? Array.from({ length: totalPages }, (_, i) => i + 1)
+      : [1, 2, 3, "...", totalPages - 2, totalPages - 1, totalPages];
 
-  const pagesInBetween = totalPages > 5 ? Array.from({ length: totalPages - 6 }, (_, i) => i + 4) : [];
-
+  const pagesInBetween =
+    totalPages > 5
+      ? Array.from({ length: totalPages - 6 }, (_, i) => i + 4)
+      : [];
+  const colors = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.tableStyle?.nav?.pageIndicator
+  );
   return (
     !loading &&
     dataLen > 0 && (
@@ -96,15 +146,15 @@ const ADTNav = () => {
               <IoIosArrowBack />
             </NavButton>
             <div
-              className="rounded-md items-center 
-            justify-center flex border
-             dark:border-zinc-700 dark:bg-zinc-800 border-zinc-300
-             w-8 h-8 
-            
+              className={`rounded-md items-center 
+            justify-center flex  ${
+              colors?.className ||
+              "border dark:border-zinc-700 dark:bg-zinc-800 border-zinc-300"
+            }
              
-             "
+             w-8 h-8 `}
             >
-              <p className="font-medium text-zinc-500 dark:text-zinc-300 ">{page}</p>
+              <p className={`font-medium  `}>{page}</p>
             </div>
             <NavButton disabled={!canGoForward} onClick={() => move("next")}>
               <IoIosArrowForward />
@@ -114,7 +164,12 @@ const ADTNav = () => {
             {totalPages > 1 &&
               pageButtonsMap.map((num) =>
                 typeof num == "number" ? (
-                  <PageButton key={num} move={move} num={num} selected={num === page} />
+                  <PageButton
+                    key={num}
+                    move={move}
+                    num={num}
+                    selected={num === page}
+                  />
                 ) : (
                   <ATHOSPopUp
                     key={num}
@@ -136,14 +191,24 @@ const ADTNav = () => {
                         <div className="max-w-48 overflow-auto">
                           <div className="flex gap-1 w-fit ">
                             {pagesInBetween.map((pib) => (
-                              <PageButton key={pib} move={move} num={pib} selected={pib === page} />
+                              <PageButton
+                                key={pib}
+                                move={move}
+                                num={pib}
+                                selected={pib === page}
+                              />
                             ))}
                           </div>
                         </div>
                       </div>
                     }
                   >
-                    <PageButton key={num} move={move} num={num} selected={pagesInBetween.includes(page)} />
+                    <PageButton
+                      key={num}
+                      move={move}
+                      num={num}
+                      selected={pagesInBetween.includes(page)}
+                    />
                   </ATHOSPopUp>
                 )
               )}

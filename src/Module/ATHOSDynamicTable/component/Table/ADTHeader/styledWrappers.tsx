@@ -25,13 +25,21 @@ text-zinc-800 dark:text-zinc-200`;
 
 /* border border-zinc-300 dark:border-zinc-600  */
 const defaultWrapperClassName = (open: boolean, className?: string) => `
-  transition-all active:scale-95 cursor-pointer hover:dark:text-zinc-200 hover:text-zinc-800 
+  transition-all active:scale-95 cursor-pointer 
   rounded-md h-10 text-sm gap-2
   flex items-center justify-center ${open ? className : ""}
 `;
 
-export const ButtonWrapper = ({ open, onClick, label, icon }: ItemWrapperProps) => {
-  const colors = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.header?.functionsColors?.icons.open);
+export const ButtonWrapper = ({
+  open,
+  onClick,
+  label,
+  icon,
+}: ItemWrapperProps) => {
+  const colors = useSelector(
+    (state: ADTState) =>
+      state.ADTPropsReducer.tableStyle?.header?.functionsColors?.icons.open
+  );
   return (
     <div
       onMouseDown={(e) => {
@@ -53,8 +61,16 @@ interface IconWrapperProps {
   wref?: any;
 }
 
-export const IconWrapper = ({ children, onClick, open, wref }: IconWrapperProps) => {
-  const colors = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.header?.functionsColors?.icons.open);
+export const IconWrapper = ({
+  children,
+  onClick,
+  open,
+  wref,
+}: IconWrapperProps) => {
+  const colors = useSelector(
+    (state: ADTState) =>
+      state.ADTPropsReducer.tableStyle?.header?.functionsColors?.icons.open
+  );
   return (
     <div
       ref={wref}

@@ -124,11 +124,20 @@ export type TableStyle<T> = {
     subtitle?: TdefaultStyles;
   };
   nav?: {
-    className?: string;
+    buttons?: {
+      disabled?: TdefaultStyles;
+      enabled?: TdefaultStyles;
+    };
+    pageIndicator?: TdefaultStyles;
+    pageButton?: {
+      disabled?: TdefaultStyles;
+      enabled?: TdefaultStyles;
+    };
   };
   cellTextColor?: {
     global?: string;
-    specific?: CellColumnTextTableStyle<T> & CellColumnTextTableStyleCustomLabelADD;
+    specific?: CellColumnTextTableStyle<T> &
+      CellColumnTextTableStyleCustomLabelADD;
   };
   columnTextColor?: {
     global?: string;
@@ -163,17 +172,29 @@ type FooterStyle = {
 export type FilterConfig = {
   isDateRange?: boolean;
   isValueRange?: boolean;
+  label?: string;
 };
-
+export type HideColConfig = {
+  label?: string;
+};
 type TableColFilter<T> = {
   [key in keyof T]?: FilterConfig | boolean;
+};
+
+type TableColHide<T> = {
+  [key in keyof T]?: HideColConfig | boolean;
 };
 
 type ResizableConfig = {
   autoBorder?: boolean;
 };
 
+type ColumnsToStartShow<T> = {
+  [key in keyof T]?: boolean;
+};
+
 export type DynamicTableProps<T> = {
+  columnsToStartShow?: ColumnsToStartShow<T>;
   extraFuncs?: ReactNode;
   selectable?: boolean;
   tableSelectedFuncs?: {
@@ -184,6 +205,7 @@ export type DynamicTableProps<T> = {
     }[];
   };
   tableColFilterName?: string;
+  hidableColumns?: TableColHide<T>;
   colsToFilter?: TableColFilter<T>;
   loading?: boolean | string;
   boldColumns?: boolean;

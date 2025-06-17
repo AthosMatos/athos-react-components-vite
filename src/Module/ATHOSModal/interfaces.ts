@@ -4,4 +4,5 @@ export interface ATHOSModalProps {
   hide?: () => void;
   blur?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "none";
   backdrop?: string;
+  className?: string;
 }

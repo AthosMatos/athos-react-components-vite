@@ -4,11 +4,18 @@ import { ATHOSRange } from "../../../../../../../ATHOSRange/component";
 import { ATHOSSelect } from "../../../../../../../ATHOSSelect/component";
 import { cleanCurrencyValue } from "../../../../../../../utils/currency-utils";
 import { FilterConfig } from "../../../../../interfaces";
-import { filterByDate, filterByRowCurrency, filterByRowValue, resetAllFilters } from "../../../../../redux/Filtering/provider";
+import {
+  filterByDate,
+  filterByRowCurrency,
+  filterByRowValue,
+  resetAllFilters,
+} from "../../../../../redux/Filtering/provider";
 import { ADTState } from "../../../../../redux/store";
 
 const FilterColsDate = ({ col }: { col: string }) => {
-  const dateValues = useSelector((state: ADTState) => state.ADTFilteringReducer.dateFilters[col]);
+  const dateValues = useSelector(
+    (state: ADTState) => state.ADTFilteringReducer.dateFilters[col]
+  );
   const dispatch = useDispatch();
   return (
     <ATHOSRange
@@ -37,7 +44,9 @@ const FilterColsDate = ({ col }: { col: string }) => {
 };
 
 const FilterColsCurrency = ({ col }: { col: string }) => {
-  const valueRange = useSelector((state: ADTState) => state.ADTFilteringReducer.currencyFilters[col]);
+  const valueRange = useSelector(
+    (state: ADTState) => state.ADTFilteringReducer.currencyFilters[col]
+  );
   const dispatch = useDispatch();
   return (
     <ATHOSRange
@@ -52,16 +61,36 @@ const FilterColsCurrency = ({ col }: { col: string }) => {
       key={col}
       onChange={({ min, max }) => {
         dispatch(
-          filterByRowCurrency({ column: col, values: { max: cleanCurrencyValue(max).toString(), min: cleanCurrencyValue(min).toString() } })
+          filterByRowCurrency({
+            column: col,
+            values: {
+              max: cleanCurrencyValue(max).toString(),
+              min: cleanCurrencyValue(min).toString(),
+            },
+          })
         );
       }}
     />
   );
 };
 
-const FilterCols = ({ col, config, data }: { col: string; config: boolean | FilterConfig | undefined; data: any[] }) => {
-  const selected = useSelector((state: ADTState) => state.ADTFilteringReducer.rowFilters[col]);
-  const colors = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.header?.functionsColors?.body);
+const FilterCols = ({
+  col,
+  config,
+  data,
+}: {
+  col: string;
+  config: boolean | FilterConfig | undefined;
+  data: any[];
+}) => {
+  const selected = useSelector(
+    (state: ADTState) => state.ADTFilteringReducer.rowFilters[col]
+  );
+  const colors = useSelector(
+    (state: ADTState) =>
+      state.ADTPropsReducer.tableStyle?.header?.functionsColors?.body
+  );
+
   const dispatch = useDispatch();
   if (typeof config === "object") {
     if (config.isDateRange) {
@@ -69,7 +98,6 @@ const FilterCols = ({ col, config, data }: { col: string; config: boolean | Filt
     } else if (config.isValueRange) {
       return <FilterColsCurrency col={col} />;
     }
-    return null;
   }
   const labels = useMemo(() => {
     // only add values that are not already in the labels
@@ -79,6 +107,12 @@ const FilterCols = ({ col, config, data }: { col: string; config: boolean | Filt
       value: value,
     }));
   }, [data, col]);
+  const label = useMemo(() => {
+    if (typeof config === "object" && config.label) {
+      return config.label;
+    }
+    return col;
+  }, [col, config]);
 
   return (
     <ATHOSSelect
@@ -98,7 +132,7 @@ const FilterCols = ({ col, config, data }: { col: string; config: boolean | Filt
       key={col}
       inline
       thin
-      label={col}
+      label={label}
       labels={labels}
       onChange={(selected) => {
         dispatch(filterByRowValue({ column: col, values: selected }));
@@ -108,12 +142,21 @@ const FilterCols = ({ col, config, data }: { col: string; config: boolean | Filt
 };
 
 const Filter = () => {
-  const highlightColor = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.highlightColor);
-  const colsToFilter = useSelector((state: ADTState) => state.ADTPropsReducer.colsToFilter);
-  const lines = useSelector((state: ADTState) => state.ADTFilteringReducer.preFilteredData.length);
+  const highlightColor = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.tableStyle?.highlightColor
+  );
+  const colsToFilter = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.colsToFilter
+  );
+  const lines = useSelector(
+    (state: ADTState) => state.ADTFilteringReducer.preFilteredData.length
+  );
   const data = useSelector((state: ADTState) => state.ADTPropsReducer.data);
   const dispatch = useDispatch();
-  const colors = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.header?.functionsColors?.body);
+  const colors = useSelector(
+    (state: ADTState) =>
+      state.ADTPropsReducer.tableStyle?.header?.functionsColors?.body
+  );
 
   const resetFilter = () => {
     dispatch(resetAllFilters());
@@ -123,12 +166,17 @@ const Filter = () => {
     <div className="min-w-xs p-3 gap-5 flex flex-col">
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center gap-1 text-zinc-500">
-          <h1 className={`px-1 rounded-sm ${colors?.itemsAmount?.className}`}>{lines}</h1>
+          <h1 className={`px-1 rounded-sm ${colors?.itemsAmount?.className}`}>
+            {lines}
+          </h1>
           <p className={`${colors?.itemsAmountLabel?.className}`}>Linhas</p>
         </div>
         <button
           className={`cursor-pointer transition-colors opacity-70 hover:opacity-100 ${colors?.clearFilters?.className}`}
-          style={{ color: colors?.clearFilters?.style?.color || highlightColor || "inherit" }}
+          style={{
+            color:
+              colors?.clearFilters?.style?.color || highlightColor || "inherit",
+          }}
           onClick={resetFilter}
         >
           Limpar Filtros
@@ -136,7 +184,9 @@ const Filter = () => {
       </div>
       <div className="flex flex-col gap-2">
         {colsToFilter &&
-          Object.entries(colsToFilter).map(([col, config]) => <FilterCols data={data} key={col} col={col} config={config} />)}
+          Object.entries(colsToFilter).map(([col, config]) => (
+            <FilterCols data={data} key={col} col={col} config={config} />
+          ))}
       </div>
     </div>
   );

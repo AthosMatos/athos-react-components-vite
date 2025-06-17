@@ -8,13 +8,25 @@ import ADTCells from "./ADTCells";
 import ADTColumns from "./ADTColumns";
 
 const Table = () => {
-  const tableClassName = useSelector((state: ADTState) => state.ADTPropsReducer.className);
-  const tableWrapperClassName = useSelector((state: ADTState) => state.ADTPropsReducer.tableWrapperClassName);
+  const tableClassName = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.className
+  );
+  const tableWrapperClassName = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.tableWrapperClassName
+  );
   const data = useSelector((state: ADTState) => state.ADTPropsReducer.data);
-  const loading = useSelector((state: ADTState) => state.ADTPropsReducer.loading);
-  const tableName = useSelector((state: ADTState) => state.ADTPropsReducer.tableName);
-  const tableStyle = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle);
-  const noDataPlaceholder = useSelector((state: ADTState) => state.ADTPropsReducer.noDataPlaceholder);
+  const loading = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.loading
+  );
+  const tableName = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.tableName
+  );
+  const tableStyle = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.tableStyle
+  );
+  const noDataPlaceholder = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.noDataPlaceholder
+  );
 
   const celltextColor = undefined;
   const coltextColor = undefined;
@@ -30,7 +42,7 @@ const Table = () => {
             key={`${tableName}-table`}
             initial={{ height: 0 }}
             animate={{ height: "auto" }}
-            className={`!min-h-5  ${tableWrapperClassName}`}
+            className={`!min-h-5 p-1  ${tableWrapperClassName}`}
             style={{
               overflowY: "overlay" as any,
             }}
@@ -55,7 +67,11 @@ const Table = () => {
             </ADTTable>
           </motion.div>
         ) : (
-          <ADTLoadingBar loading={loading} tableName={tableName} tableStyle={tableStyle} />
+          <ADTLoadingBar
+            loading={loading}
+            tableName={tableName}
+            tableStyle={tableStyle}
+          />
         )
       ) : (
         noDataPlaceholder

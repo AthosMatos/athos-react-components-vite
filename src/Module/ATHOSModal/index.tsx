@@ -4,12 +4,20 @@ import { createPortal } from "react-dom";
 import { useClickOutside } from "../hooks/useClickOutside";
 import { ATHOSModalProps } from "./interfaces";
 
-export const ATHOSModal: React.FC<ATHOSModalProps> = (props: ATHOSModalProps) => {
-  const { children, show, hide, backdrop = "rgba(255, 255, 255, 0.5)", blur = "sm" } = props;
+export const ATHOSModal: React.FC<ATHOSModalProps> = (
+  props: ATHOSModalProps
+) => {
+  const {
+    children,
+    show,
+    hide,
+    backdrop = "rgba(255, 255, 255, 0.5)",
+    blur = "sm",
+  } = props;
   const ARef = useRef<HTMLDivElement>(null);
   useClickOutside({
     callback: () => {
-      hide && hide();
+      if (hide) hide();
     },
     refs: [ARef],
   });
@@ -37,7 +45,7 @@ export const ATHOSModal: React.FC<ATHOSModalProps> = (props: ATHOSModalProps) =>
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <div className="w-fit h-fit" ref={ARef}>
+          <div className={`w-fit h-fit ${props.className}`} ref={ARef}>
             {children}
           </div>
         </motion.div>

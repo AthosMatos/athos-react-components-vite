@@ -1,6 +1,18 @@
-import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { PopUpPosition, usePopUp } from "../../../hooks/private/usePopUp";
-import { ATHOSSelectedProps, ATHOSSelectPropsCols, ATHOSSelectPropsList, SelectedItemI } from "../intefaces";
+import {
+  ATHOSSelectedProps,
+  ATHOSSelectPropsCols,
+  ATHOSSelectPropsList,
+  SelectedItemI,
+} from "../intefaces";
 
 interface ATHOSSelectContextI {
   props: ATHOSSelectedProps;
@@ -17,7 +29,9 @@ interface ATHOSSelectContextI {
   setIsOpened: React.Dispatch<React.SetStateAction<boolean>>;
   isOpened: boolean;
   lastSelected?: string | number;
-  setLastSelected: React.Dispatch<React.SetStateAction<string | number | undefined>>;
+  setLastSelected: React.Dispatch<
+    React.SetStateAction<string | number | undefined>
+  >;
   multiSelectLabelClassName?: string;
   searchValue: string;
   setSearchValue: React.Dispatch<React.SetStateAction<string>>;
@@ -36,7 +50,14 @@ const ATHOSSelectProvider = (
     matchLabelWidth?: boolean;
   }
 ) => {
-  const { multiSelect = false, onToggle, position, spacing, matchLabelWidth, multiSelectLabelClassName } = props;
+  const {
+    multiSelect = false,
+    onToggle,
+    position,
+    spacing,
+    matchLabelWidth,
+    multiSelectLabelClassName,
+  } = props;
   const popUpProps = usePopUp({
     onToggle,
     matchChildrenWidth: matchLabelWidth,
@@ -45,17 +66,19 @@ const ATHOSSelectProvider = (
   });
   const [updating, setUpdating] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const [selectedItems, setSelectedItems] = useState<(string | number)[]>(
-    Array.isArray(props.selected) ? props.selected : props.selected !== undefined && props.selected !== null ? [props.selected] : []
-  );
+  const [selectedItems, setSelectedItems] = useState<(string | number)[]>([]);
   const [lastSelected, setLastSelected] = useState<string | number>();
   // Type guard function to check if we have labels
-  const hasLabels = (props: ATHOSSelectedProps): props is ATHOSSelectPropsList => {
+  const hasLabels = (
+    props: ATHOSSelectedProps
+  ): props is ATHOSSelectPropsList => {
     return "labels" in props && Array.isArray(props.labels);
   };
 
   // Type guard function to check if we have cols
-  const hasCols = (props: ATHOSSelectedProps): props is ATHOSSelectPropsCols => {
+  const hasCols = (
+    props: ATHOSSelectedProps
+  ): props is ATHOSSelectPropsCols => {
     return "cols" in props && Array.isArray(props.cols);
   };
 
@@ -113,17 +136,34 @@ const ATHOSSelectProvider = (
 
   useEffect(() => {
     if (props.selected) {
-      setSelectedItems(Array.isArray(props.selected) ? props.selected : [props.selected]);
+      setSelectedItems(
+        Array.isArray(props.selected)
+          ? props.selected
+          : props.selected !== undefined && props.selected !== null
+          ? [props.selected]
+          : []
+      );
     }
+
+    return () => {
+      setSelectedItems([]);
+      setLastSelected(undefined);
+    };
   }, [props.selected]);
 
   const filteredLabels = useMemo(() => {
     return (
       labels?.filter((label) => {
         if (label.label) {
-          return label.label.toString().toLowerCase().includes(searchValue.toLowerCase());
+          return label.label
+            .toString()
+            .toLowerCase()
+            .includes(searchValue.toLowerCase());
         }
-        return label.value.toString().toLowerCase().includes(searchValue.toLowerCase());
+        return label.value
+          .toString()
+          .toLowerCase()
+          .includes(searchValue.toLowerCase());
       }) || null
     );
   }, [labels, searchValue]);
@@ -133,9 +173,15 @@ const ATHOSSelectProvider = (
       cols?.map((col) => {
         return col.filter((label) => {
           if (label.label) {
-            return label.label.toString().toLowerCase().includes(searchValue.toLowerCase());
+            return label.label
+              .toString()
+              .toLowerCase()
+              .includes(searchValue.toLowerCase());
           }
-          return label.value.toString().toLowerCase().includes(searchValue.toLowerCase());
+          return label.value
+            .toString()
+            .toLowerCase()
+            .includes(searchValue.toLowerCase());
         });
       }) || null
     );
@@ -168,7 +214,9 @@ const ATHOSSelectProvider = (
 export const useATHOSSelectContext = () => {
   const context = useContext(ATHOSSelectContext);
   if (!context) {
-    throw new Error("useATHOSSelectContext must be used within a ATHOSSelectProvider");
+    throw new Error(
+      "useATHOSSelectContext must be used within a ATHOSSelectProvider"
+    );
   }
   return context;
 };

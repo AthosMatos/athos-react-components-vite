@@ -4,12 +4,31 @@ import { v4 } from "uuid";
 import { fillIds } from "../../../utils/data-utils";
 import { DynamicTableProps } from "../interfaces";
 import { setTotalItems } from "../redux/CustomStates/provider";
-import { setBaseData, setFilteredColumns, setFilteredData, setPreFilteredData } from "../redux/Filtering/provider";
+import {
+  setBaseData,
+  setColumnOrder,
+  setFilteredColumns,
+  setFilteredData,
+  setPreFilteredData,
+} from "../redux/Filtering/provider";
 import { ADTPropsState } from "../redux/props/interfaces";
 import { fillADTProps, setColumns } from "../redux/props/provider";
 
-export function ADTStatesController<T>({ props }: { props: DynamicTableProps<T> }) {
-  const { data, columnsToHide, columnsToShow, customColumns, tableStyle, columnOrder, extraColumns } = props;
+export function ADTStatesController<T>({
+  props,
+}: {
+  props: DynamicTableProps<T>;
+}) {
+  const {
+    data,
+    columnsToHide,
+    columnsToShow,
+    customColumns,
+    tableStyle,
+    columnOrder,
+    extraColumns,
+    columnsToStartShow,
+  } = props;
   const dataWithIds = useMemo(() => {
     if (data && data.length) return fillIds(data);
     return data;
@@ -31,7 +50,9 @@ export function ADTStatesController<T>({ props }: { props: DynamicTableProps<T> 
     if (!data || !data.length) return [];
     let cols: (keyof T)[] = [];
     if (columnsToHide) {
-      cols = Object.keys(data[0] as object).filter((column) => !columnsToHide.includes(column as keyof T)) as (keyof T)[];
+      cols = Object.keys(data[0] as object).filter(
+        (column) => !columnsToHide.includes(column as keyof T)
+      ) as (keyof T)[];
     } else if (columnsToShow) {
       cols = columnsToShow;
     } else cols = Object.keys(data[0] as object) as (keyof T)[];
@@ -47,7 +68,11 @@ export function ADTStatesController<T>({ props }: { props: DynamicTableProps<T> 
       });
     }
     if (xtraCols?.length) {
-      cols.push(...xtraCols.map((col) => `${col.column as any}-isExtraCol-${col.id}` as any));
+      cols.push(
+        ...xtraCols.map(
+          (col) => `${col.column as any}-isExtraCol-${col.id}` as any
+        )
+      );
     }
 
     if (columnOrder) {
@@ -55,7 +80,14 @@ export function ADTStatesController<T>({ props }: { props: DynamicTableProps<T> 
       cols = [...columnOrder, ...cols];
     }
     return cols;
-  }, [columnsToHide, columnsToShow, data, customColumns, columnOrder, xtraCols]);
+  }, [
+    columnsToHide,
+    columnsToShow,
+    data,
+    customColumns,
+    columnOrder,
+    xtraCols,
+  ]);
 
   useEffect(() => {
     const pr: ADTPropsState<any> = {
@@ -70,16 +102,22 @@ export function ADTStatesController<T>({ props }: { props: DynamicTableProps<T> 
       columns,
     };
     dispatch(fillADTProps(pr));
-  }, [props]);
+  }, [columns, dataWithIds, dispatch, props, tableStyle, xtraCols]);
 
   useEffect(() => {
     if (columns?.length && data?.length) {
-      dispatch(setFilteredColumns(columns));
+      if (columnsToStartShow) {
+        const colsToShow = Object.keys(columnsToStartShow).filter((col) =>
+          columns.includes(col as keyof T)
+        );
+        dispatch(setFilteredColumns(colsToShow));
+      } else dispatch(setFilteredColumns(columns));
+      dispatch(setColumnOrder(columns));
       dispatch(setColumns(columns));
       dispatch(setTotalItems(data.length));
       dispatch(setFilteredData(dataWithIds));
       dispatch(setPreFilteredData(dataWithIds));
       dispatch(setBaseData(dataWithIds));
     }
-  }, [columns]);
+  }, [columns, columnsToStartShow, data.length, dataWithIds, dispatch]);
 }
