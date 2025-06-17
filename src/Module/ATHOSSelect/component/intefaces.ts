@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import type { CSSProperties } from "styled-components";
 import { ATHOSInputStyles } from "../../ATHOSInput/component/interfaces";
 import { PopUpPosition } from "../../hooks/private/usePopUp";
 
@@ -8,7 +7,7 @@ export interface SelectedItemI {
   component?: ReactNode;
   value: string | number;
   className?: string;
-  style?: CSSProperties;
+  style?: React.CSSProperties;
 }
 
 type MultiSelectType =
@@ -33,19 +32,17 @@ interface ATHOSSelectBaseProps {
   containerClassName?: string;
   optionClassName?: string;
   selectedLabelClassName?: string;
-  selectedLabelStyle?: CSSProperties;
+  selectedLabelStyle?: React.CSSProperties;
   labelsStyle?: React.CSSProperties;
   spacing?: number;
   matchLabelWidth?: boolean;
   onToggleOpen?: (isOpen: boolean) => void;
   inline?: boolean;
   listContainerClassName?: string;
-  listContainerStyle?: CSSProperties;
+  listContainerStyle?: React.CSSProperties;
   multiSelect?: MultiSelectType;
   multiSelectLabelClassName?: string;
-  onChange?:
-    | ((selected: (string | number)[]) => Promise<any>)
-    | ((selected: (string | number)[]) => void);
+  onChange?: ((selected: (string | number)[]) => Promise<any>) | ((selected: (string | number)[]) => void);
   search?:
     | {
         placeholder?: string;
@@ -61,6 +58,6 @@ export interface ATHOSSelectPropsList extends ATHOSSelectBaseProps {
 export interface ATHOSSelectPropsCols extends ATHOSSelectBaseProps {
   cols: SelectedItemI[][];
   colClassName?: string;
-  colStyle?: CSSProperties;
+  colStyle?: React.CSSProperties;
 }
 export type ATHOSSelectedProps = ATHOSSelectPropsList | ATHOSSelectPropsCols;

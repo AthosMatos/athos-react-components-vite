@@ -2,7 +2,7 @@ import type { DraggableSyntheticListeners, UniqueIdentifier } from "@dnd-kit/cor
 import { defaultAnimateLayoutChanges, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { motion } from "motion/react";
-import type { CSSProperties, PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 import { createContext, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import type { BaseItem } from "..";
@@ -65,7 +65,7 @@ function SortableItem<T extends BaseItem>({ children, id, update, items }: Props
     }),
     [attributes, listeners, setActivatorNodeRef, setIsDeleting]
   );
-  const style: CSSProperties = {
+  const style: React.CSSProperties = {
     opacity: isDragging ? 0.4 : undefined,
     transform: CSS.Translate.toString(transform),
     transition,

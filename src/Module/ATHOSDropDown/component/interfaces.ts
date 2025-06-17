@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import type { CSSProperties } from "styled-components";
 import type { PopUpPosition } from "../../hooks/private/usePopUp";
 
 interface ATHOSDDDPPBaseProps {
@@ -12,7 +11,7 @@ interface ATHOSDDDPPBaseProps {
   matchChildrenWidth?: boolean;
   onToggle?: (isOpen: boolean) => void;
   buttonClassName?: string;
-  buttonStyle?: CSSProperties;
+  buttonStyle?: React.CSSProperties;
   disabled?: boolean;
 }
 
@@ -20,7 +19,7 @@ export interface LabelI {
   label: ReactNode;
   onClick?: () => void;
   className?: string;
-  style?: CSSProperties;
+  style?: React.CSSProperties;
 }
 interface ATHOSDropDownBaseProps extends ATHOSDDDPPBaseProps {
   children: React.ReactNode;
@@ -32,6 +31,6 @@ export interface ATHOSDropDownPropsList extends ATHOSDropDownBaseProps {
 export interface ATHOSDropDownPropsCols extends ATHOSDropDownBaseProps {
   cols: LabelI[][];
   colClassName?: string;
-  colStyle?: CSSProperties;
+  colStyle?: React.CSSProperties;
 }
 export type ATHOSDropDownProps = ATHOSDropDownPropsList | ATHOSDropDownPropsCols;

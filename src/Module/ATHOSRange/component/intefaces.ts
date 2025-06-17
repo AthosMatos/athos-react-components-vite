@@ -1,4 +1,3 @@
-import type { CSSProperties } from "styled-components";
 import type { PopUpPosition } from "../../hooks/private/usePopUp";
 
 export interface ATHOSRangeProps {
@@ -19,7 +18,7 @@ export interface ATHOSRangeProps {
   wrapperClassName?: string;
   optionLabelClassName?: string;
   selectedLabelClassName?: string;
-  selectedLabelStyle?: CSSProperties;
+  selectedLabelStyle?: React.CSSProperties;
   labelsStyle?: React.CSSProperties;
   spacing?: number;
   matchLabelWidth?: boolean;
