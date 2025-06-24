@@ -13,14 +13,15 @@ export type GlobalConfig<T> = {
   cellComponent?: (cell: ReactNode) => React.ReactNode;
   rowClick?: (rowData: T) => void;
 };
-export type SpecificColConfig = {
+export type SpecificColConfig<T, D> = {
   maxCharToCut?: number;
   label?: React.ReactNode;
   maxWidth?: number; //implement
   minWidth?: number; //implement
   minColWidthToShort?: number; //imrpove add stages like short, medium, long
-  cellComponent?: (cell: ReactNode) => React.ReactNode;
-  formatter?: (value: any) => ReactNode;
+  cellComponent?: (cell: T) => ReactNode;
+  cellComponentRowData?: (cell: D) => ReactNode;
+  formatter?: (value: T) => ReactNode;
 } & TdefaultStyles;
 
 export type ExtraColConfig<T> = {
@@ -61,7 +62,7 @@ export type ExtraCellColumnsI<T> = {
   component: (data: T) => React.ReactNode;
 };
 export type ColConfig<T> = {
-  [key in keyof T]?: SpecificColConfig;
+  [key in keyof T]?: SpecificColConfig<T[key], T>;
 };
 export type StartShortI<T> = {
   [key in keyof T]?: boolean;

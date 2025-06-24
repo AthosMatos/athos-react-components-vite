@@ -24,7 +24,13 @@ import ADTNav from "./Table/ADTNav";
  * but if provided, it will use the keys in the order of the array.
  */
 
-const Comp = ({ props, stly }: { stly?: boolean; props: DynamicTableProps<any> }) => {
+const Comp = ({
+  props,
+  stly,
+}: {
+  stly?: boolean;
+  props: DynamicTableProps<any>;
+}) => {
   ADTStatesController({ props });
   const { selectedRows, data, tableName } = useSelectors_ADTSelectedRowsToast();
 
@@ -33,10 +39,15 @@ const Comp = ({ props, stly }: { stly?: boolean; props: DynamicTableProps<any> }
   if (tableContext) {
     useEffect(() => {
       //console.log("selectedRows", selectedRows);
-      tableContext.setSelectedData({ ...tableContext.selectedData, [tableName]: selectedRows?.map((row: any) => data[row]) });
-    }, [selectedRows]);
+      tableContext.setSelectedData({
+        ...tableContext.selectedData,
+        [tableName]: selectedRows?.map((row: any) => data[row]),
+      });
+    }, [data, selectedRows, tableContext, tableName]);
   } else {
-    console.log("useATHOSDynamicTableContextPrivate must be used within a ATHOSDynamicTableProvider");
+    console.warn(
+      "useATHOSDynamicTableContextPrivate must be used within a ATHOSDynamicTableProvider"
+    );
   }
 
   return (

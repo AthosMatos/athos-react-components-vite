@@ -22,12 +22,24 @@ const useADTCellCol = ({
   column: any;
   isLast: any;
 }) => {
-  const extraColumns = useSelector((state: ADTState) => state.ADTPropsReducer.extraColumns);
-  const colConfig = useSelector((state: ADTState) => state.ADTPropsReducer.colConfig);
-  const globalConfig = useSelector((state: ADTState) => state.ADTPropsReducer.globalConfig);
-  const startShort = useSelector((state: ADTState) => state.ADTPropsReducer.startShort);
-  const short = useSelector((state: ADTState) => state.ADTCustomStatesReducer.columnsShort);
-  const customCols = useSelector((state: ADTState) => state.ADTPropsReducer.customColumns);
+  const extraColumns = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.extraColumns
+  );
+  const colConfig = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.colConfig
+  );
+  const globalConfig = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.globalConfig
+  );
+  const startShort = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.startShort
+  );
+  const short = useSelector(
+    (state: ADTState) => state.ADTCustomStatesReducer.columnsShort
+  );
+  const customCols = useSelector(
+    (state: ADTState) => state.ADTPropsReducer.customColumns
+  );
 
   const [showTooltip, setShowTooltip] = useState(false);
 
@@ -35,21 +47,36 @@ const useADTCellCol = ({
   const touch = useMobileTouchHandler({ index, rowIndex, showTooltip });
   const persistStyle = usePrimaryColHandler({ index, isLast, isCheck });
   const maxCharToCut =
-    (extraColumns?.length && extraCol && extraColumns.find((xc) => xc.id == extraCol.split("-isExtraCol-")[1])?.maxCharToCut) ||
+    (extraColumns?.length &&
+      extraCol &&
+      extraColumns.find((xc) => xc.id == extraCol.split("-isExtraCol-")[1])
+        ?.maxCharToCut) ||
     (colConfig && colConfig[column]?.maxCharToCut) ||
     globalConfig?.maxCharToCut ||
     10;
   const className =
-    (extraColumns?.length && extraCol && extraColumns.find((xc) => xc.id == extraCol.split("-isExtraCol-")[1])?.className) ||
+    (extraColumns?.length &&
+      extraCol &&
+      extraColumns.find((xc) => xc.id == extraCol.split("-isExtraCol-")[1])
+        ?.className) ||
     (colConfig && colConfig[column]?.className);
   const style =
-    (extraColumns?.length && extraCol && extraColumns.find((xc) => xc.id == extraCol.split("-isExtraCol-")[1])?.style) ||
+    (extraColumns?.length &&
+      extraCol &&
+      extraColumns.find((xc) => xc.id == extraCol.split("-isExtraCol-")[1])
+        ?.style) ||
     (colConfig && colConfig[column]?.style);
 
   const formatter = colConfig && colConfig[column]?.formatter;
 
   const hasExtraCol = useMemo(
-    () => !!(extraColumns?.length && extraCol && extraColumns.find((exc) => exc.id == extraCol.split("-isExtraCol-")[1])?.cellComponent),
+    () =>
+      !!(
+        extraColumns?.length &&
+        extraCol &&
+        extraColumns.find((exc) => exc.id == extraCol.split("-isExtraCol-")[1])
+          ?.cellComponent
+      ),
     [extraColumns, extraCol]
   );
   const rowValue = useMemo(() => {
@@ -62,23 +89,43 @@ const useADTCellCol = ({
       row[column].length > maxCharToCut
     ) {
       setShowTooltip(true);
-      return formatter ? formatter(row[column].slice(0, maxCharToCut) + "...") : row[column].slice(0, maxCharToCut) + "...";
+      return formatter
+        ? formatter(row[column].slice(0, maxCharToCut) + "...")
+        : row[column].slice(0, maxCharToCut) + "...";
     }
     setShowTooltip(false);
     return formatter ? formatter(row[column]) : row[column];
-  }, [startShort, row, column, maxCharToCut, short, hasExtraCol]);
+  }, [hasExtraCol, row, column, short, startShort, maxCharToCut, formatter]);
 
   const cell = useMemo(() => {
     if (hasExtraCol) {
       return extraColumns
         ?.find((exc) => exc.id == extraCol.split("-isExtraCol-")[1])
         ?.cellComponent?.(formatter ? formatter(row[column]) : row[column]);
+    } else if (colConfig && colConfig[column]?.cellComponentRowData) {
+      return colConfig[column]?.cellComponentRowData(
+        formatter ? formatter(row) : row
+      );
     } else if (colConfig && colConfig[column]?.cellComponent) {
-      return colConfig[column]?.cellComponent(formatter ? formatter(row[column]) : row[column]);
+      return colConfig[column]?.cellComponent(
+        formatter ? formatter(row[column]) : row[column]
+      );
     }
-    const customColumns = customCols?.find((col) => col.newLabel === column)?.render?.(row);
+    const customColumns = customCols
+      ?.find((col) => col.newLabel === column)
+      ?.render?.(row);
     return customColumns || rowValue;
-  }, [column, row, colConfig, rowValue, extraColumns, extraCol, hasExtraCol]);
+  }, [
+    hasExtraCol,
+    colConfig,
+    column,
+    customCols,
+    row,
+    rowValue,
+    extraColumns,
+    formatter,
+    extraCol,
+  ]);
 
   const Cell = useMemo(() => {
     if (className || style) {
