@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { BiCollapseVertical } from "react-icons/bi";
 import { BsFillMenuButtonWideFill, BsGrid3X2GapFill, BsInputCursorText } from "react-icons/bs";
 import { FaWpforms } from "react-icons/fa";
-import { FaListCheck, FaTable } from "react-icons/fa6";
+import { FaListCheck, FaTable, FaTree } from "react-icons/fa6";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { GrInstallOption } from "react-icons/gr";
 import { RxButton, RxComponent1 } from "react-icons/rx";
@@ -24,6 +24,7 @@ import ATHOSInputPage from "../Module/ATHOSInput/page";
 import { OptKeyed } from "../Module/ATHOSMenu/helpers";
 import ATHOSPopUpPage from "../Module/ATHOSPopUp/page";
 import ATHOSSelectPage from "../Module/ATHOSSelect/page";
+import ATHOSTreeviewPage from "../Module/ATHOSTreeview/page";
 import AthosVirtualDivPage from "../Module/ATHOSVirtualDiv/page";
 import { usePage } from "../pageContext/redux";
 import InstallPage from "../pages/Install";
@@ -76,6 +77,14 @@ export const RoutesProvider = ({ children }: { children: React.ReactNode }) => {
       label: AppText.pages.components.title[lang],
       icon: <RxComponent1 />,
       subOpts: {
+        treeview: {
+          path: "components/treeview",
+          component: ATHOSTreeviewPage,
+          label: "Treeview",
+          icon: <FaTree />,
+          onClick: () => setPageTitle(AppText.pages.components.treeview),
+          onInit: () => setPageTitle(AppText.pages.components.treeview),
+        },
         breadcrumbs: {
           path: "components/breadcrumbs",
           component: ATHOSBreadcrumbsPage,

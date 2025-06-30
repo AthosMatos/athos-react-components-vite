@@ -1,15 +1,42 @@
-# Ignore everything except dist, package.json, and README.md
+# Development files
 node_modules
 src
 tests
-rollup.config.js
-tsconfig.json
 public
 *.log
 .vscode
 .git
 .github
-.public
+
+# Demo-specific files (not for npm package)
+src/demo.css
+src/index.css
+src/main.tsx
+src/tt.tsx
+src/Routes
+src/pages
+src/langContext
+src/pageContext
+src/themeContext
+src/Layout
+
+# Config files
+rollup.config.mjs
+tsconfig*.json
+vite.config.mts
+eslint.config.js
 prettierrc.json
-.prettierrc
-.prettierignore
+.prettierrc*
+.gitignore
+
+# Build artifacts (keep only dist)
+*.tsbuildinfo
+
+# IDE files
+.idea
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,17 +1,3 @@
-@import "tailwindcss";
-@plugin "daisyui";
-
-@custom-variant dark (&:where(.dark, .dark *));
-
-body {
-  margin: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: white;
-  font-family: "Anek Latin";
-}
-
-input[type="password"]::-ms-reveal,
-input[type="password"]::-ms-clear {
-  display: none;
-}
+/* This file imports both component and demo styles for development */
+@import "./components.css";
+@import "./demo.css";

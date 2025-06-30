@@ -1,18 +1,18 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
-import { useClickOutside } from "../hooks/useClickOutside";
+import { usePopUp } from "../hooks/private/usePopUp";
 import HeightAnimDiv from "./components/HeightAnimDiv";
-import { ATHOSMenuProps, OptionProps } from "./interfaces";
+import type { ATHOSMenuProps, OptionProps } from "./interfaces";
 import AMPropsReducer, { fillProps } from "./redux/Props";
 import AMSelectedReducer, {
-    OptSTypes,
+    type OptSTypes,
     selectData,
     selectOption,
     selectSubOption,
     selectSubSubOption
 } from "./redux/Selected";
-import { AMState } from "./redux/store";
+import type { AMState } from "./redux/store";
 import Menu from "./sections/Menu";
 import Selected from "./sections/Selected";
 
@@ -20,18 +20,9 @@ const AM = (props: ATHOSMenuProps) => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(fillProps(props));
-    }, [props]);
+    }, [dispatch, props]);
 
-    const [open, setOpen] = useState(false);
     const [init, setInit] = useState(false);
-    const BRef = useRef<HTMLDivElement>(null);
-    const ARef = useRef<HTMLDivElement>(null);
-    useClickOutside({
-        callback: () => {
-            setOpen(false);
-        },
-        refs: [ARef, BRef]
-    });
 
     if (props.navigate) {
         const options = props.options;
@@ -113,40 +104,42 @@ const AM = (props: ATHOSMenuProps) => {
                     });
                 });
             });
-        }, [location, options, init]);
+        }, [location, options, init, SetSelected]);
 
         useEffect(() => {
             if (options != reduxoptions) {
                 setInit(false);
             }
-        }, [options]);
+        }, [options, reduxoptions]);
     }
 
-    const selectedHeight = useMemo(() => {
-        return (ARef.current?.clientHeight || 0) + 10;
-    }, [ARef.current]);
+    const { childRef, contentRef, isOpened, setIsOpened } = usePopUp({
+        //onToggle: () => setOpen(!open),
+        // matchChildrenWidth: true,
+        position: props.menuDirection
+    });
 
     return (
-        <div className="flex flex-col gap-2 select-none leading-tight w-full">
+        <div className="select-none leading-tight w-full">
             <div className="relative">
-                <Selected aRef={ARef} click={() => setOpen(!open)} />
+                <Selected
+                    aRef={childRef}
+                    click={() => setIsOpened(!isOpened)}
+                />
                 <HeightAnimDiv
-                    style={
-                        props.menuDirection == "top"
-                            ? {
-                                  bottom: selectedHeight
-                                      ? selectedHeight + "px"
-                                      : "0px"
-                              }
-                            : {
-                                  top: selectedHeight
-                                      ? selectedHeight + "px"
-                                      : "0px"
-                              }
-                    }
-                    Bref={BRef}
+                    style={{
+                        [props.menuDirection?.startsWith("top")
+                            ? "bottom"
+                            : "top"]: childRef.current
+                            ? `${
+                                  childRef.current.offsetHeight +
+                                  (props.spacing || 0)
+                              }px`
+                            : "0px"
+                    }}
+                    Bref={contentRef}
                     className="w-full absolute z-[999]"
-                    show={open}
+                    show={isOpened}
                 >
                     <Menu />
                 </HeightAnimDiv>

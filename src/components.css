@@ -1,0 +1,10 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Component-specific styles only - no global body styles */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}

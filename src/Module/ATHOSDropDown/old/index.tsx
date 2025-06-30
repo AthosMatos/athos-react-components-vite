@@ -1,0 +1,109 @@
+import { usePopUp } from "../../hooks/private/usePopUp";
+import type { ATHOSDropDownProps, ATHOSDropDownPropsCols, ATHOSDropDownPropsList, LabelI } from "./interfaces";
+
+/**
+ *
+ */
+
+const ListItem = ({
+  option,
+  onClick,
+  className,
+  style,
+}: {
+  option: LabelI;
+  onClick?: () => void;
+  className?: string;
+  style?: React.CSSProperties;
+}) => {
+  const defaultClassName = `cursor-pointer select-none `;
+
+  return (
+    <li
+      style={{
+        ...style,
+        ...option.style,
+      }}
+      onClick={onClick}
+      className={`${defaultClassName} ${className} ${option.className}`}
+    >
+      {option.label}
+    </li>
+  );
+};
+
+const ATHOSDropDownold = (props: ATHOSDropDownProps) => {
+  const {
+    children,
+    className,
+    labelsStyle,
+    position = "bottom-left",
+    style,
+    spacing,
+    matchChildrenWidth = false,
+    onToggle,
+    listButtonsClassName: labelClassName,
+    buttonClassName,
+    buttonStyle,
+    disabled,
+  } = props;
+
+  const { childRef, gap, id, pos, contentRef, setIsOpened } = usePopUp({
+    onToggle,
+    matchChildrenWidth,
+    position,
+    spacing,
+  });
+
+  // Type guard function to check if we have labels
+  const hasLabels = (props: ATHOSDropDownProps): props is ATHOSDropDownPropsList => {
+    return "labels" in props && Array.isArray(props.labels);
+  };
+
+  // Type guard function to check if we have cols
+  const hasCols = (props: ATHOSDropDownProps): props is ATHOSDropDownPropsCols => {
+    return "cols" in props && Array.isArray(props.cols);
+  };
+  return (
+    <div className={`${pos} ${disabled ? "pointer-events-none opacity-40" : ""}`}>
+      <button
+        disabled={disabled}
+        className={buttonClassName}
+        onClick={() => setIsOpened((prev) => !prev)}
+        ref={childRef}
+        popoverTarget={id}
+        style={
+          {
+            ...buttonStyle,
+            anchorName: `--anchor-${id}`,
+          } as any
+        }
+      >
+        {children}
+      </button>
+      <ul
+        ref={contentRef}
+        className={`dropdown flex flex-col ${className}`}
+        popover="auto"
+        id={id}
+        style={{ ...style, ...gap, positionAnchor: `--anchor-${id}` } as any}
+      >
+        {hasLabels(props)
+          ? props.labels?.map((option, index) => (
+              <ListItem style={labelsStyle} className={labelClassName} key={index} onClick={option.onClick} option={option} />
+            ))
+          : hasCols(props)
+          ? props.cols?.map((colGroup, index) => (
+              <div key={index} className={`flex ${props.colClassName}`} style={props.colStyle}>
+                {colGroup.map((option, index) => (
+                  <ListItem style={labelsStyle} className={labelClassName} key={index} onClick={option.onClick} option={option} />
+                ))}
+              </div>
+            ))
+          : null}
+      </ul>
+    </div>
+  );
+};
+
+export { ATHOSDropDownold };

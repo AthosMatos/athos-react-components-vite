@@ -80,6 +80,7 @@ const ATHOSDynamicTablePage = () => {
   return (
     <>
       <ATHOSDynamicTable
+        selectable
         loading={loading ? "Carregando..." : loading}
         extraCellColumns={[
           {
@@ -169,11 +170,11 @@ const ATHOSDynamicTablePage = () => {
             rowSpacingColor: !isDark ? "rgb(255, 255, 255)" : "rgb(19, 19, 19)",
             rowTextColor: "#1FB5AD",
           },
-          header: {
+          /* header: {
             functionsColors: {
               className: "text-zinc-400 dark:text-white",
             },
-          },
+          }, */
         }}
         //paddingInCells={"0.4rem"}
         spacingBetweenCells={8}

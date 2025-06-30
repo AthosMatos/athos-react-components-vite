@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "jsx": "react-jsx",
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "preserveConstEnums": true,
+    "removeComments": false,
+    "isolatedModules": true,
+    "allowImportingTsExtensions": false,
+    "noEmit": false,
+    "emitDeclarationOnly": false
+  },
+  "include": ["src/module-index.ts", "src/Module/**/*", "src/components.css"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.*",
+    "**/*.spec.*",
+    "**/*.stories.*",
+    "src/main.tsx",
+    "src/tt.tsx",
+    "src/demo.css",
+    "src/Routes/**/*",
+    "src/pages/**/*",
+    "src/langContext/**/*",
+    "src/pageContext/**/*",
+    "src/themeContext/**/*",
+    "src/Layout/**/*"
+  ]
+}

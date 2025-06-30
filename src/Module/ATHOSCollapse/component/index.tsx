@@ -140,9 +140,9 @@ export const ATHOSCollapse = ({
 
   return (
     <motion.div
-      style={{
+      /* style={{
         width: "fit-content",
-      }}
+      }} */
       ref={wrapperRef}
       animate={{
         gap: isOpen ? `${spacing}px` : 0,
@@ -150,7 +150,7 @@ export const ATHOSCollapse = ({
       onClick={onWrapperClick}
       className={`flex ${pos} ${wrapperClassName}`}
     >
-      <div ref={childRef} onClick={onClick}>
+      <div ref={childRef} onClick={onClick} className="w-fit h-fit">
         {children}
       </div>
 
@@ -167,6 +167,7 @@ export const ATHOSCollapse = ({
             ? variants.leftandrightWithFade
             : variants.leftandright
         }
+        style={position === "top" || position === "bottom" ? { minWidth: "fit-content" } : { minHeight: "fit-content" }}
         className={`flex overflow-hidden`}
         transition={CollapseTransition}
       >

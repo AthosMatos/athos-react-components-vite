@@ -1,5 +1,11 @@
-import "./index.css";
+import "./components.css";
 /* Components */
+
+export { ATHOSTreeview } from "./Module/ATHOSTreeview/component";
+
+export { ATHOSSelect } from "./Module/ATHOSSelect/component";
+
+export { ATHOSBreadcrumbs, type ATHOSBreadcrumbsProps } from "./Module/ATHOSBreadcrumbs/component";
 
 export { ATHOSButton } from "./Module/ATHOSButton/component";
 export type { ATHOSButtonProps } from "./Module/ATHOSButton/component/interfaces";
@@ -19,9 +25,10 @@ export { ATHOSDynamicTableProvider, useATHOSDynamicTableContext } from "./Module
 
 /* Table */
 export { ATHOSInput } from "./Module/ATHOSInput/component";
+export type { ATHOSInputType } from "./Module/ATHOSInput/component/interfaces";
 export { ATHOSResizableDiv } from "./Module/ATHOSResizableDiv";
 export { ATHOSSwitcher } from "./Module/ATHOSSwitcher";
-export { ATHOSTabs } from "./Module/ATHOSSwitcher/ATHOSTabs";
+export { ATHOSTabs } from "./Module/ATHOSTabs";
 export { ATHOSVirtualDiv } from "./Module/ATHOSVirtualDiv/component";
 /* TOAST */
 export { ATHOSToast } from "./Module/ATHOSToast";

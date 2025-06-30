@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaLayerGroup } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { ATHOSDropDown } from "../../../../../../ATHOSDropDown/component";
-import { LabelI } from "../../../../../../ATHOSDropDown/component/interfaces";
+import { LabelI } from "../../../../../../ATHOSDropDown/old/interfaces";
 import { ADTState } from "../../../../redux/store";
 import { ButtonWrapper, ListBgWrapperClassname, ListButtonClassname } from "../../styledWrappers";
 

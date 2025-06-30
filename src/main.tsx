@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
-import "./index.css";
+import "./index.css"; // Combined styles for development (includes both component and demo styles)
 import { LangReducer } from "./langContext/redux";
 import { ATHOSDynamicTableProvider } from "./module-index";
 import { PageReducer } from "./pageContext/redux";

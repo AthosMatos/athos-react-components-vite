@@ -1,8 +1,7 @@
 # How to publish the package to npm
 
 ```bash
-yarn rollup
-yarn publish
+npm publish
 ```
 
 # ATHOS React Components
@@ -10,8 +9,7 @@ yarn publish
 First install:
 
 ```bash
-npm install @athosws/react-components
-yarn add @athosws/react-components
+pnpm install @athosws/react-components
 ```
 
 ## ATHOSButton Component
@@ -52,11 +50,7 @@ export default App;
 To use a tooltip, pass the `tooltip` prop with the desired content:
 
 ```jsx
-<ATHOSButton
-  type="action"
-  tooltip="This is an action button"
-  onClick={() => console.log("Action button clicked!")}
->
+<ATHOSButton type="action" tooltip="This is an action button" onClick={() => console.log("Action button clicked!")}>
   Action
 </ATHOSButton>
 ```

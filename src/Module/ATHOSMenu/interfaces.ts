@@ -3,32 +3,32 @@
 import type { ReactNode } from "react";
 
 export type AMOptColorsProps = {
-  background?: string;
-  border?:
-    | {
-        color?: string;
-        width?: string;
-      }
-    | "none";
-  text?: string;
-  icon?: string;
-  className?: string;
+    background?: string;
+    border?:
+        | {
+              color?: string;
+              width?: string;
+          }
+        | "none";
+    text?: string;
+    icon?: string;
+    className?: string;
 };
 export interface ColorOptType {
-  hover?: AMOptColorsProps;
-  clicked?: AMOptColorsProps;
-  normal?: AMOptColorsProps;
-  defaults?: AMOptColorsProps;
+    hover?: AMOptColorsProps;
+    clicked?: AMOptColorsProps;
+    normal?: AMOptColorsProps;
+    defaults?: AMOptColorsProps;
 }
 interface AMMenuColorsProps extends AMOptColorsProps {
-  option: ColorOptType;
-  subOption?: ColorOptType;
-  subSubOption?: ColorOptType;
+    option: ColorOptType;
+    subOption?: ColorOptType;
+    subSubOption?: ColorOptType;
 }
 
 interface AMColorsProps {
-  selected?: AMOptColorsProps;
-  menu?: AMMenuColorsProps;
+    selected?: AMOptColorsProps;
+    menu?: AMMenuColorsProps;
 }
 
 ///COLOR////
@@ -36,36 +36,38 @@ interface AMColorsProps {
 ///OPTIONS///
 
 export interface DefaultOptProps {
-  label: string;
-  icon?: ReactNode;
-  path?: string;
-  onClick?: () => void;
-  onInit?: () => void;
-  specificColors?: ColorOptType;
+    label: string;
+    icon?: ReactNode;
+    path?: string;
+    onClick?: () => void;
+    onInit?: () => void;
+    specificColors?: ColorOptType;
 }
 
 export interface SubSubOptionProps extends DefaultOptProps {}
 
 export interface SubOptionProps extends DefaultOptProps {
-  subSubOpts?: SubSubOptionProps[];
+    subSubOpts?: SubSubOptionProps[];
 }
 
 export interface OptionProps extends DefaultOptProps {
-  subOpts?: SubOptionProps[];
+    subOpts?: SubOptionProps[];
 }
 
 export interface ATHOSMenuProps {
-  generalColors?: AMColorsProps;
-  options: OptionProps[];
+    spacing?: number;
+    className?: string;
+    generalColors?: AMColorsProps;
+    options: OptionProps[];
 
-  navigate?: {
-    useNavigate: any;
-    useLocation: any;
-  };
-  maxMenuHeight?: number;
-  blur?: {
-    menu?: boolean;
-    selected?: boolean;
-  };
-  menuDirection?: "top" | "bottom";
+    navigate?: {
+        useNavigate: any;
+        useLocation: any;
+    };
+    maxMenuHeight?: number;
+    blur?: {
+        menu?: boolean;
+        selected?: boolean;
+    };
+    menuDirection?: "top" | "bottom";
 }

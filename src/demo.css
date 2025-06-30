@@ -1,0 +1,8 @@
+/* Demo/Development specific styles - NOT included in the npm package */
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: white;
+  font-family: "Anek Latin";
+}

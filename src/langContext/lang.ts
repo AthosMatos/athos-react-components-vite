@@ -15,6 +15,16 @@ export const AppText = {
       },
     },
     components: {
+      treeview: {
+        title: {
+          "pt-BR": "Treeview",
+          "en-US": "Treeview",
+        },
+        subtitle: {
+          "pt-BR": "Veja o Treeview em ação",
+          "en-US": "See the Treeview in action",
+        },
+      },
       breadcrumbs: {
         title: {
           "pt-BR": "Breadcrumb",
