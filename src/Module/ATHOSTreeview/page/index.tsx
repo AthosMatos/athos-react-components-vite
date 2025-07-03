@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { FaTreeCity } from "react-icons/fa6";
 import { ATHOSTreeview } from "../component";
+import { TreeType } from "../component/interfaces/tree";
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const ATHOSTreeviewPage = () => {
   const [selected, setSelected] = useState<string[]>(["sub1.1.1"]);
-  const [data, setData] = useState([
+  const [data, setData] = useState<TreeType[]>([
     {
       id: "tree1",
       name: "Tree 1",
@@ -52,6 +55,7 @@ const ATHOSTreeviewPage = () => {
       ],
     },
   ]);
+  const [loading, setLoading] = useState(false);
 
   const multiSelectHandler = (id: string) => {
     setSelected((prevSelected) => {
@@ -62,28 +66,39 @@ const ATHOSTreeviewPage = () => {
       }
     });
   };
-  const singularSelectHandler = (id: string) => {
+  const singularSelectHandler = async (id: string) => {
+    setLoading(true);
+    await sleep(1000);
     setSelected([id]);
+    setLoading(false);
   };
 
   const handleAdd = (name: string, parentId?: string) => {};
 
   return (
     <div className="text-black">
+      {/* <SortableTree indicator collapsible /> */}
       <ATHOSTreeview
+        isLoading={loading}
         styles={{
-          generalClassName: "border border-zinc-300 rounded-md p-2",
-          // selectedClassName: (index) => `bg-red-${Math.min(index + 1, 9)}00 text-blue-900`,
+          generalClassName: "border border-zinc-300 rounded-xl p-2 w-[500px]",
+          selected: {
+            bgColor: "#E1D8D8",
+            color: "#845B5D",
+          },
         }}
         fillWidth
         selected={selected}
-        /*  onAdd={(name, parentId) => {
+        onAdd={(name, parentId) => {
           //alert(`Add: ${name} under ${parentId}`);
           handleAdd(name, parentId);
         }}
         onDelete={(id) => {
           alert(`Delete: ${id}`);
-        }} */
+        }}
+        onMove={(id, parentId) => {
+          alert(`Move: ${id} to ${parentId}`);
+        }}
         onSelect={(id) => {
           singularSelectHandler(id);
         }}

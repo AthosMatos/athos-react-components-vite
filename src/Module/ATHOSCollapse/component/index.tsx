@@ -16,10 +16,13 @@ interface ATHOSCollapseProps {
   initialOpen?: boolean;
   collapsedClassName?: string;
   wrapperClassName?: string;
+  buttonClassName?: string;
   toggleOnWrapperClick?: boolean;
   fade?: boolean;
   hideOnClickOutside?: boolean;
-  forceOpen?: boolean;
+  open?: boolean;
+  extraButton?: React.ReactNode;
+  buttonContainerClassName?: string;
 }
 
 const variants = {
@@ -84,10 +87,13 @@ export const ATHOSCollapse = ({
   initialOpen,
   collapsedClassName,
   wrapperClassName,
+  buttonClassName,
   toggleOnWrapperClick,
   fade,
   hideOnClickOutside,
-  forceOpen,
+  extraButton,
+  open: forceOpen,
+  buttonContainerClassName,
 }: ATHOSCollapseProps) => {
   const [isOpen, setIsOpen] = useState(initialOpen || false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -150,8 +156,11 @@ export const ATHOSCollapse = ({
       onClick={onWrapperClick}
       className={`flex ${pos} ${wrapperClassName}`}
     >
-      <div ref={childRef} onClick={onClick} className="w-fit h-fit">
-        {children}
+      <div ref={childRef} className={buttonContainerClassName}>
+        <div className={buttonClassName} onClick={onClick}>
+          {children}
+        </div>
+        {extraButton}
       </div>
 
       <motion.div

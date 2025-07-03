@@ -1,16 +1,22 @@
-import { CrumbType } from "./crumbs";
+import { TreeType } from "./tree";
 
 export interface ATHOSTreeviewPropsI {
   styles?: {
     generalClassName?: string;
-    selectedClassName?: ((index: number) => string) | string;
+    selected?: {
+      bgColor?: string;
+      bgcolorIndex?: (index: number) => string;
+      color?: string;
+      colorIndex?: (index: number) => string;
+    };
   };
   isLoading?: boolean;
-  data: CrumbType[];
+  data: TreeType[];
   selected?: string[];
   onAdd?: (name: string, parentId?: string) => void;
   onDelete?: (id: string) => void;
-  fillWidth?: boolean;
   onSelect?: (id: string) => void;
-  update?: (data: CrumbType[]) => void;
+  onMove?: (id: string, parentId: string) => void;
+  fillWidth?: boolean;
+  levelIndicator?: "darken" | "brighten";
 }
