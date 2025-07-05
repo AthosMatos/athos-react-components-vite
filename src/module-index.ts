@@ -1,7 +1,7 @@
 import "./components.css";
 /* Components */
 
-/* export { ATHOSTreeview } from "./Module/ATHOSTreeview/component"; */
+export { ATHOSTreeview } from "./Module/ATHOSTreeview/component";
 
 export { ATHOSSelect } from "./Module/ATHOSSelect/component";
 
