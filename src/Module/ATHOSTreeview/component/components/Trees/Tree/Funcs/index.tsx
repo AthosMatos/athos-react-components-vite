@@ -29,6 +29,13 @@ const Funcs = ({ isMoving, isMovingThisTree, tree, index }: FuncsProps) => {
   }, [funcOpenId, tree.id]);
 
   const { color } = useColors({ index });
+
+  const noFunctions = useMemo(() => {
+    return !onAdd && !onMove && !onDelete;
+  }, [onAdd, onMove, onDelete]);
+  if (noFunctions) {
+    return null;
+  }
   return isMovingThisTree ? (
     <IoMdMove
       className="opacity-60 hover:opacity-100 hover:text-red-400 transition-all duration-200 cursor-pointer"

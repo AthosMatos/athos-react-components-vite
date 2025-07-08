@@ -22,6 +22,7 @@ import ATHOSDynamicTablePage from "../Module/ATHOSDynamicTable/page";
 import ATHOSFormPage from "../Module/ATHOSForm/page";
 import ATHOSInputPage from "../Module/ATHOSInput/page";
 import { OptKeyed } from "../Module/ATHOSMenu/helpers";
+import ATHOSModalPage from "../Module/ATHOSModal/page";
 import ATHOSPopUpPage from "../Module/ATHOSPopUp/page";
 import ATHOSSelectPage from "../Module/ATHOSSelect/page";
 import ATHOSTreeviewPage from "../Module/ATHOSTreeview/page";
@@ -159,7 +160,7 @@ export const RoutesProvider = ({ children }: { children: React.ReactNode }) => {
         },
         modal: {
           path: "components/modal",
-          component: ATHOSCardPage,
+          component: ATHOSModalPage,
           label: "Modal",
           icon: <VscScreenFull />,
           onClick: () => setPageTitle(AppText.pages.components.modal),

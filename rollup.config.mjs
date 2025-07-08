@@ -2,6 +2,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
+import copy from "rollup-plugin-copy";
 import dts from "rollup-plugin-dts";
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import postcss from "rollup-plugin-postcss";
@@ -41,6 +42,21 @@ export default [
         minimize: true,
       }),
       terser(),
+      copy({
+        targets: [
+          {
+            src: "src/Module/*",
+            dest: "dist/ATHOSCOMPONENTS"
+          }
+        ],
+        filter: (src) => {
+          // Exclude page folders and their contents
+          const isPageFolder = src.includes('/page/') || src.includes('\\page\\');
+          const isPageFolderItself = src.endsWith('/page') || src.endsWith('\\page');
+          return !isPageFolder && !isPageFolderItself;
+        }
+      }),
+      
     ],
     external: [
       ...Object.keys(packageJson.peerDependencies || {}),

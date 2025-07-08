@@ -36,8 +36,8 @@ export { useATHOSToast } from "./Module/ATHOSToast/useToast";
 /* TOAST */
 
 /* MODAL */
-export { ATHOSModal } from "./Module/ATHOSModal";
-export { useATHOSModal } from "./Module/ATHOSModal/useModal";
+export { ATHOSModal } from "./Module/ATHOSModal/component";
+export { useATHOSModal } from "./Module/ATHOSModal/component/useModal";
 /* MODAL */
 
 export { ATHOSTooltip } from "./Module/ATHOSTooltip";

@@ -21,9 +21,10 @@ interface IusePopUp {
   matchChildrenWidth?: boolean;
   spacing?: number;
   onToggle?: (isOpen: boolean) => void;
+  onClickOutside?: () => void;
 }
 
-export const usePopUp = ({ position = "top", matchChildrenWidth = false, spacing = 6, onToggle }: IusePopUp) => {
+export const usePopUp = ({ position = "top", onClickOutside, matchChildrenWidth = false, spacing = 6, onToggle }: IusePopUp) => {
   const id = useMemo(() => v4(), []);
   const [isOpened, setIsOpened] = useState(false);
   const pos =
@@ -75,18 +76,19 @@ export const usePopUp = ({ position = "top", matchChildrenWidth = false, spacing
         dropdown.style.width = `${childWidth}px`;
       }
     }
-  }, [childRef.current, matchChildrenWidth, isOpened]);
+  }, [matchChildrenWidth, isOpened, id]);
 
   useClickOutside({
     callback: () => {
       setIsOpened(false);
+      if (onClickOutside) onClickOutside();
     },
     refs: [childRef, contentRef],
   });
 
   useEffect(() => {
     if (onToggle) onToggle(isOpened);
-  }, [isOpened]);
+  }, [isOpened, onToggle]);
   return { id, pos, gap, childRef, contentRef, setIsOpened, isOpened };
 };
 

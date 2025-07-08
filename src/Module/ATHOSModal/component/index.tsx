@@ -1,19 +1,12 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useRef } from "react";
 import { createPortal } from "react-dom";
-import { useClickOutside } from "../hooks/useClickOutside";
+
+import { useClickOutside } from "../../hooks/useClickOutside";
 import { ATHOSModalProps } from "./interfaces";
 
-export const ATHOSModal: React.FC<ATHOSModalProps> = (
-  props: ATHOSModalProps
-) => {
-  const {
-    children,
-    show,
-    hide,
-    backdrop = "rgba(255, 255, 255, 0.5)",
-    blur = "sm",
-  } = props;
+export const ATHOSModal = (props: ATHOSModalProps) => {
+  const { children, show, hide, backdrop = "rgba(255, 255, 255, 0.5)", blur = "sm" } = props;
   const ARef = useRef<HTMLDivElement>(null);
   useClickOutside({
     callback: () => {

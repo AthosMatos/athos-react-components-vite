@@ -2,8 +2,9 @@ import type { PopUpPosition } from "../../hooks/private/usePopUp";
 
 export interface ATHOSPopUpProps {
   children: React.ReactNode;
-
+  isOpen?: boolean;
   onToggle?: (isOpen: boolean) => void;
+  onClickOutside?: () => void;
   position?: PopUpPosition;
   style?: React.CSSProperties;
   contentWrapperStyle?: React.CSSProperties;

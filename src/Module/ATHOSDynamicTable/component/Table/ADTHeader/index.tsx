@@ -8,26 +8,13 @@ import { ADTSearch } from "./components/Search";
 import ADTSelectedFuncs from "./components/SelectedFuncs";
 
 const ADTHeader = () => {
-  const loading = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.loading
-  );
-  const dataLen = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.data
-  )?.length;
-  const iconsColors = useSelector(
-    (state: ADTState) =>
-      state.ADTPropsReducer.tableStyle?.header?.functionsColors?.icons
-  );
-  const extraFuncs = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.extraFuncs
-  );
+  const loading = useSelector((state: ADTState) => state.ADTPropsReducer.loading);
+  const dataLen = useSelector((state: ADTState) => state.ADTPropsReducer.data)?.length;
+  const iconsColors = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.header?.functionsColors?.icons);
+  const extraFuncs = useSelector((state: ADTState) => state.ADTPropsReducer.extraFuncs);
 
   return (
-    <div
-      className={`flex mb-2 justify-between ${
-        iconsColors?.className || "text-zinc-300"
-      }`}
-    >
+    <div className={`flex mb-2 justify-between h-10 ${iconsColors?.className || "text-zinc-300"}`}>
       <ADTInfo />
       {dataLen > 0 && !loading && (
         <div
@@ -40,9 +27,16 @@ const ADTHeader = () => {
           <ADTColumnsFilter />
           <ADTFilter />
           <ADTSearch />
-          {extraFuncs}
         </div>
       )}
+      <div
+        style={{
+          color: iconsColors?.style?.color,
+        }}
+        className={`flex select-none items-center h-10`}
+      >
+        {extraFuncs}
+      </div>
     </div>
   );
 };

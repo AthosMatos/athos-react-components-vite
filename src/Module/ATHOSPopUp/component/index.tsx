@@ -11,6 +11,8 @@ const ATHOSPopUp = ({
   matchChildrenWidth,
   spacing,
   className,
+  isOpen,
+  onClickOutside,
   contentWrapperStyle: contentStyle,
 }: ATHOSPopUpProps) => {
   const { childRef, gap, id, pos, contentRef, setIsOpened } = usePopUp({
@@ -18,6 +20,7 @@ const ATHOSPopUp = ({
     matchChildrenWidth,
     position,
     spacing,
+    onClickOutside,
   });
 
   return (
@@ -33,7 +36,7 @@ const ATHOSPopUp = ({
       </button>
       <ul
         ref={contentRef}
-        className={`dropdown flex flex-col ${contentClassName}`}
+        className={`dropdown ${isOpen ? "dropdown-open" : ""} flex flex-col ${contentClassName}`}
         popover="auto"
         id={id}
         style={
