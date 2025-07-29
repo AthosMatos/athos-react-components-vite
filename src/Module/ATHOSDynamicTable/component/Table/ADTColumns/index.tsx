@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import { usePropsContext } from "../../contexts/propsContext";
 import { ADTState } from "../../redux/store";
 import { ADTTR } from "../../styled";
 import ADTCol from "./ADTCol";
@@ -6,9 +7,9 @@ import ADTColCheckBox from "./ADTColCheckBox";
 import ADTColExtraCellCols from "./ADTColExtraCellCols";
 
 const ADTColumns = () => {
-  const { filteredColumns, selectable } = useSelector((state: ADTState) => ({
+  const { selectable } = usePropsContext<any>();
+  const { filteredColumns } = useSelector((state: ADTState) => ({
     filteredColumns: state.ADTFilteringReducer.filteredColumns,
-    selectable: state.ADTPropsReducer.selectable,
   }));
 
   return (

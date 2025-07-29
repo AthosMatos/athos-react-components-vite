@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { memo, useEffect, useRef, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
+import { usePropsContext } from "../../../../contexts/propsContext";
 import { filterBySearch } from "../../../../redux/Filtering/provider";
 import { ADTState } from "../../../../redux/store";
 import { IconWrapper } from "../../styledWrappers";
@@ -12,8 +13,11 @@ interface SInputProps {
 }
 
 const SInput = ({ onChange, wRef }: SInputProps) => {
-  const searchFilter = useSelector((state: ADTState) => state.ADTFilteringReducer.searchFilter);
-  const colors = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.header?.functionsColors?.body?.search);
+  const searchFilter = useSelector(
+    (state: ADTState) => state.ADTFilteringReducer.searchFilter
+  );
+  const colors =
+    usePropsContext<any>().tableStyle?.header?.functionsColors?.body?.search;
 
   return (
     <motion.input
@@ -23,7 +27,14 @@ const SInput = ({ onChange, wRef }: SInputProps) => {
       onChange={onChange}
       className={`rounded-lg transition-colors outline-none h-9 max-w-[300px] 
         ${colors?.className} `}
-      initial={{ width: 0, opacity: 0, paddingLeft: 0, paddingRight: 0, marginLeft: 0, marginRight: 0 }}
+      initial={{
+        width: 0,
+        opacity: 0,
+        paddingLeft: 0,
+        paddingRight: 0,
+        marginLeft: 0,
+        marginRight: 0,
+      }}
       animate={{
         width: "clamp(100px,66%,300px)",
         opacity: 1,
@@ -32,7 +43,14 @@ const SInput = ({ onChange, wRef }: SInputProps) => {
         marginLeft: "0.5rem",
         marginRight: "0.5rem",
       }}
-      exit={{ width: 0, opacity: 0, paddingLeft: 0, paddingRight: 0, marginLeft: 0, marginRight: 0 }}
+      exit={{
+        width: 0,
+        opacity: 0,
+        paddingLeft: 0,
+        paddingRight: 0,
+        marginLeft: 0,
+        marginRight: 0,
+      }}
       transition={{
         duration: 0.53,
         ease: "easeOut",
@@ -48,8 +66,9 @@ export const ADTSearch = memo(() => {
     setOpenSearch(!openSearch);
   };
   const inputRef = useRef<HTMLInputElement>(null);
-  const colors = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.header?.functionsColors?.icons);
 
+  const colors =
+    usePropsContext<any>().tableStyle?.header?.functionsColors?.icons;
   useEffect(() => {
     if (openSearch) {
       inputRef.current?.focus();
@@ -59,7 +78,12 @@ export const ADTSearch = memo(() => {
   return (
     <>
       <AnimatePresence>
-        {openSearch && <SInput wRef={inputRef} onChange={(event) => dispatch(filterBySearch(event.target.value))} />}
+        {openSearch && (
+          <SInput
+            wRef={inputRef}
+            onChange={(event) => dispatch(filterBySearch(event.target.value))}
+          />
+        )}
       </AnimatePresence>
       <IconWrapper open={openSearch} onClick={toggleSearch}>
         <FaSearch className={`text-base ${colors?.className}`} />

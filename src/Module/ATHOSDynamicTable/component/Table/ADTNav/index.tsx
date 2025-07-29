@@ -2,6 +2,7 @@ import { useEffect, useMemo } from "react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { ATHOSPopUp } from "../../../../ATHOSPopUp/component";
+import { usePropsContext } from "../../contexts/propsContext";
 import { movePage } from "../../redux/Filtering/provider";
 import { setCheckState } from "../../redux/Select/provider";
 import { ADTState } from "../../redux/store";
@@ -22,9 +23,7 @@ const PageButton = ({
   move: (to: number | "prev" | "next") => void;
   selected: boolean;
 }) => {
-  const colors = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.tableStyle?.nav?.pageButton
-  );
+  const colors = usePropsContext<any>().tableStyle?.nav?.pageButton;
   return (
     <p
       onClick={() => {
@@ -51,9 +50,7 @@ ${
 };
 
 const NavButton = ({ onClick, children, disabled }: NavButtonProps) => {
-  const colors = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.tableStyle?.nav?.buttons
-  );
+  const colors = usePropsContext<any>().tableStyle?.nav?.buttons;
   return (
     <div
       onClick={disabled ? undefined : onClick}
@@ -92,9 +89,9 @@ const ADTNav = () => {
     () => Math.ceil(totalItems / pageSize),
     [totalItems, pageSize]
   );
-  const dataLen = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.data
-  )?.length;
+  const { tableStyle, data, loading, tableName } = usePropsContext<any>();
+
+  const dataLen = data?.length || 0;
   const selectedpages = useSelector(
     (state: ADTState) => state.ADTSelectReducer.selectedPages
   );
@@ -119,10 +116,7 @@ const ADTNav = () => {
   };
   useEffect(() => {
     if (!selectedpages.includes(page)) dispatch(setCheckState(0));
-  }, [page]);
-  const loading = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.loading
-  );
+  }, [dispatch, page, selectedpages]);
 
   const pageButtonsMap =
     totalPages <= 6
@@ -133,9 +127,8 @@ const ADTNav = () => {
     totalPages > 5
       ? Array.from({ length: totalPages - 6 }, (_, i) => i + 4)
       : [];
-  const colors = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.tableStyle?.nav?.pageIndicator
-  );
+
+  const colors = tableStyle?.nav?.pageIndicator;
   return (
     !loading &&
     dataLen > 0 && (
@@ -172,6 +165,7 @@ const ADTNav = () => {
                   />
                 ) : (
                   <ATHOSPopUp
+                    id={`adt-nav-page-${tableName}-${num}`}
                     key={num}
                     content={
                       <div className="flex flex-col gap-2 dark:bg-black bg-zinc-200 p-2 rounded-md border border-zinc-300  border-opacity-40">

@@ -1,30 +1,23 @@
 import { useState } from "react";
 import { FaFilter } from "react-icons/fa";
-import { useSelector } from "react-redux";
 import { ATHOSPopUp } from "../../../../../../ATHOSPopUp/component";
-import { ADTState } from "../../../../redux/store";
+import { usePropsContext } from "../../../../contexts/propsContext";
 import { ButtonWrapper, ListWrapperClassname } from "../../styledWrappers";
 import Filter from "./Filter";
 
 const ADTFilter = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { name } = useSelector((state: ADTState) => ({
-    name: state.ADTPropsReducer.tableColFilterName,
-  }));
-  const colors = useSelector(
-    (state: ADTState) =>
-      state.ADTPropsReducer.tableStyle?.header?.functionsColors?.body
-  );
+  const { tableColFilterName, tableStyle, colsToFilter, tableName } =
+    usePropsContext<any>();
 
-  const colsToFilter = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.colsToFilter
-  );
+  const colors = tableStyle?.header?.functionsColors?.body;
 
   return (
     colsToFilter &&
     Object.keys(colsToFilter).length > 0 && (
       <ATHOSPopUp
+        id={`${tableName}-filter`}
         position="bottom-right"
         onToggle={(isOpen) => setIsOpen(isOpen)}
         contentWrapperClassName={`${ListWrapperClassname} ${colors?.className}`}
@@ -32,7 +25,7 @@ const ADTFilter = () => {
       >
         <ButtonWrapper
           open={isOpen}
-          label={name || "Filtros"}
+          label={tableColFilterName || "Filtros"}
           icon={<FaFilter size={16} />}
         />
       </ATHOSPopUp>

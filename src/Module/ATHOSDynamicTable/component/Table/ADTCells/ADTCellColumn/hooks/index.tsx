@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
+import { usePropsContext } from "../../../../contexts/propsContext";
 import { ADTState } from "../../../../redux/store";
 import { useMobileTouchHandler } from "./useMobileTouchHandler";
 import { usePrimaryColHandler } from "./usePrimaryColHandler";
@@ -22,23 +23,16 @@ const useADTCellCol = ({
   column: any;
   isLast: any;
 }) => {
-  const extraColumns = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.extraColumns
-  );
-  const colConfig = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.colConfig
-  );
-  const globalConfig = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.globalConfig
-  );
-  const startShort = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.startShort
-  );
+  const {
+    colConfig,
+    extraColumns,
+    globalConfig,
+    startShort,
+    customColumns: customCols,
+  } = usePropsContext();
+
   const short = useSelector(
     (state: ADTState) => state.ADTCustomStatesReducer.columnsShort
-  );
-  const customCols = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.customColumns
   );
 
   const [showTooltip, setShowTooltip] = useState(false);

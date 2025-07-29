@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import { usePropsContext } from "../../contexts/propsContext";
 import { ADTState } from "../../redux/store";
 import { ADTTR } from "../../styled";
 import ADTCellCheckBox from "./ADTCellCheckBox";
@@ -11,27 +12,21 @@ import ADTCellExtraCols from "./ADTCellExtraCols";
 }; */
 
 const ADTCells = () => {
-  const {
-    filteredColumns,
-    extraCellColumns,
-    pageSize,
-    filteredData,
-    selectedRows,
-    rowClassName,
-    selected: selectedColor,
-    rowClick,
-    selectable,
-  } = useSelector((state: ADTState) => ({
-    filteredColumns: state.ADTFilteringReducer.filteredColumns,
-    extraCellColumns: state.ADTPropsReducer.extraCellColumns,
-    pageSize: state.ADTFilteringReducer.filteredData.length,
-    filteredData: state.ADTFilteringReducer.filteredData,
-    selectedRows: state.ADTSelectReducer.selectedRows,
-    selected: state.ADTPropsReducer.tableStyle?.selected,
-    rowClassName: state.ADTPropsReducer.tableStyle?.rowClassName,
-    rowClick: state.ADTPropsReducer.globalConfig?.rowClick,
-    selectable: state.ADTPropsReducer.selectable,
-  }));
+  const { extraCellColumns, tableStyle, globalConfig, selectable } =
+    usePropsContext();
+
+  const selected = tableStyle?.selected;
+  const rowClassName = tableStyle?.rowClassName;
+  const rowClick = globalConfig?.rowClick;
+
+  const { filteredColumns, pageSize, filteredData, selectedRows } = useSelector(
+    (state: ADTState) => ({
+      filteredColumns: state.ADTFilteringReducer.filteredColumns,
+      pageSize: state.ADTFilteringReducer.filteredData.length,
+      filteredData: state.ADTFilteringReducer.filteredData,
+      selectedRows: state.ADTSelectReducer.selectedRows,
+    })
+  );
 
   return filteredData?.map((row, rowIndex) => (
     <ADTTR
@@ -42,7 +37,7 @@ const ADTCells = () => {
       variants={variants} */
       animate={{
         backgroundColor: selectedRows.includes(row.uniqueId)
-          ? selectedColor?.rowColor
+          ? selected?.rowColor
           : "transparent",
       }}
       className={`transition-colors ${rowClassName} `}
@@ -52,7 +47,6 @@ const ADTCells = () => {
     >
       {selectable && (
         <ADTCellCheckBox
-          index={rowIndex}
           isLast={rowIndex === pageSize - 1}
           rowId={row.uniqueId}
           isCheck={selectedRows.includes(row.uniqueId)}

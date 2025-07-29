@@ -1,7 +1,6 @@
 import { memo, useMemo } from "react";
-import { useSelector } from "react-redux";
 import { ATHOSTooltip } from "../../../../../ATHOSTooltip";
-import { ADTState } from "../../../redux/store";
+import { usePropsContext } from "../../../contexts/propsContext";
 import { ADTCellColWrapper } from "../../../styled";
 import { getCellWrapperStyle, tdClassName } from "../../funcs";
 import useADTCellCol from "./hooks";
@@ -17,38 +16,20 @@ const ADTCellColumn = ({
   col,
   isLastCol,
 }: ADTCellColumnProps) => {
-  const persistPrimaryColumn = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.persistPrimaryColumn
-  );
-  const extraColumns = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.extraColumns
-  );
-  const spacingBetweenColumns = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.spacingBetweenColumns
-  );
-  const spacingBetweenCells = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.spacingBetweenCells
-  );
-  const selectedColor = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.tableStyle?.selected
-  );
-  const rowSpacingColor = useSelector(
-    (state: ADTState) =>
-      state.ADTPropsReducer.tableStyle?.selected?.rowSpacingColor
-  );
-  const rowColor = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.tableStyle?.selected?.rowColor
-  );
-  const rowBorderColor = useSelector(
-    (state: ADTState) =>
-      state.ADTPropsReducer.tableStyle?.selected?.rowBorderColor
-  );
-  const paddingInCells = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.paddingInCells
-  );
-  const primary = useSelector(
-    (state: ADTState) => !!state.ADTPropsReducer.persistPrimaryColumn
-  );
+  const {
+    persistPrimaryColumn,
+    extraColumns,
+    spacingBetweenColumns,
+    spacingBetweenCells,
+    tableStyle,
+    paddingInCells,
+  } = usePropsContext();
+
+  const selectedColor = tableStyle?.selected;
+
+  const rowSpacingColor = selectedColor?.rowSpacingColor;
+  const rowColor = selectedColor?.rowColor;
+  const rowBorderColor = selectedColor?.rowBorderColor;
 
   const extraCol = useMemo(() => {
     if (extraColumns?.length && col.includes("-isExtraCol-")) {
@@ -78,7 +59,7 @@ const ADTCellColumn = ({
   const cellWrapperProps = {
     id,
     className: `${tdClassName(index, persistPrimaryColumn)} ${
-      isLastRow && !isCheck && primary ? "rounded-ee-md" : ""
+      isLastRow && !isCheck && persistPrimaryColumn ? "rounded-ee-md" : ""
     }`,
     style: {
       color: textColor,

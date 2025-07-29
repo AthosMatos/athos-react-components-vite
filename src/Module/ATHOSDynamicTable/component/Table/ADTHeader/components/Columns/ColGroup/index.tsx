@@ -2,6 +2,7 @@ import { AnimatePresence } from "motion/react";
 import { useMemo } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
+import { usePropsContext } from "../../../../../contexts/propsContext";
 import {
   filterColumns,
   resetColumns,
@@ -15,20 +16,15 @@ interface ColGroupProps {
   activeCols: number;
 }
 const ColGroup = ({ cols, activeCols }: ColGroupProps) => {
-  const highlightColor = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.tableStyle?.highlightColor
-  );
+  const { hidableColumns, tableStyle } = usePropsContext<any>();
+
+  const highlightColor = tableStyle?.highlightColor;
   const filteredColumns = useSelector(
     (state: ADTState) => state.ADTFilteringReducer.filteredColumns
   );
   const dispatch = useDispatch();
-  const colors = useSelector(
-    (state: ADTState) =>
-      state.ADTPropsReducer.tableStyle?.header?.functionsColors?.body
-  );
-  const hidableColumns = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.hidableColumns
-  );
+
+  const colors = tableStyle?.header?.functionsColors?.body;
 
   const filterOutCol = (col: string) => {
     dispatch(filterColumns(col));

@@ -3,20 +3,27 @@ import { FaLayerGroup } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { ATHOSDropDown } from "../../../../../../ATHOSDropDown/component";
 import { LabelI } from "../../../../../../ATHOSDropDown/old/interfaces";
+import { usePropsContext } from "../../../../contexts/propsContext";
 import { ADTState } from "../../../../redux/store";
-import { ButtonWrapper, ListBgWrapperClassname, ListButtonClassname } from "../../styledWrappers";
+import {
+  ButtonWrapper,
+  ListBgWrapperClassname,
+  ListButtonClassname,
+} from "../../styledWrappers";
 
 const ADTSelectedFuncs = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { name, funcs, data, selectedRows } = useSelector((state: ADTState) => ({
-    name: state.ADTPropsReducer.tableSelectedFuncs?.title,
-    funcs: state.ADTPropsReducer.tableSelectedFuncs?.funcs,
-    selectedRows: state.ADTSelectReducer.selectedRows,
-    data: state.ADTPropsReducer.data,
-  }));
+  const { tableSelectedFuncs, data } = usePropsContext<any>();
 
-  const selectedData = data.filter((row) => selectedRows.includes(row.uniqueId));
+  const { selectedRows } = useSelector((state: ADTState) => ({
+    selectedRows: state.ADTSelectReducer.selectedRows,
+  }));
+  const name = tableSelectedFuncs?.title;
+  const funcs = tableSelectedFuncs?.funcs;
+  const selectedData = data.filter((row) =>
+    selectedRows.includes(row.uniqueId)
+  );
 
   return (
     funcs &&
@@ -27,12 +34,19 @@ const ADTSelectedFuncs = () => {
         matchChildrenWidth
         onToggle={(isOpen) => setIsOpen(isOpen)}
         labels={funcs?.map((func) => {
-          return { label: func.label, onClick: () => func.onClick(selectedData) } as LabelI;
+          return {
+            label: func.label,
+            onClick: () => func.onClick(selectedData),
+          } as LabelI;
         })}
         className={ListBgWrapperClassname}
         listButtonsClassName={ListButtonClassname}
       >
-        <ButtonWrapper open={isOpen} label={name || "Funcionalidades em Lote"} icon={<FaLayerGroup size={16} />} />
+        <ButtonWrapper
+          open={isOpen}
+          label={name || "Funcionalidades em Lote"}
+          icon={<FaLayerGroup size={16} />}
+        />
       </ATHOSDropDown>
     )
   );
@@ -44,18 +58,25 @@ interface ADTDefaultSelectedFuncsPropsBase {
   children?: React.ReactNode;
 }
 
-interface ADTDefaultSelectedFuncsPropsLabels extends ADTDefaultSelectedFuncsPropsBase {
+interface ADTDefaultSelectedFuncsPropsLabels
+  extends ADTDefaultSelectedFuncsPropsBase {
   labels: LabelI[];
 }
-interface ADTDefaultSelectedFuncsPropsCols extends ADTDefaultSelectedFuncsPropsBase {
+interface ADTDefaultSelectedFuncsPropsCols
+  extends ADTDefaultSelectedFuncsPropsBase {
   cols: LabelI[][];
 }
-type ADTDefaultSelectedFuncsProps = ADTDefaultSelectedFuncsPropsLabels | ADTDefaultSelectedFuncsPropsCols;
+type ADTDefaultSelectedFuncsProps =
+  | ADTDefaultSelectedFuncsPropsLabels
+  | ADTDefaultSelectedFuncsPropsCols;
 
-export const ADTDefaultSelectedFuncs = (props: ADTDefaultSelectedFuncsProps) => {
+export const ADTDefaultSelectedFuncs = (
+  props: ADTDefaultSelectedFuncsProps
+) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const dropdownProps = "labels" in props ? { labels: props.labels } : { cols: props.cols };
+  const dropdownProps =
+    "labels" in props ? { labels: props.labels } : { cols: props.cols };
 
   return (
     <ATHOSDropDown

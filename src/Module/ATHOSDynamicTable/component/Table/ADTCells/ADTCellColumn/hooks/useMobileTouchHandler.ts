@@ -1,9 +1,16 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { ADTState } from "../../../../redux/store";
+import { usePropsContext } from "../../../../contexts/propsContext";
 
-export const useMobileTouchHandler = ({ index, rowIndex, showTooltip }: { index: number; rowIndex: number; showTooltip: boolean }) => {
-  const columns = useSelector((state: ADTState) => state.ADTPropsReducer.columns);
+export const useMobileTouchHandler = ({
+  index,
+  rowIndex,
+  showTooltip,
+}: {
+  index: number;
+  rowIndex: number;
+  showTooltip: boolean;
+}) => {
+  const { columns } = usePropsContext();
 
   const [touch, setTouch] = useState(false);
 

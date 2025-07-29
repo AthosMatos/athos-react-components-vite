@@ -1,24 +1,38 @@
 import { useEffect } from "react";
 import { IoClose, IoMenu } from "react-icons/io5";
-import { useSelector } from "react-redux";
 import { ATHOSDropDown } from "../../../../ATHOSDropDown/component";
 import { ATHOSToast } from "../../../../ATHOSToast";
+import { usePropsContext } from "../../contexts/propsContext";
 import { useADTSelect } from "../../redux/Select/hook";
-import { ADTState } from "../../redux/store";
 import ADTCheckBox from "../ADTCheckBox";
-import { ADTATWrapper, ADTBRDSimple, ADTSRTFSWrapper, ADTSRTIconWrapper, ADTSRTLabel, ADTSRTMainFunc } from "./styled";
+import {
+  ADTATWrapper,
+  ADTBRDSimple,
+  ADTSRTFSWrapper,
+  ADTSRTIconWrapper,
+  ADTSRTLabel,
+  ADTSRTMainFunc,
+} from "./styled";
 import useSelectors_ADTSelectedRowsToast from "./useSelectors";
 
 const ADTSelectedRowsToast = () => {
-  const { selectedRows, selectedRowsToastOpen, checkState, tableStyle, selectedRowsTooltip, data, tableName } =
-    useSelectors_ADTSelectedRowsToast();
+  const {
+    selectedRows,
+    selectedRowsToastOpen,
+    checkState,
+    selectedRowsToast,
+    data,
+    tableName,
+  } = useSelectors_ADTSelectedRowsToast();
 
-  const { uncheckAll, openSelectedRowsToast, closeSelectedRowsToast } = useADTSelect();
+  const { uncheckAll, openSelectedRowsToast, closeSelectedRowsToast } =
+    useADTSelect();
 
   const onDismiss = () => {
     uncheckAll();
   };
-  const containerColor = useSelector((state: ADTState) => state.ADTPropsReducer.selectedRowsToast?.containerColor);
+  const containerColor =
+    usePropsContext<any>().selectedRowsToast?.containerColor;
 
   useEffect(() => {
     if (selectedRows.length > 0) {
@@ -26,7 +40,7 @@ const ADTSelectedRowsToast = () => {
     } else {
       closeSelectedRowsToast();
     }
-  }, [selectedRows]);
+  }, [closeSelectedRowsToast, openSelectedRowsToast, selectedRows]);
 
   return (
     <ATHOSToast
@@ -45,46 +59,62 @@ const ADTSelectedRowsToast = () => {
         }}
       >
         <ADTSRTFSWrapper>
-          <ADTCheckBox clicable={false} big checked={checkState == 0 ? true : checkState} />
+          <ADTCheckBox
+            clicable={false}
+            big
+            checked={checkState == 0 ? true : checkState}
+          />
           <ADTSRTLabel>{selectedRows.length} Items</ADTSRTLabel>
         </ADTSRTFSWrapper>
         <ADTBRDSimple w={1} h={20} />
         <ADTSRTLabel>{tableName}</ADTSRTLabel>
         <ADTBRDSimple w={1} h={20} />
 
-        {(selectedRowsTooltip?.mainFunc || selectedRowsTooltip?.secondaryFunc || selectedRowsTooltip?.othersFunc) && (
+        {(selectedRowsToast?.mainFunc ||
+          selectedRowsToast?.secondaryFunc ||
+          selectedRowsToast?.othersFunc) && (
           <ADTSRTFSWrapper>
-            {selectedRowsTooltip?.mainFunc && (
+            {selectedRowsToast?.mainFunc && (
               <ADTSRTMainFunc
                 onClick={() => {
-                  selectedRowsTooltip.mainFunc!.onClick(data.filter((row) => selectedRows.includes(row.uniqueId)));
+                  selectedRowsToast.mainFunc!.onClick(
+                    data.filter((row) => selectedRows.includes(row.uniqueId))
+                  );
                   onDismiss();
                 }}
                 //highlightColor={tableStyle?.highlightColor!}
               >
-                {selectedRowsTooltip.mainFunc.icon ?? selectedRowsTooltip.mainFunc.label}
+                {selectedRowsToast.mainFunc.icon ??
+                  selectedRowsToast.mainFunc.label}
               </ADTSRTMainFunc>
             )}
-            {selectedRowsTooltip?.secondaryFunc && (
+            {selectedRowsToast?.secondaryFunc && (
               <ADTSRTIconWrapper
                 pad={8}
                 backColor={"#f3f3f3"}
                 onClick={() => {
                   onDismiss();
-                  selectedRowsTooltip.secondaryFunc!.onClick(data.filter((row) => selectedRows.includes(row.uniqueId)));
+                  selectedRowsToast.secondaryFunc!.onClick(
+                    data.filter((row) => selectedRows.includes(row.uniqueId))
+                  );
                 }}
               >
-                {selectedRowsTooltip.secondaryFunc.label ?? selectedRowsTooltip.secondaryFunc.icon}
+                {selectedRowsToast.secondaryFunc.label ??
+                  selectedRowsToast.secondaryFunc.icon}
               </ADTSRTIconWrapper>
             )}
 
-            {selectedRowsTooltip?.othersFunc && (
+            {selectedRowsToast?.othersFunc && (
               <ATHOSDropDown
-                labels={selectedRowsTooltip.othersFunc.map((func) => {
+                labels={selectedRowsToast.othersFunc.map((func) => {
                   return {
                     label: func.label,
                     onClick: () => {
-                      func.onClick(data.filter((row) => selectedRows.includes(row.uniqueId)));
+                      func.onClick(
+                        data.filter((row) =>
+                          selectedRows.includes(row.uniqueId)
+                        )
+                      );
                       onDismiss();
                     },
                   };

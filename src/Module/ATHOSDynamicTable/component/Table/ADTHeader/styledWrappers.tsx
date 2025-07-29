@@ -1,5 +1,4 @@
-import { useSelector } from "react-redux";
-import { ADTState } from "../../redux/store";
+import { usePropsContext } from "../../contexts/propsContext";
 
 interface ItemWrapperProps {
   label?: string;
@@ -36,10 +35,9 @@ export const ButtonWrapper = ({
   label,
   icon,
 }: ItemWrapperProps) => {
-  const colors = useSelector(
-    (state: ADTState) =>
-      state.ADTPropsReducer.tableStyle?.header?.functionsColors?.icons.open
-  );
+  const colors =
+    usePropsContext<any>().tableStyle?.header?.functionsColors?.icons.open;
+
   return (
     <div
       onMouseDown={(e) => {
@@ -67,10 +65,8 @@ export const IconWrapper = ({
   open,
   wref,
 }: IconWrapperProps) => {
-  const colors = useSelector(
-    (state: ADTState) =>
-      state.ADTPropsReducer.tableStyle?.header?.functionsColors?.icons.open
-  );
+  const colors =
+    usePropsContext<any>().tableStyle?.header?.functionsColors?.icons.open;
   return (
     <div
       ref={wref}

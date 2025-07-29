@@ -1,6 +1,5 @@
 import { memo } from "react";
-import { useSelector } from "react-redux";
-import { ADTState } from "../../redux/store";
+import { usePropsContext } from "../../contexts/propsContext";
 import ADTFilter from "./components/ADTFilter";
 import ADTInfo from "./components/ADTInfo";
 import ADTColumnsFilter from "./components/Columns";
@@ -8,13 +7,17 @@ import { ADTSearch } from "./components/Search";
 import ADTSelectedFuncs from "./components/SelectedFuncs";
 
 const ADTHeader = () => {
-  const loading = useSelector((state: ADTState) => state.ADTPropsReducer.loading);
-  const dataLen = useSelector((state: ADTState) => state.ADTPropsReducer.data)?.length;
-  const iconsColors = useSelector((state: ADTState) => state.ADTPropsReducer.tableStyle?.header?.functionsColors?.icons);
-  const extraFuncs = useSelector((state: ADTState) => state.ADTPropsReducer.extraFuncs);
+  const { loading, data, tableStyle, extraFuncs } = usePropsContext<any>();
+
+  const dataLen = data?.length || 0;
+  const iconsColors = tableStyle?.header?.functionsColors?.icons;
 
   return (
-    <div className={`flex mb-2 justify-between h-10 ${iconsColors?.className || "text-zinc-300"}`}>
+    <div
+      className={`flex mb-2 justify-between h-10 ${
+        iconsColors?.className || "text-zinc-300"
+      }`}
+    >
       <ADTInfo />
       {dataLen > 0 && !loading && (
         <div

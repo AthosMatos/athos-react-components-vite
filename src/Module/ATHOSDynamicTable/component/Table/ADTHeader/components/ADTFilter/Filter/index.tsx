@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ATHOSRange } from "../../../../../../../ATHOSRange/component";
 import { ATHOSSelect } from "../../../../../../../ATHOSSelect/component";
 import { cleanCurrencyValue } from "../../../../../../../utils/currency-utils";
+import { usePropsContext } from "../../../../../contexts/propsContext";
 import { FilterConfig } from "../../../../../interfaces";
 import {
   filterByDate,
@@ -86,19 +87,11 @@ const FilterCols = ({
   const selected = useSelector(
     (state: ADTState) => state.ADTFilteringReducer.rowFilters[col]
   );
-  const colors = useSelector(
-    (state: ADTState) =>
-      state.ADTPropsReducer.tableStyle?.header?.functionsColors?.body
-  );
 
+  const colors =
+    usePropsContext<any>().tableStyle?.header?.functionsColors?.body;
   const dispatch = useDispatch();
-  if (typeof config === "object") {
-    if (config.isDateRange) {
-      return <FilterColsDate col={col} />;
-    } else if (config.isValueRange) {
-      return <FilterColsCurrency col={col} />;
-    }
-  }
+
   const labels = useMemo(() => {
     // only add values that are not already in the labels
     const uniqueValues = new Set(data.map((item) => item[col]));
@@ -113,6 +106,14 @@ const FilterCols = ({
     }
     return col;
   }, [col, config]);
+
+  if (typeof config === "object") {
+    if (config.isDateRange) {
+      return <FilterColsDate col={col} />;
+    } else if (config.isValueRange) {
+      return <FilterColsCurrency col={col} />;
+    }
+  }
 
   return (
     <ATHOSSelect
@@ -142,21 +143,15 @@ const FilterCols = ({
 };
 
 const Filter = () => {
-  const highlightColor = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.tableStyle?.highlightColor
-  );
-  const colsToFilter = useSelector(
-    (state: ADTState) => state.ADTPropsReducer.colsToFilter
-  );
+  const { tableStyle, colsToFilter, data } = usePropsContext<any>();
+
+  const highlightColor = tableStyle?.highlightColor;
   const lines = useSelector(
     (state: ADTState) => state.ADTFilteringReducer.preFilteredData.length
   );
-  const data = useSelector((state: ADTState) => state.ADTPropsReducer.data);
   const dispatch = useDispatch();
-  const colors = useSelector(
-    (state: ADTState) =>
-      state.ADTPropsReducer.tableStyle?.header?.functionsColors?.body
-  );
+
+  const colors = tableStyle?.header?.functionsColors?.body;
 
   const resetFilter = () => {
     dispatch(resetAllFilters());

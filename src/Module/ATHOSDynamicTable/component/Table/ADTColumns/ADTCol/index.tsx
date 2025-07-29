@@ -1,35 +1,48 @@
 import { ReactNode, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { ATHOSColors } from "../../../../../colors/colors";
+import { usePropsContext } from "../../../contexts/propsContext";
 import { setColShort } from "../../../redux/CustomStates/provider";
 import { sortDataByColumn } from "../../../redux/Filtering/provider";
-import { ADTState } from "../../../redux/store";
-import { ADTColBorderWrapper, ADTColumnWrapper, persistentBorderStyle, persitentBorderWidth } from "../../../styled";
+import {
+  ADTColBorderWrapper,
+  ADTColumnWrapper,
+  persistentBorderStyle,
+  persitentBorderWidth,
+} from "../../../styled";
 import { tdClassName } from "../../funcs";
 import ADTBorder from "./ADTBorder";
 import ColOrderFilter from "./ColOrderFilter";
 
 const ADTCol = ({ column, index }: { column: string; index: number }) => {
-  const { colConfig, persistPrimaryColumn, spacingBetweenColumns, extraColumns, tableStyle, boldHeader, paddingHeader, tableName } =
-    useSelector((state: ADTState) => ({
-      spacingBetweenColumns: state.ADTPropsReducer.spacingBetweenColumns,
-      persistPrimaryColumn: state.ADTPropsReducer.persistPrimaryColumn,
-      tableStyle: state.ADTPropsReducer.tableStyle,
-      colConfig: state.ADTPropsReducer.colConfig,
-      tableName: state.ADTPropsReducer.tableName,
-      paddingHeader: state.ADTPropsReducer.spacingHeader,
-      boldHeader: state.ADTPropsReducer.boldColumns,
-      extraColumns: state.ADTPropsReducer.extraColumns,
-    }));
-  const globalConfig = useSelector((state: ADTState) => state.ADTPropsReducer.globalConfig);
-  const minColWidthToShort = (colConfig && colConfig[column]?.minColWidthToShort) || globalConfig?.minColWidthToShort;
+  const {
+    spacingBetweenColumns,
+    persistPrimaryColumn,
+    tableStyle,
+    colConfig,
+    tableName,
+    spacingHeader,
+    boldColumns,
+    extraColumns,
+    globalConfig,
+  } = usePropsContext();
+
+  const minColWidthToShort =
+    (colConfig && colConfig[column]?.minColWidthToShort) ||
+    globalConfig?.minColWidthToShort;
 
   const textColor = useMemo(() => {
     const globalColor = tableStyle?.columnTextColor?.global;
-    const specificColor = tableStyle?.columnTextColor?.specific && tableStyle?.columnTextColor?.specific[column];
+    const specificColor =
+      tableStyle?.columnTextColor?.specific &&
+      tableStyle?.columnTextColor?.specific[column];
 
     return specificColor ?? globalColor;
-  }, [tableStyle?.columnTextColor]);
+  }, [
+    column,
+    tableStyle?.columnTextColor?.global,
+    tableStyle?.columnTextColor?.specific,
+  ]);
 
   const value = useMemo(() => {
     let v: ReactNode = column;
@@ -55,7 +68,8 @@ const ADTCol = ({ column, index }: { column: string; index: number }) => {
         }
       }
 
-      const bColor = (persistPrimaryColumn as any).borderColor ?? "rgba(0, 0, 0, 0.13)";
+      const bColor =
+        (persistPrimaryColumn as any).borderColor ?? "rgba(0, 0, 0, 0.13)";
       obj["borderTopColor"] = bColor;
       obj["borderRightColor"] = bColor;
 
@@ -65,7 +79,7 @@ const ADTCol = ({ column, index }: { column: string; index: number }) => {
       obj["borderRightStyle"] = persistentBorderStyle;
       return obj;
     }
-  }, [persistPrimaryColumn]);
+  }, [index, persistPrimaryColumn]);
 
   const id = `${tableName}-${column}-th`;
 
@@ -91,7 +105,7 @@ const ADTCol = ({ column, index }: { column: string; index: number }) => {
        rounded-se-md`}
       style={{
         ...persistStyle,
-        paddingBottom: paddingHeader,
+        paddingBottom: spacingHeader,
         left: index === 0 ? "36px" : undefined,
         paddingLeft: index > 0 ? spacingBetweenColumns : undefined,
         paddingRight: index > 0 ? spacingBetweenColumns : undefined,
@@ -99,13 +113,21 @@ const ADTCol = ({ column, index }: { column: string; index: number }) => {
       id={id}
       textColor={textColor}
     >
-      <ADTColBorderWrapper bold={boldHeader}>
-        <div className={`flex flex-1 justify-between items-center cursor-pointer`} onClick={sort}>
+      <ADTColBorderWrapper bold={boldColumns}>
+        <div
+          className={`flex flex-1 justify-between items-center cursor-pointer`}
+          onClick={sort}
+        >
           {value}
 
           <ColOrderFilter column={column} />
         </div>
-        <ADTBorder showBorder={isMouseOver} minColWidthToShort={minColWidthToShort} colID={id} setcolshort={setcolshort} />
+        <ADTBorder
+          showBorder={isMouseOver}
+          minColWidthToShort={minColWidthToShort}
+          colID={id}
+          setcolshort={setcolshort}
+        />
       </ADTColBorderWrapper>
     </ADTColumnWrapper>
   );

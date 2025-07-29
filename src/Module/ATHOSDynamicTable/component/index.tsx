@@ -1,19 +1,18 @@
 import { Provider } from "react-redux";
 import { ATHOSResizableDiv } from "../../ATHOSResizableDiv";
-import ADTSelectedRowsToast from "./components/ADTSelectedRowsToast";
 
 import { DynamicTableProps } from "./interfaces";
-import { ADTStatesController } from "./StatesController";
 import { ADTTableWrapper } from "./styled";
 
 import { configureStore } from "@reduxjs/toolkit";
-import { useContext, useEffect, useMemo } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import useSelectors_ADTSelectedRowsToast from "./components/ADTSelectedRowsToast/useSelectors";
 import { ATHOSDynamicTableContext } from "./context";
+import { PropsContextProvider } from "./contexts/propsContext";
 import ADTCustomStatesReducer from "./redux/CustomStates/provider";
 import ADTFilteringReducer from "./redux/Filtering/provider";
-import ADTPropsReducer from "./redux/props/provider";
 import ADTSelectReducer from "./redux/Select/provider";
+import { ADTStatesController } from "./StatesController";
 import Table from "./Table";
 import ADTHeader from "./Table/ADTHeader";
 import ADTNav from "./Table/ADTNav";
@@ -31,24 +30,18 @@ const Comp = ({
   stly?: boolean;
   props: DynamicTableProps<any>;
 }) => {
-  ADTStatesController({ props });
-  const { selectedRows, data, tableName } = useSelectors_ADTSelectedRowsToast();
-
+  const { selectedRows } = useSelectors_ADTSelectedRowsToast();
+  const { tableName, data } = props;
   const tableContext = useContext(ATHOSDynamicTableContext);
 
-  if (tableContext) {
-    useEffect(() => {
-      //console.log("selectedRows", selectedRows);
-      tableContext.setSelectedData({
-        ...tableContext.selectedData,
-        [tableName]: selectedRows?.map((row: any) => data[row]),
-      });
-    }, [data, selectedRows, tableContext, tableName]);
-  } else {
-    console.warn(
-      "useATHOSDynamicTableContextPrivate must be used within a ATHOSDynamicTableProvider"
-    );
-  }
+  useEffect(() => {
+    //console.log("selectedRows", selectedRows);
+    if (!tableContext) return;
+    tableContext.setSelectedData({
+      ...tableContext.selectedData,
+      [tableName]: selectedRows?.map((row: any) => data[row]),
+    });
+  }, [data, selectedRows, tableContext, tableName]);
 
   return (
     <ADTTableWrapper
@@ -63,23 +56,24 @@ const Comp = ({
   );
 };
 
-export function ATHOSDynamicTable<T>(props: DynamicTableProps<T>) {
+function ATHOSDynamicTableProv<T>(props: DynamicTableProps<T>) {
   const tableId = `${props.tableName}-athos-dynamic-table`;
-  const store = useMemo(
-    () =>
-      configureStore({
-        reducer: {
-          ADTPropsReducer,
-          ADTCustomStatesReducer,
-          ADTSelectReducer,
-          ADTFilteringReducer,
-        },
-      }),
-    []
-  );
+
+  const { columns, dataWithIds, xtraCols } = ADTStatesController({
+    props,
+  });
+
   return (
-    <Provider store={store}>
-      <ADTSelectedRowsToast />
+    <PropsContextProvider
+      value={{
+        ...props,
+        data: dataWithIds,
+        persistPrimaryColumn: props.persistPrimaryColumn ?? true,
+        extraColumns: xtraCols,
+        columns: columns,
+      }}
+    >
+      {/*  <ADTSelectedRowsToast /> */}
       {props.resizeable ? (
         <ATHOSResizableDiv
           OuterContainerStyle={{
@@ -93,6 +87,36 @@ export function ATHOSDynamicTable<T>(props: DynamicTableProps<T>) {
       ) : (
         <Comp props={props} stly />
       )}
+    </PropsContextProvider>
+  );
+}
+
+export function ATHOSDynamicTable<T>(props: DynamicTableProps<T>) {
+  const store = useMemo(
+    () =>
+      configureStore({
+        reducer: {
+          ADTCustomStatesReducer,
+          ADTSelectReducer,
+          ADTFilteringReducer,
+        },
+      }),
+    []
+  );
+
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  return (
+    //loading={!hasMounted || props.loading}
+    <Provider store={store}>
+      <ATHOSDynamicTableProv
+        {...props}
+        loading={!hasMounted || props.loading}
+      />
     </Provider>
   );
 }

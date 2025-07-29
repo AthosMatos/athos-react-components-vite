@@ -1,16 +1,32 @@
 import { useDispatch, useSelector } from "react-redux";
+import { usePropsContext } from "../../contexts/propsContext";
 import { ADTState } from "../store";
-import { setCheckState, setSelectedPages, setSelectedRows, setSelectedRowsToastOpen } from "./provider";
+import {
+  setCheckState,
+  setSelectedPages,
+  setSelectedRows,
+  setSelectedRowsToastOpen,
+} from "./provider";
 
 export const useADTSelect = () => {
   const dispatch = useDispatch();
-  const totalItems = useSelector((state: ADTState) => state.ADTCustomStatesReducer.totalItems);
+  const totalItems = useSelector(
+    (state: ADTState) => state.ADTCustomStatesReducer.totalItems
+  );
   const page = useSelector((state: ADTState) => state.ADTFilteringReducer.page);
-  const pageSize = useSelector((state: ADTState) => state.ADTFilteringReducer.pageSize);
-  const selectedRows = useSelector((state: ADTState) => state.ADTSelectReducer.selectedRows);
-  const checkState = useSelector((state: ADTState) => state.ADTSelectReducer.checkState);
-  const data = useSelector((state: ADTState) => state.ADTPropsReducer.data);
-  const selectedPages = useSelector((state: ADTState) => state.ADTSelectReducer.selectedPages);
+  const pageSize = useSelector(
+    (state: ADTState) => state.ADTFilteringReducer.pageSize
+  );
+  const selectedRows = useSelector(
+    (state: ADTState) => state.ADTSelectReducer.selectedRows
+  );
+  const checkState = useSelector(
+    (state: ADTState) => state.ADTSelectReducer.checkState
+  );
+  const { data } = usePropsContext<any>();
+  const selectedPages = useSelector(
+    (state: ADTState) => state.ADTSelectReducer.selectedPages
+  );
   const checkAll = () => {
     dispatch(setSelectedRows(data.map((row, i) => row.uniqueId)));
     dispatch(setCheckState(1));
@@ -21,7 +37,13 @@ export const useADTSelect = () => {
     if (selectedPages.length <= 1) {
       dispatch(setSelectedRows([]));
     } else {
-      const newSelectedRows = newSelPages.map((p) => data.slice((p - 1) * pageSize, p * pageSize).map((row, i) => row.uniqueId)).flat();
+      const newSelectedRows = newSelPages
+        .map((p) =>
+          data
+            .slice((p - 1) * pageSize, p * pageSize)
+            .map((row, i) => row.uniqueId)
+        )
+        .flat();
       dispatch(setSelectedRows(newSelectedRows));
     }
     dispatch(setCheckState(0));
@@ -39,7 +61,11 @@ export const useADTSelect = () => {
     dispatch(setSelectedPages(selPages));
 
     const newSelRows = selPages
-      .map((p) => data.slice((p - 1) * pageSize, (p - 1) * pageSize + currPageAmount).map((row, i) => row.uniqueId))
+      .map((p) =>
+        data
+          .slice((p - 1) * pageSize, (p - 1) * pageSize + currPageAmount)
+          .map((row, i) => row.uniqueId)
+      )
       .flat();
 
     dispatch(setSelectedRows(newSelRows));
@@ -58,7 +84,9 @@ export const useADTSelect = () => {
 
   const checkCellClick = (id: string) => {
     // console.log("row", row);
-    const newSelectedRows = selectedRows.includes(id) ? selectedRows.filter((r) => r !== id) : [...selectedRows, id];
+    const newSelectedRows = selectedRows.includes(id)
+      ? selectedRows.filter((r) => r !== id)
+      : [...selectedRows, id];
     dispatch(setSelectedRows(newSelectedRows));
   };
 

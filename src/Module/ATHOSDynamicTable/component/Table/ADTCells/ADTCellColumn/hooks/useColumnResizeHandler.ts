@@ -1,23 +1,28 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { ADTState } from "../../../../redux/store";
+import { usePropsContext } from "../../../../contexts/propsContext";
 
 interface ADTCellColumnProps {
   column: string;
 }
 
 export const useColumnResizeHandler = ({ column }: ADTCellColumnProps) => {
-  const colConfig = useSelector((state: ADTState) => state.ADTPropsReducer.colConfig);
-  const globalConfig = useSelector((state: ADTState) => state.ADTPropsReducer.globalConfig);
-  const tableName = useSelector((state: ADTState) => state.ADTPropsReducer.tableName);
-  const minColWidthToShort = (colConfig && colConfig[column]?.minColWidthToShort) || globalConfig?.minColWidthToShort;
+  const { colConfig, tableName, globalConfig } = usePropsContext();
+
+  const minColWidthToShort =
+    (colConfig && colConfig[column]?.minColWidthToShort) ||
+    globalConfig?.minColWidthToShort;
   const [short, setShort] = useState<boolean>();
 
   useEffect(() => {
     if (!minColWidthToShort) return;
     const DTColDiv = document.getElementById(`${tableName}-${column}-th`);
     /* console.log(DTColDiv); */
-    if ((colConfig && colConfig[column]?.cellComponent) || !minColWidthToShort || !DTColDiv) return;
+    if (
+      (colConfig && colConfig[column]?.cellComponent) ||
+      !minColWidthToShort ||
+      !DTColDiv
+    )
+      return;
 
     // Callback function to execute when resize is observed
     const handleResize = (entries: ResizeObserverEntry[]) => {
@@ -40,7 +45,7 @@ export const useColumnResizeHandler = ({ column }: ADTCellColumnProps) => {
       resizeObserver.unobserve(DTColDiv);
       resizeObserver.disconnect();
     };
-  }, [minColWidthToShort]);
+  }, [colConfig, column, minColWidthToShort, short, tableName]);
 
   return { short };
 };

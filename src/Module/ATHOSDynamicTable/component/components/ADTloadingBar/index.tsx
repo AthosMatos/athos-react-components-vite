@@ -1,26 +1,18 @@
 import { motion } from "motion/react";
-import { DynamicTableProps } from "../../interfaces";
+import { usePropsContext } from "../../contexts/propsContext";
 
 const duration = 1;
-const ADTLoadingBar = ({
-  tableName,
-  tableStyle,
-  loading,
-}: {
-  tableName: string;
-  tableStyle: DynamicTableProps<any>["tableStyle"];
-  loading: boolean | string;
-}) => {
+const ADTLoadingBar = () => {
+  const { loading } = usePropsContext();
   return (
     <motion.div
-      key={`${tableName}-loading`}
       transition={{
         duration,
       }}
       exit={{
         opacity: 0,
       }}
-      className="w-full relative text-black bg-zinc-200/15 items-center h-5 flex justify-center p-[0.05rem] rounded-full"
+      className="w-full relative text-black bg-black items-center h-5 flex justify-center p-[0.05rem] rounded-full"
     >
       <motion.div
         initial={{
@@ -35,11 +27,13 @@ const ADTLoadingBar = ({
           repeatType: "reverse",
         }}
         style={{
-          backgroundColor: "white",
+          backgroundColor: "red",
         }}
         className="w-0 h-full rounded-full absolute"
       />
-      <p className="z-10 font-light text-sm">{loading || "Carregando..."}</p>
+      <p className="z-10 font-light text-sm">
+        {typeof loading === "string" ? loading : "Carregando..."}
+      </p>
     </motion.div>
   );
 };

@@ -4,86 +4,150 @@ import { v4 } from "uuid";
 import { fillIds } from "../../../utils/data-utils";
 import { DynamicTableProps } from "../interfaces";
 import { setTotalItems } from "../redux/CustomStates/provider";
-import { setBaseData, setColumnOrder, setFilteredColumns, setFilteredData, setPreFilteredData } from "../redux/Filtering/provider";
-import { ADTPropsState } from "../redux/props/interfaces";
-import { fillADTProps, setColumns } from "../redux/props/provider";
+import {
+  setBaseData,
+  setColumnOrder,
+  setFilteredColumns,
+  setFilteredData,
+  setPreFilteredData,
+} from "../redux/Filtering/provider";
 
-export function ADTStatesController<T>({ props }: { props: DynamicTableProps<T> }) {
-  const { data, columnsToHide, columnsToShow, customColumns, tableStyle, columnOrder, extraColumns, columnsToStartShow } = props;
+export function ADTStatesController<T>({
+  props,
+}: {
+  props: DynamicTableProps<T>;
+}) {
+  const {
+    data,
+    columnsToHide,
+    columnsToShow,
+    customColumns,
+    columnOrder,
+    extraColumns,
+    columnsToStartShow,
+  } = props;
+
+  // Cache for data with IDs to avoid regenerating if data hasn't changed
   const dataWithIds = useMemo(() => {
-    if (data && data.length) return fillIds(data);
-    return data;
+    if (!data?.length) return data;
+    return fillIds(data);
   }, [data]);
+
   const dispatch = useDispatch();
 
+  // Optimized extra columns processing with stable IDs
   const xtraCols = useMemo(() => {
-    return extraColumns?.length
-      ? extraColumns.map((exc) => {
-          return {
-            ...exc,
-            id: exc.id ?? v4(),
-          };
-        })
-      : undefined;
+    if (!extraColumns?.length) return undefined;
+
+    return extraColumns.map((exc) => ({
+      ...exc,
+      id: exc.id ?? v4(),
+    }));
   }, [extraColumns]);
 
+  // Optimized column processing
   const columns = useMemo(() => {
-    if (!data || !data.length) return [];
-    let cols: (keyof T)[] = [];
-    if (columnsToHide) {
-      cols = Object.keys(data[0] as object).filter((column) => !columnsToHide.includes(column as keyof T)) as (keyof T)[];
-    } else if (columnsToShow) {
-      cols = columnsToShow;
-    } else cols = Object.keys(data[0] as object) as (keyof T)[];
+    if (!data?.length) return [];
 
-    if (customColumns) {
+    // Get base columns more efficiently
+    let cols: (keyof T)[];
+
+    if (columnsToHide) {
+      const firstObjectKeys = Object.keys(data[0] as object) as (keyof T)[];
+      cols = firstObjectKeys.filter(
+        (column) => !columnsToHide.includes(column)
+      );
+    } else if (columnsToShow) {
+      cols = [...columnsToShow]; // Create a copy to avoid mutations
+    } else {
+      cols = Object.keys(data[0] as object) as (keyof T)[];
+    }
+
+    // Process custom columns efficiently
+    if (customColumns?.length) {
+      // Process all custom columns in one pass
+      const colsToRemove = new Set<keyof T>();
+      const colsToAdd: Array<{ index?: number; newLabel: keyof T }> = [];
+
       customColumns.forEach((customColumn) => {
-        cols = cols.filter((col) => !customColumn.colsToGet.includes(col));
-        if (customColumn.index != undefined) {
-          cols.splice(customColumn.index, 0, customColumn.newLabel as keyof T);
+        customColumn.colsToGet.forEach((col) => colsToRemove.add(col));
+        colsToAdd.push({
+          index: customColumn.index,
+          newLabel: customColumn.newLabel as keyof T,
+        });
+      });
+
+      // Remove columns that need to be replaced
+      cols = cols.filter((col) => !colsToRemove.has(col));
+
+      // Add new columns
+      colsToAdd.forEach(({ index, newLabel }) => {
+        if (index !== undefined) {
+          cols.splice(index, 0, newLabel);
         } else {
-          cols.push(customColumn.newLabel as keyof T);
+          cols.push(newLabel);
         }
       });
     }
+
+    // Add extra columns efficiently
     if (xtraCols?.length) {
-      cols.push(...xtraCols.map((col) => `${col.column as any}-isExtraCol-${col.id}` as any));
+      const extraColumnNames = xtraCols.map(
+        (col) => `${col.column as any}-isExtraCol-${col.id}` as keyof T
+      );
+      cols.push(...extraColumnNames);
     }
 
-    if (columnOrder) {
-      cols = cols.filter((col) => !columnOrder.includes(col));
-      cols = [...columnOrder, ...cols];
+    // Apply column order efficiently
+    if (columnOrder?.length) {
+      const orderedCols = [...columnOrder];
+      const remainingCols = cols.filter((col) => !columnOrder.includes(col));
+      cols = [...orderedCols, ...remainingCols];
     }
+
     return cols;
-  }, [columnsToHide, columnsToShow, data, customColumns, columnOrder, xtraCols]);
+  }, [
+    data,
+    columnsToHide,
+    columnsToShow,
+    customColumns,
+    xtraCols,
+    columnOrder,
+  ]);
 
+  // Batch Redux updates for better performance
   useEffect(() => {
-    const pr: ADTPropsState<any> = {
-      ...props,
-      data: dataWithIds,
-      persistPrimaryColumn: props.persistPrimaryColumn ?? true,
-      extraColumns: xtraCols,
-      tableStyle: {
-        ...tableStyle,
-        //highlightColor: tableStyle?.highlightColor ?? "#bcdfff",
-      },
-      columns,
-    };
-    dispatch(fillADTProps(pr));
-  }, [columns, dataWithIds, dispatch, props, tableStyle, xtraCols]);
+    if (!columns?.length || !data?.length) return;
 
-  useEffect(() => {
-    if (columns?.length && data?.length) {
+    // Batch all Redux updates together
+    const updates = () => {
+      // Handle filtered columns
       if (columnsToStartShow) {
-        const colsToShow = Object.keys(columnsToStartShow).filter((col) => columns.includes(col as keyof T));
+        const colsToShow = Object.keys(columnsToStartShow).filter((col) =>
+          columns.includes(col as keyof T)
+        );
         dispatch(setFilteredColumns(colsToShow));
-      } else dispatch(setFilteredColumns(columns));
+      } else {
+        dispatch(setFilteredColumns(columns));
+      }
+
+      // Dispatch all other updates
       dispatch(setColumnOrder(columns));
-      dispatch(setColumns(columns));
       dispatch(setTotalItems(data.length));
       dispatch(setFilteredData(dataWithIds));
       dispatch(setPreFilteredData(dataWithIds));
       dispatch(setBaseData(dataWithIds));
-    }
+    };
+
+    // Use setTimeout to batch updates and avoid blocking the UI
+    const timeoutId = setTimeout(updates, 0);
+
+    return () => clearTimeout(timeoutId);
   }, [columns, columnsToStartShow, data, dataWithIds, dispatch]);
+
+  return {
+    dataWithIds,
+    xtraCols,
+    columns,
+  };
 }

@@ -1,12 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import ADTCustomStatesReducer from "./CustomStates/provider";
 import ADTFilteringReducer from "./Filtering/provider";
-import ADTPropsReducer from "./props/provider";
 import ADTSelectReducer from "./Select/provider";
 
 const ADTStore = configureStore({
   reducer: {
-    ADTPropsReducer,
     ADTCustomStatesReducer,
     ADTSelectReducer,
     ADTFilteringReducer,
