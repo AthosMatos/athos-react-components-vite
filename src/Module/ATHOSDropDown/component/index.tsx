@@ -1,4 +1,4 @@
-import { AnimatePresence, motion, type Variants } from "motion/react";
+import { type Variants } from "motion/react";
 import { usePopUp } from "../../hooks/private/usePopUp";
 import type { ATHOSDropDownProps, ATHOSDropDownPropsCols, ATHOSDropDownPropsList, LabelI } from "./interfaces";
 /**
@@ -57,9 +57,8 @@ export const ATHOSDropDown = (props: ATHOSDropDownProps) => {
     disabled,
   } = props;
 
-  const { childRef, setIsOpened, isOpened, contentRef } = usePopUp({
+  const { childRef, gap, id, pos, contentRef, setIsOpened } = usePopUp({
     onToggle,
-    matchChildrenWidth,
     position,
     spacing,
   });
@@ -75,44 +74,46 @@ export const ATHOSDropDown = (props: ATHOSDropDownProps) => {
   };
 
   return (
-    <div className={`relative`}>
-      <button disabled={disabled} className={buttonClassName} onClick={() => setIsOpened(!isOpened)} ref={childRef} style={buttonStyle}>
+    <div className={`${pos}`}>
+      <button
+        disabled={disabled}
+        className={buttonClassName}
+        popoverTarget={id}
+        style={{ ...buttonStyle, anchorName: `--anchor-${id}` } as any}
+        ref={childRef}
+        onClick={() => {
+          setIsOpened((prev) => !prev);
+        }}
+      >
         {children}
       </button>
-      <AnimatePresence>
-        {isOpened && (
-          <motion.ul
-            ref={contentRef}
-            transition={{
-              duration: 0.15,
-              ease: "easeInOut",
-            }}
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-            variants={variants}
-            style={{
-              ...style,
-              [position.startsWith("top") ? "bottom" : "top"]: childRef.current ? `${childRef.current.offsetHeight}px` : "0px",
-            }}
-            className={`overflow-hidden min-w-full w-fit absolute z-[999] flex justify-end flex-col gap-1 ${className}`}
-          >
-            {hasLabels(props)
-              ? props.labels?.map((option, index) => (
-                  <ListItem style={labelsStyle} className={labelClassName} onClick={option.onClick} key={index} option={option} />
-                ))
-              : hasCols(props)
-              ? props.cols?.map((colGroup, index) => (
-                  <div key={index} className={`flex ${props.colClassName}`} style={props.colStyle}>
-                    {colGroup.map((option, index) => (
-                      <ListItem style={labelsStyle} className={labelClassName} key={index} onClick={option.onClick} option={option} />
-                    ))}
-                  </div>
-                ))
-              : null}
-          </motion.ul>
-        )}
-      </AnimatePresence>
+      <ul
+        popover="auto"
+        id={id}
+        ref={contentRef}
+        style={
+          {
+            ...style,
+            ...gap,
+            positionAnchor: `--anchor-${id}`,
+          } as any
+        }
+        className={`dropdown flex flex-col ${className}`}
+      >
+        {hasLabels(props)
+          ? props.labels?.map((option, index) => (
+              <ListItem style={labelsStyle} className={labelClassName} onClick={option.onClick} key={index} option={option} />
+            ))
+          : hasCols(props)
+          ? props.cols?.map((colGroup, index) => (
+              <div key={index} className={`flex ${props.colClassName}`} style={props.colStyle}>
+                {colGroup.map((option, index) => (
+                  <ListItem style={labelsStyle} className={labelClassName} key={index} onClick={option.onClick} option={option} />
+                ))}
+              </div>
+            ))
+          : null}
+      </ul>
     </div>
   );
 };

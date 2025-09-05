@@ -1,10 +1,11 @@
 import { usePropsContext } from "../../contexts/propsContext";
 
 interface ItemWrapperProps {
-  label?: string;
-  icon?: React.ReactNode;
-  open: boolean;
-  onClick?: () => void;
+    label?: string;
+    disabled?: boolean;
+    icon?: React.ReactNode;
+    open: boolean;
+    onClick?: () => void;
 }
 
 export const ListWrapperClassname = `flex gap-1 flex-col shadow-lg flex-1 rounded-xl border w-max p-1
@@ -23,60 +24,76 @@ active:scale-95
 text-zinc-800 dark:text-zinc-200`;
 
 /* border border-zinc-300 dark:border-zinc-600  */
-const defaultWrapperClassName = (open: boolean, className?: string) => `
-  transition-all active:scale-95 cursor-pointer 
+const defaultWrapperClassName = (
+    open: boolean,
+    className?: string,
+    disabled?: boolean
+) => `
+  transition-all ${
+      disabled
+          ? "opacity-50 cursor-not-allowed"
+          : "active:scale-95 cursor-pointer"
+  } 
   rounded-md h-10 text-sm gap-2
   flex items-center justify-center ${open ? className : ""}
 `;
 
 export const ButtonWrapper = ({
-  open,
-  onClick,
-  label,
-  icon,
+    open,
+    onClick,
+    label,
+    icon,
+    disabled
 }: ItemWrapperProps) => {
-  const colors =
-    usePropsContext<any>().tableStyle?.header?.functionsColors?.icons.open;
+    const colors =
+        usePropsContext<any>().tableStyle?.header?.functionsColors?.icons.open;
 
-  return (
-    <div
-      onMouseDown={(e) => {
-        e.preventDefault();
-        if (onClick) onClick();
-      }}
-      className={`px-3 ${defaultWrapperClassName(open, colors?.className)}`}
-    >
-      {icon}
-      {label}
-    </div>
-  );
+    return (
+        <div
+            onMouseDown={(e) => {
+                e.preventDefault();
+                if (onClick) onClick();
+            }}
+            className={`px-3 ${defaultWrapperClassName(
+                open,
+                colors?.className,
+                disabled
+            )}`}
+        >
+            {icon}
+            {label}
+        </div>
+    );
 };
 
 interface IconWrapperProps {
-  children: React.ReactNode;
-  onClick?: () => void;
-  open: boolean;
-  wref?: any;
+    children: React.ReactNode;
+    onClick?: () => void;
+    open: boolean;
+    wref?: any;
 }
 
 export const IconWrapper = ({
-  children,
-  onClick,
-  open,
-  wref,
+    children,
+    onClick,
+    open,
+    wref
 }: IconWrapperProps) => {
-  const colors =
-    usePropsContext<any>().tableStyle?.header?.functionsColors?.icons.open;
-  return (
-    <div
-      ref={wref}
-      onMouseDown={(e) => {
-        e.preventDefault();
-        if (onClick) onClick();
-      }}
-      className={`w-10 ${defaultWrapperClassName(open, colors?.className)}`}
-    >
-      {children}
-    </div>
-  );
+    const colors =
+        usePropsContext<any>().tableStyle?.header?.functionsColors?.icons.open;
+    return (
+        <div
+            ref={wref}
+            onMouseDown={(e) => {
+                e.preventDefault();
+                if (onClick) onClick();
+            }}
+            className={`w-10 ${defaultWrapperClassName(
+                open,
+                colors?.className
+            )}`}
+        >
+            {children}
+        </div>
+    );
 };

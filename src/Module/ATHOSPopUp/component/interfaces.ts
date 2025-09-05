@@ -13,6 +13,9 @@ export interface ATHOSPopUpProps {
   content: React.ReactNode;
   spacing?: number;
   matchChildrenWidth?: boolean;
+  generalWrapperClassName?: string;
+  id?: string;
+  showOnHover?: boolean;
 }
 
 export type APUContainerProps = {

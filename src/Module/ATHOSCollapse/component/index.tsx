@@ -23,6 +23,8 @@ interface ATHOSCollapseProps {
   open?: boolean;
   extraButton?: React.ReactNode;
   buttonContainerClassName?: string;
+  autoOpen?: boolean;
+  disableClick?: boolean;
 }
 
 const variants = {
@@ -94,6 +96,8 @@ export const ATHOSCollapse = ({
   extraButton,
   open: forceOpen,
   buttonContainerClassName,
+  autoOpen = true,
+  disableClick,
 }: ATHOSCollapseProps) => {
   const [isOpen, setIsOpen] = useState(initialOpen || false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -104,6 +108,8 @@ export const ATHOSCollapse = ({
     position === "top" ? "flex-col-reverse" : position === "bottom" ? "flex-col" : position === "left" ? "flex-row-reverse" : "flex-row";
 
   const onClick = () => {
+    if (disableClick) return;
+    if (!autoOpen) return;
     if (toggleOnWrapperClick) return;
     setIsOpen(!isOpen);
     if (onToggle) {
@@ -111,6 +117,8 @@ export const ATHOSCollapse = ({
     }
   };
   const onWrapperClick = () => {
+    if (disableClick) return;
+    if (!autoOpen) return;
     if (toggleOnWrapperClick) {
       setIsOpen(!isOpen);
       if (onToggle) {

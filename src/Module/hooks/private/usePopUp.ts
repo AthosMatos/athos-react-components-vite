@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { v4 } from "uuid";
 import { useClickOutside } from "../useClickOutside";
 
@@ -18,14 +18,14 @@ export type PopUpPosition =
 
 interface IusePopUp {
   position?: PopUpPosition;
-  matchChildrenWidth?: boolean;
   spacing?: number;
   onToggle?: (isOpen: boolean) => void;
   onClickOutside?: () => void;
+  id?: string;
 }
 
-export const usePopUp = ({ position = "top", onClickOutside, matchChildrenWidth = false, spacing = 6, onToggle }: IusePopUp) => {
-  const id = useMemo(() => v4(), []);
+export const usePopUp = ({ position = "top", onClickOutside, spacing = 6, onToggle, id: ID }: IusePopUp) => {
+  const id = useMemo(() => ID || v4(), [ID]);
   const [isOpened, setIsOpened] = useState(false);
   const pos =
     position === "top"
@@ -67,20 +67,11 @@ export const usePopUp = ({ position = "top", onClickOutside, matchChildrenWidth 
   );
   const childRef = useRef<HTMLButtonElement>(null);
   const contentRef = useRef<HTMLUListElement>(null);
-  useLayoutEffect(() => {
-    if (childRef.current && matchChildrenWidth) {
-      const childWidth = childRef.current.getBoundingClientRect().width;
-      const dropdown = document.getElementById(id);
-
-      if (dropdown) {
-        dropdown.style.width = `${childWidth}px`;
-      }
-    }
-  }, [matchChildrenWidth, isOpened, id]);
 
   useClickOutside({
     callback: () => {
       setIsOpened(false);
+      console.log("Popup closed");
       if (onClickOutside) onClickOutside();
     },
     refs: [childRef, contentRef],
@@ -88,7 +79,7 @@ export const usePopUp = ({ position = "top", onClickOutside, matchChildrenWidth 
 
   useEffect(() => {
     if (onToggle) onToggle(isOpened);
-  }, [isOpened, onToggle]);
+  }, [isOpened]);
   return { id, pos, gap, childRef, contentRef, setIsOpened, isOpened };
 };
 

@@ -14,23 +14,47 @@ const ATHOSPopUp = ({
   isOpen,
   onClickOutside,
   contentWrapperStyle: contentStyle,
+  generalWrapperClassName,
+  id,
+  showOnHover = false,
 }: ATHOSPopUpProps) => {
-  const { childRef, gap, id, pos, contentRef, setIsOpened } = usePopUp({
+  const {
+    childRef,
+    gap,
+    pos,
+    contentRef,
+    setIsOpened,
+    id: popoverId,
+  } = usePopUp({
     onToggle,
-    matchChildrenWidth,
     position,
     spacing,
     onClickOutside,
+    id,
   });
+  const handleMouseEnter = () => {
+    if (showOnHover) {
+      setIsOpened(true);
+      contentRef?.current?.showPopover?.();
+    }
+  };
 
+  const handleMouseLeave = () => {
+    if (showOnHover) {
+      setIsOpened(false);
+      contentRef?.current?.hidePopover?.();
+    }
+  };
   return (
-    <div className={`${pos}`}>
+    <div className={`${pos} ${generalWrapperClassName || ""}`}>
       <button
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         className={className}
         onClick={() => setIsOpened((prev) => !prev)}
         ref={childRef}
-        popoverTarget={id}
-        style={{ ...style, anchorName: `--anchor-${id}` } as any}
+        popoverTarget={popoverId}
+        style={{ ...style, anchorName: `--anchor-${popoverId}` } as any}
       >
         {children}
       </button>
@@ -38,13 +62,14 @@ const ATHOSPopUp = ({
         ref={contentRef}
         className={`dropdown ${isOpen ? "dropdown-open" : ""} flex flex-col ${contentClassName}`}
         popover="auto"
-        id={id}
+        id={popoverId}
         style={
           {
             //boxShadow: "2px 8px 20px rgba(0, 0, 0, 0.14)",
             ...contentStyle,
             ...gap,
-            positionAnchor: `--anchor-${id}`,
+            positionAnchor: `--anchor-${popoverId}`,
+            ...(matchChildrenWidth ? { width: `anchor-size(--anchor-${popoverId} width)` } : {}),
           } as any
         }
       >

@@ -1,151 +1,151 @@
 import { ReactNode } from "react";
 
 type TdefaultStyles = {
-  style?: React.CSSProperties;
-  className?: string;
+    style?: React.CSSProperties;
+    className?: string;
 };
 
 export type GlobalConfig<T> = {
-  maxCharToCut?: number;
-  maxWidth?: number; //implement
-  minWidth?: number; //implement
-  minColWidthToShort?: number; //imrpove add stages like short, medium, long
-  cellComponent?: (cell: ReactNode) => React.ReactNode;
-  rowClick?: (rowData: T) => void;
+    maxCharToCut?: number;
+    maxWidth?: number; //implement
+    minWidth?: number; //implement
+    minColWidthToShort?: number; //imrpove add stages like short, medium, long
+    cellComponent?: (cell: ReactNode) => React.ReactNode;
+    rowClick?: (rowData: T) => void;
 };
 export type SpecificColConfig<T, D> = {
-  maxCharToCut?: number;
-  label?: React.ReactNode;
-  maxWidth?: number; //implement
-  minWidth?: number; //implement
-  minColWidthToShort?: number; //imrpove add stages like short, medium, long
-  cellComponent?: (cell: T) => ReactNode;
-  cellComponentRowData?: (cell: D) => ReactNode;
-  formatter?: (value: T) => ReactNode;
+    maxCharToCut?: number;
+    label?: React.ReactNode;
+    maxWidth?: number; //implement
+    minWidth?: number; //implement
+    minColWidthToShort?: number; //imrpove add stages like short, medium, long
+    cellComponent?: (cell: T) => ReactNode;
+    cellComponentRowData?: (cell: D) => ReactNode;
+    formatter?: (value: T) => ReactNode;
 } & TdefaultStyles;
 
 export type ExtraColConfig<T> = {
-  id?: string;
-  column: keyof T;
-  maxCharToCut?: number;
-  label?: React.ReactNode;
-  maxWidth?: number; //implement
-  minWidth?: number; //implement
-  minColWidthToShort?: number; //imrpove add stages like short, medium, long
-  cellComponent?: (cell: ReactNode) => React.ReactNode;
+    id?: string;
+    column: keyof T;
+    maxCharToCut?: number;
+    label?: React.ReactNode;
+    maxWidth?: number; //implement
+    minWidth?: number; //implement
+    minColWidthToShort?: number; //imrpove add stages like short, medium, long
+    cellComponent?: (cell: ReactNode) => React.ReactNode;
 } & TdefaultStyles;
 
 export type ADTLabelI<T> = {
-  label: string;
-  onClick: (selectedData: T[]) => void;
+    label: string;
+    onClick: (selectedData: T[]) => void;
 };
 
 export type SelectedRowsTooltipI<T> = {
-  mainFunc?: {
-    label?: string;
-    icon?: React.ReactNode;
-    onClick: (selectedData: T[]) => void;
-  };
-  secondaryFunc?: {
-    label?: string;
-    icon?: React.ReactNode;
-    onClick: (selectedData: T[]) => void;
-  };
-  othersFunc?: ADTLabelI<T>[];
-  containerColor?: TdefaultStyles;
+    mainFunc?: {
+        label?: string;
+        icon?: React.ReactNode;
+        onClick: (selectedData: T[]) => void;
+    };
+    secondaryFunc?: {
+        label?: string;
+        icon?: React.ReactNode;
+        onClick: (selectedData: T[]) => void;
+    };
+    othersFunc?: ADTLabelI<T>[];
+    containerColor?: TdefaultStyles;
 };
 
 export type ExtraCellColumnsI<T> = {
-  label?: string;
-  center?: boolean;
-  showCondition?: (data: T) => boolean;
-  component: (data: T) => React.ReactNode;
+    label?: string;
+    center?: boolean;
+    showCondition?: (data: T) => boolean;
+    component: (data: T) => React.ReactNode;
 };
 export type ColConfig<T> = {
-  [key in keyof T]?: SpecificColConfig<T[key], T>;
+    [key in keyof T]?: SpecificColConfig<T[key], T>;
 };
 export type StartShortI<T> = {
-  [key in keyof T]?: boolean;
+    [key in keyof T]?: boolean;
 };
 
 export type ColumnTextTableStyle<T> = {
-  [key in keyof T]?: string;
+    [key in keyof T]?: string;
 };
 type ColumnTextTableStyleCustomLabelADD = {
-  [key: string]: string;
+    [key: string]: string;
 };
 export type CellColumnTextTableStyle<T> = {
-  [key in keyof T]?: {
-    global?: string;
-    specificIndex?: {
-      indexes: number[];
-      color: string;
+    [key in keyof T]?: {
+        global?: string;
+        specificIndex?: {
+            indexes: number[];
+            color: string;
+        };
+        condional?: {
+            showCondition: (rowColumnData: string) => boolean;
+            color: string;
+        };
     };
-    condional?: {
-      showCondition: (rowColumnData: string) => boolean;
-      color: string;
-    };
-  };
 };
 export type CellColumnTextTableStyleCustomLabelADD = {
-  [key: string]: {
-    global?: string;
-    specificIndex?: {
-      indexes: number[];
-      color: string;
+    [key: string]: {
+        global?: string;
+        specificIndex?: {
+            indexes: number[];
+            color: string;
+        };
+        condional?: {
+            showCondition: (rowColumnData: string) => boolean;
+            color: string;
+        };
     };
-    condional?: {
-      showCondition: (rowColumnData: string) => boolean;
-      color: string;
-    };
-  };
 };
 export type TableStyle<T> = {
-  selected?: {
-    rowColor?: string;
-    rowTextColor?: string;
-    rowBorderColor?: string;
-    rowSpacingColor?: string;
-    selectedIconColor?: string;
-  };
-  header?: {
-    functionsColors?: {
-      icons: TdefaultStyles & {
-        open?: TdefaultStyles;
-      };
-      body?: TdefaultStyles & {
-        itemsAmount?: TdefaultStyles;
-        itemsAmountLabel?: TdefaultStyles;
-        clearFilters?: TdefaultStyles;
-        listItem?: TdefaultStyles;
-        search?: TdefaultStyles;
-      };
+    selected?: {
+        rowColor?: string;
+        rowTextColor?: string;
+        rowBorderColor?: string;
+        rowSpacingColor?: string;
+        selectedIconColor?: string;
     };
-    title?: TdefaultStyles;
-    subtitle?: TdefaultStyles;
-  };
-  nav?: {
-    buttons?: {
-      disabled?: TdefaultStyles;
-      enabled?: TdefaultStyles;
+    header?: {
+        functionsColors?: {
+            icons: TdefaultStyles & {
+                open?: TdefaultStyles;
+            };
+            body?: TdefaultStyles & {
+                itemsAmount?: TdefaultStyles;
+                itemsAmountLabel?: TdefaultStyles;
+                clearFilters?: TdefaultStyles;
+                listItem?: TdefaultStyles;
+                search?: TdefaultStyles;
+            };
+        };
+        title?: TdefaultStyles;
+        subtitle?: TdefaultStyles;
     };
-    pageIndicator?: TdefaultStyles;
-    pageButton?: {
-      disabled?: TdefaultStyles;
-      enabled?: TdefaultStyles;
+    nav?: {
+        buttons?: {
+            disabled?: TdefaultStyles;
+            enabled?: TdefaultStyles;
+        };
+        pageIndicator?: TdefaultStyles;
+        pageButton?: {
+            disabled?: TdefaultStyles;
+            enabled?: TdefaultStyles;
+        };
     };
-  };
-  cellTextColor?: {
-    global?: string;
-    specific?: CellColumnTextTableStyle<T> &
-      CellColumnTextTableStyleCustomLabelADD;
-  };
-  columnTextColor?: {
-    global?: string;
-    specific?: ColumnTextTableStyle<T> & ColumnTextTableStyleCustomLabelADD;
-  };
-  highlightColor?: string;
-  rowClassName?: string;
+    cellTextColor?: {
+        global?: string;
+        specific?: CellColumnTextTableStyle<T> &
+            CellColumnTextTableStyleCustomLabelADD;
+    };
+    columnTextColor?: {
+        global?: string;
+        specific?: ColumnTextTableStyle<T> & ColumnTextTableStyleCustomLabelADD;
+    };
+    highlightColor?: string;
+    rowClassName?: string;
 };
 
 /* type HeaderStyle = {
@@ -171,88 +171,88 @@ type FooterStyle = {
 }; */
 
 export type FilterConfig = {
-  isDateRange?: boolean;
-  isValueRange?: boolean;
-  label?: string;
+    isDateRange?: boolean;
+    isValueRange?: boolean;
+    label?: string;
 };
 export type HideColConfig = {
-  label?: string;
+    label?: string;
 };
 type TableColFilter<T> = {
-  [key in keyof T]?: FilterConfig | boolean;
+    [key in keyof T]?: FilterConfig | boolean;
 };
 
 type TableColHide<T> = {
-  [key in keyof T]?: HideColConfig | boolean;
+    [key in keyof T]?: HideColConfig | boolean;
 };
 
 type ResizableConfig = {
-  autoBorder?: boolean;
+    autoBorder?: boolean;
 };
 
 type ColumnsToStartShow<T> = {
-  [key in keyof T]?: boolean;
+    [key in keyof T]?: boolean;
 };
 
 export type DynamicTableProps<T> = {
-  columnsToStartShow?: ColumnsToStartShow<T>;
-  extraFuncs?: ReactNode;
-  selectable?: boolean;
-  tableSelectedFuncs?: {
-    title?: string;
-    funcs?: {
-      label: ReactNode;
-      onClick: (selectedData: T[]) => void;
+    columnsToStartShow?: ColumnsToStartShow<T>;
+    extraFuncs?: ReactNode;
+    selectable?: boolean;
+    tableSelectedFuncs?: {
+        title?: string;
+        funcs?: {
+            label: ReactNode;
+            onClick: (selectedData: T[]) => void;
+        }[];
+    };
+    tableColFilterName?: string;
+    hidableColumns?: TableColHide<T>;
+    colsToFilter?: TableColFilter<T>;
+    loading?: boolean | string;
+    boldColumns?: boolean;
+    wrapperClassName?: string;
+    tableWrapperClassName?: string;
+    className?: string;
+    tableName: string;
+    data: T[];
+    resizeable?: boolean | ResizableConfig;
+    tableStyle?: TableStyle<T>;
+    colConfig?: ColConfig<T>;
+    globalConfig?: GlobalConfig<T>;
+    columnsToHide?: (keyof T)[];
+    columnsToShow?: (keyof T)[];
+    customColumns?: {
+        newLabel: string;
+        colsToGet: (keyof T)[];
+        index?: number;
+        render?: (data: T) => React.ReactNode;
     }[];
-  };
-  tableColFilterName?: string;
-  hidableColumns?: TableColHide<T>;
-  colsToFilter?: TableColFilter<T>;
-  loading?: boolean | string;
-  boldColumns?: boolean;
-  wrapperClassName?: string;
-  tableWrapperClassName?: string;
-  className?: string;
-  tableName: string;
-  data: T[];
-  resizeable?: boolean | ResizableConfig;
-  tableStyle?: TableStyle<T>;
-  colConfig?: ColConfig<T>;
-  globalConfig?: GlobalConfig<T>;
-  columnsToHide?: (keyof T)[];
-  columnsToShow?: (keyof T)[];
-  customColumns?: {
-    newLabel: string;
-    colsToGet: (keyof T)[];
-    index?: number;
-    render?: (data: T) => React.ReactNode;
-  }[];
 
-  columnOrder?: (keyof T)[];
-  noDataPlaceholder?: React.ReactNode;
-  style?: React.CSSProperties;
-  spacingBetweenCells?: number | string;
-  paddingInCells?: number | string;
-  spacingHeader?: number | string;
-  spacingBetweenColumns?: number | string;
-  spacingBetweenExtraColumns?: number | string;
-  selectedRowsToast?: SelectedRowsTooltipI<T>;
-  extraCellColumns?: ExtraCellColumnsI<T>[];
-  extraColumns?: ExtraColConfig<T>[];
-  startShort?: StartShortI<T> | boolean;
-  persistPrimaryColumn?:
-    | {
-        backgroundColor?: string;
-        borderColor?: string;
-      }
-    | boolean;
-  /*  autoLockHeight?: boolean; */
+    columnOrder?: (keyof T)[];
+    noDataPlaceholder?: React.ReactNode;
+    style?: React.CSSProperties;
+    spacingBetweenCells?: number | string;
+    paddingInCells?: number | string;
+    spacingHeader?: number | string;
+    spacingBetweenColumns?: number | string;
+    spacingBetweenExtraColumns?: number | string;
+    selectedRowsToast?: SelectedRowsTooltipI<T>;
+    extraCellColumns?: ExtraCellColumnsI<T>[];
+    extraColumns?: ExtraColConfig<T>[];
+    startShort?: StartShortI<T> | boolean;
+    persistPrimaryColumn?:
+        | {
+              backgroundColor?: string;
+              borderColor?: string;
+          }
+        | boolean;
+    /*  autoLockHeight?: boolean; */
 };
 
 export interface ColumnsProps<T> {
-  columns: (keyof T)[];
+    columns: (keyof T)[];
 }
 
 export type ColumnsIds<T> = {
-  [key in keyof T]: string;
+    [key in keyof T]: string;
 };
