@@ -35,7 +35,7 @@ export const Switch = ({ icon, label, className, style, dftClassName, dftStyle, 
       id={`${id}-${index}`}
       style={stl}
       onClick={onclick}
-      className={`${cls} !bg-transparent text-black ${selected ? "" : "opacity-30"} flex z-10
+      className={`${cls} !bg-transparent text-black ${selected ? "" : "opacity-30"} flex z-50
           transition-all duration-300 gap-2 select-none cursor-pointer 
           text-sm rounded-lg p-1 px-2 items-center !bg-transparent !border-none`}
     >
