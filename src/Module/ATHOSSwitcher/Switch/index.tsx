@@ -30,14 +30,20 @@ export const Switch = ({ icon, label, className, style, dftClassName, dftStyle, 
     onSelected && onSelected();
   };
 
+  //remove any bg color from cls
+  const clsWOBg = cls
+    .split(" ")
+    .filter((c) => !c.startsWith("bg-"))
+    .join(" ");
+
   return (
     <div
       id={`${id}-${index}`}
       style={stl}
       onClick={onclick}
-      className={`${cls} !bg-transparent text-black ${selected ? "" : "opacity-30"} flex z-50
+      className={`!bg-transparent ${clsWOBg} text-black ${selected ? "" : "opacity-30"} flex z-50
           transition-all duration-300 gap-2 select-none cursor-pointer 
-          text-sm rounded-lg p-1 px-2 items-center !bg-transparent !border-none`}
+          text-sm rounded-lg p-1 px-2 items-center !border-none`}
     >
       {icon}
       {label}
