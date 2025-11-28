@@ -60,3 +60,11 @@ export { useWindowDimensions } from "./Module/hooks/useWindowSize";
 /* Funcs */
 
 export { isBiggerThan } from "./Module/hooks/useWindowSize";
+
+/* LightModule */
+export { default as LightButton } from "./LightModule/LightButton";
+export { default as LightInput } from "./LightModule/LightInput";
+export { default as LightList } from "./LightModule/LightList";
+export { default as LightPopover } from "./LightModule/LightPopover";
+export { default as LightSelect } from "./LightModule/LightSelect";
+export { default as LightTable } from "./LightModule/LightTable";

@@ -12,7 +12,6 @@ interface LightSelectProps {
   selectedClassName?: string;
   wrapperClassName?: string;
   labelClassName?: string;
-  selectedAutoClassName?: boolean;
 }
 
 const LightSelect = ({
@@ -26,7 +25,6 @@ const LightSelect = ({
   wrapperClassName,
   labelClassName,
   listValueClassName,
-  selectedAutoClassName = true,
 }: LightSelectProps) => {
   return (
     <>
@@ -43,11 +41,7 @@ const LightSelect = ({
         <button
           type="button"
           disabled={disabled}
-          className={`${
-            selectedAutoClassName
-              ? "px-3 disabled:opacity-50 py-[6px] flex justify-start w-full border cursor-pointer bg-white text-black border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-mBrown transition-all"
-              : ""
-          } ${selectedClassName}`}
+          className={`px-3 disabled:opacity-50 py-[6px] flex justify-start w-full border cursor-pointer bg-white text-black border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-mBrown transition-all ${selectedClassName}`}
           popoverTarget={`popover-${id}`}
           style={{ anchorName: `--anchor-${id}` } as React.CSSProperties}
         >
@@ -57,7 +51,7 @@ const LightSelect = ({
 
       {!disabled && (
         <ul
-          className={`dropdown rounded-box shadow-sm mt-2 p-1 flex flex-col gap-1 ${listClassName}`}
+          className={`dropdown rounded-box bg-white shadow-sm mt-2 p-1 flex flex-col gap-1 ${listClassName}`}
           popover="auto"
           id={`popover-${id}`}
           style={
