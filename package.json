@@ -30,7 +30,8 @@
     "build": "rollup -c",
     "lint": "eslint .",
     "preview": "vite preview",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "pnpm run build",
+    "generate-exports": "node scripts/generate-exports.js"
   },
   "peerDependencies": {
     "daisyui": "^5.0.43",

@@ -1,21 +1,13 @@
-export interface ATHOSInputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface ATHOSInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   wrapperClassName?: string;
   removePredefaultStyles?: boolean;
 }
 
-const LightInput = ({
-  label,
-  wrapperClassName,
-  removePredefaultStyles,
-  ...props
-}: ATHOSInputProps) => {
+const LightInput = ({ label, wrapperClassName, removePredefaultStyles, ...props }: ATHOSInputProps) => {
   return (
     <div className={`flex flex-col ${wrapperClassName}`}>
-      {label && (
-        <label className="text-sm font-medium text-gray-400">{label}</label>
-      )}
+      {label && <label className="text-sm font-medium text-gray-400">{label}</label>}
       <input
         {...props}
         className={`${

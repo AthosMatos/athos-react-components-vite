@@ -15,16 +15,8 @@
 
 */
 
-export type ButtonType =
-  | "primary"
-  | "secondary"
-  | "danger"
-  | "warning"
-  | "info"
-  | "default"
-  | "primary2";
-interface LightButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export type ButtonType = "primary" | "secondary" | "danger" | "warning" | "info" | "default" | "primary2";
+interface LightButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   buttontype?: ButtonType;
 }
 
@@ -55,10 +47,7 @@ const LightButton = ({ children, className, ...props }: LightButtonProps) => {
   }
 
   return (
-    <button
-      className={`px-5 py-[6px] cursor-pointer font-semibold rounded-[9px] transition-all ${buttonClass} ${className}`}
-      {...props}
-    >
+    <button className={`px-5 py-[6px] cursor-pointer font-semibold rounded-[9px] transition-all ${buttonClass} ${className}`} {...props}>
       {children}
     </button>
   );

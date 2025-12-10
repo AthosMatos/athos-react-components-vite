@@ -64,11 +64,7 @@ const LightPopover = ({
 
   return (
     <div className={`${pos} ${wrapperClassName}`}>
-      <button
-        className={`${className}`}
-        popoverTarget={`popover-${id}`}
-        style={{ anchorName: `--anchor-${id}` } as React.CSSProperties}
-      >
+      <button className={`${className}`} popoverTarget={`popover-${id}`} style={{ anchorName: `--anchor-${id}` } as React.CSSProperties}>
         {children}
       </button>
       <ul
@@ -80,9 +76,7 @@ const LightPopover = ({
         style={
           {
             positionAnchor: `--anchor-${id}`,
-            minWidth: minWidthIsChildren
-              ? `anchor-size(--anchor-${id} width)`
-              : undefined,
+            minWidth: minWidthIsChildren ? `anchor-size(--anchor-${id} width)` : undefined,
           } as React.CSSProperties
         }
       >

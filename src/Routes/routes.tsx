@@ -6,6 +6,7 @@ import { FaListCheck, FaTable, FaTree } from "react-icons/fa6";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { GrInstallOption } from "react-icons/gr";
 import { IoMdSwitch } from "react-icons/io";
+import { LuBox } from "react-icons/lu";
 import { MdOutlineInfo, MdOutlineNotificationsActive, MdOutlineTab } from "react-icons/md";
 import { RxButton, RxComponent1 } from "react-icons/rx";
 import { SlSizeFullscreen } from "react-icons/sl";
@@ -37,6 +38,13 @@ import ATHOSTreeviewPage from "../Module/ATHOSTreeview/page";
 import AthosVirtualDivPage from "../Module/ATHOSVirtualDiv/page";
 import { usePage } from "../pageContext/redux";
 import InstallPage from "../pages/Install";
+// LightModule imports
+import LightButtonPage from "../LightModule/LightButton/page";
+import LightInputPage from "../LightModule/LightInput/page";
+import LightListPage from "../LightModule/LightList/page";
+import LightPopoverPage from "../LightModule/LightPopover/page";
+import LightSelectPage from "../LightModule/LightSelect/page";
+import LightTablePage from "../LightModule/LightTable/page";
 
 export type WithComponent<T> = {
   [key in keyof T]: T[key] & {
@@ -237,6 +245,60 @@ export const RoutesProvider = ({ children }: { children: React.ReactNode }) => {
           icon: <FaListCheck />,
           onClick: () => setPageTitle(AppText.pages.components.select),
           onInit: () => setPageTitle(AppText.pages.components.select),
+        },
+      },
+    },
+    lightComponents: {
+      label: AppText.pages.lightComponents.title[lang],
+      icon: <LuBox />,
+      subOpts: {
+        button: {
+          path: "light/button",
+          component: LightButtonPage,
+          label: "Light Button",
+          icon: <RxButton />,
+          onClick: () => setPageTitle(AppText.pages.lightComponents.button),
+          onInit: () => setPageTitle(AppText.pages.lightComponents.button),
+        },
+        input: {
+          path: "light/input",
+          component: LightInputPage,
+          label: "Light Input",
+          icon: <BsInputCursorText />,
+          onClick: () => setPageTitle(AppText.pages.lightComponents.input),
+          onInit: () => setPageTitle(AppText.pages.lightComponents.input),
+        },
+        list: {
+          path: "light/list",
+          component: LightListPage,
+          label: "Light List",
+          icon: <TfiViewList />,
+          onClick: () => setPageTitle(AppText.pages.lightComponents.list),
+          onInit: () => setPageTitle(AppText.pages.lightComponents.list),
+        },
+        popover: {
+          path: "light/popover",
+          component: LightPopoverPage,
+          label: "Light Popover",
+          icon: <PopUpIcon className="w-4 h-4 dark:fill-white" />,
+          onClick: () => setPageTitle(AppText.pages.lightComponents.popover),
+          onInit: () => setPageTitle(AppText.pages.lightComponents.popover),
+        },
+        select: {
+          path: "light/select",
+          component: LightSelectPage,
+          label: "Light Select",
+          icon: <FaListCheck />,
+          onClick: () => setPageTitle(AppText.pages.lightComponents.select),
+          onInit: () => setPageTitle(AppText.pages.lightComponents.select),
+        },
+        table: {
+          path: "light/table",
+          component: LightTablePage,
+          label: "Light Table",
+          icon: <FaTable />,
+          onClick: () => setPageTitle(AppText.pages.lightComponents.table),
+          onInit: () => setPageTitle(AppText.pages.lightComponents.table),
         },
       },
     },

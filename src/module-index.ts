@@ -61,9 +61,9 @@ export { useWindowDimensions } from "./Module/hooks/useWindowSize";
 export { isBiggerThan } from "./Module/hooks/useWindowSize";
 
 /* LightModule */
-export { default as LightButton } from "./LightModule/LightButton";
-export { default as LightInput } from "./LightModule/LightInput";
-export { default as LightList } from "./LightModule/LightList";
-export { default as LightPopover } from "./LightModule/LightPopover";
-export { default as LightSelect } from "./LightModule/LightSelect";
-export { default as LightTable } from "./LightModule/LightTable";
+export { default as LightButton } from "./LightModule/LightButton/component";
+export { default as LightInput } from "./LightModule/LightInput/component";
+export { default as LightList } from "./LightModule/LightList/component";
+export { default as LightPopover } from "./LightModule/LightPopover/component";
+export { default as LightSelect } from "./LightModule/LightSelect/component";
+export { default as LightTable } from "./LightModule/LightTable/component";

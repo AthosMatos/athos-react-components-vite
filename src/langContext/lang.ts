@@ -214,5 +214,75 @@ export const AppText = {
         },
       },
     },
+    lightComponents: {
+      title: {
+        "pt-BR": "Light Components",
+        "en-US": "Light Components",
+      },
+      subtitle: {
+        "pt-BR": "Componentes leves usando Popover API nativo",
+        "en-US": "Lightweight components using native Popover API",
+      },
+      button: {
+        title: {
+          "pt-BR": "Light Button",
+          "en-US": "Light Button",
+        },
+        subtitle: {
+          "pt-BR": "Veja o Light Button em ação",
+          "en-US": "See the Light Button in action",
+        },
+      },
+      input: {
+        title: {
+          "pt-BR": "Light Input",
+          "en-US": "Light Input",
+        },
+        subtitle: {
+          "pt-BR": "Veja o Light Input em ação",
+          "en-US": "See the Light Input in action",
+        },
+      },
+      list: {
+        title: {
+          "pt-BR": "Light List",
+          "en-US": "Light List",
+        },
+        subtitle: {
+          "pt-BR": "Veja o Light List em ação",
+          "en-US": "See the Light List in action",
+        },
+      },
+      popover: {
+        title: {
+          "pt-BR": "Light Popover",
+          "en-US": "Light Popover",
+        },
+        subtitle: {
+          "pt-BR": "Veja o Light Popover em ação",
+          "en-US": "See the Light Popover in action",
+        },
+      },
+      select: {
+        title: {
+          "pt-BR": "Light Select",
+          "en-US": "Light Select",
+        },
+        subtitle: {
+          "pt-BR": "Veja o Light Select em ação",
+          "en-US": "See the Light Select in action",
+        },
+      },
+      table: {
+        title: {
+          "pt-BR": "Light Table",
+          "en-US": "Light Table",
+        },
+        subtitle: {
+          "pt-BR": "Veja o Light Table em ação",
+          "en-US": "See the Light Table in action",
+        },
+      },
+    },
   },
 };
