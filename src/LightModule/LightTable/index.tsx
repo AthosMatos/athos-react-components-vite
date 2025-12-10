@@ -46,20 +46,12 @@ const TableRow = <T,>({
   cellClassName?: string;
 }) => {
   return (
-    <tr
-      className={rowClassName}
-      key={rowIndex}
-      onClick={() => onRowClick?.(row)}
-    >
+    <tr className={rowClassName} key={rowIndex} onClick={() => onRowClick?.(row)}>
       {keyColumns &&
         Object.keys(keyColumns).map((columnKey) => (
           <td className={cellClassName} key={columnKey}>
             {keyColumns[columnKey as keyof T]?.cellComponent
-              ? keyColumns[columnKey as keyof T]?.cellComponent(
-                  row[columnKey as keyof T],
-                  row,
-                  columnKey as keyof T
-                )
+              ? keyColumns[columnKey as keyof T]?.cellComponent(row[columnKey as keyof T], row, columnKey as keyof T)
               : String(row[columnKey as keyof T])}
           </td>
         ))}
@@ -108,7 +100,7 @@ const LightTable = <T,>(props: LightTableProps<T>) => {
         </tr>
       </thead>
       <tbody className={bodyClassName}>
-        {data.map((row, rowIndex) =>
+        {data?.map((row, rowIndex) =>
           rowShowCondition ? (
             rowShowCondition(row) ? (
               <TableRow
