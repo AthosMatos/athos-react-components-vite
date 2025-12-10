@@ -1,5 +1,5 @@
 import { LangsI, useLang } from "../../langContext/redux";
-import { ATHOSSwitcher } from "../../Module/ATHOSSwitcher";
+import { ATHOSSwitcher } from "../../module-index";
 import { isBiggerThan } from "../../Module/hooks/useWindowSize";
 
 import BrasilFlag from "./assets/Flag_of_Brazil.svg.png";

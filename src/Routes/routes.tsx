@@ -5,6 +5,8 @@ import { FaWpforms } from "react-icons/fa";
 import { FaListCheck, FaTable, FaTree } from "react-icons/fa6";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { GrInstallOption } from "react-icons/gr";
+import { IoMdSwitch } from "react-icons/io";
+import { MdOutlineInfo, MdOutlineNotificationsActive, MdOutlineTab } from "react-icons/md";
 import { RxButton, RxComponent1 } from "react-icons/rx";
 import { SlSizeFullscreen } from "react-icons/sl";
 import { TfiViewList } from "react-icons/tfi";
@@ -21,10 +23,16 @@ import ATHOSDropDownPage from "../Module/ATHOSDropDown/page";
 import ATHOSDynamicTablePage from "../Module/ATHOSDynamicTable/page";
 import ATHOSFormPage from "../Module/ATHOSForm/page";
 import ATHOSInputPage from "../Module/ATHOSInput/page";
-import { OptKeyed } from "../Module/ATHOSMenu/helpers";
+import { OptKeyed } from "../Module/ATHOSMenu/component/helpers";
+import ATHOSMenuPage from "../Module/ATHOSMenu/page";
 import ATHOSModalPage from "../Module/ATHOSModal/page";
 import ATHOSPopUpPage from "../Module/ATHOSPopUp/page";
+import ATHOSResizableDivPage from "../Module/ATHOSResizableDiv/page";
 import ATHOSSelectPage from "../Module/ATHOSSelect/page";
+import ATHOSSwitcherPage from "../Module/ATHOSSwitcher/page";
+import ATHOSTabsPage from "../Module/ATHOSTabs/page";
+import ATHOSToastPage from "../Module/ATHOSToast/page";
+import ATHOSTooltipPage from "../Module/ATHOSTooltip/page";
 import ATHOSTreeviewPage from "../Module/ATHOSTreeview/page";
 import AthosVirtualDivPage from "../Module/ATHOSVirtualDiv/page";
 import { usePage } from "../pageContext/redux";
@@ -152,7 +160,7 @@ export const RoutesProvider = ({ children }: { children: React.ReactNode }) => {
         },
         menu: {
           path: "components/menu",
-          component: ATHOSCardPage,
+          component: ATHOSMenuPage,
           label: "Menu",
           icon: <GiHamburgerMenu />,
           onClick: () => setPageTitle(AppText.pages.components.menu),
@@ -176,7 +184,7 @@ export const RoutesProvider = ({ children }: { children: React.ReactNode }) => {
         },
         resizableDiv: {
           path: "components/resizableDiv",
-          component: ATHOSCardPage,
+          component: ATHOSResizableDivPage,
           label: "Resizable Div",
           icon: <SlSizeFullscreen />,
           onClick: () => setPageTitle(AppText.pages.components.resizableDiv),
@@ -184,35 +192,35 @@ export const RoutesProvider = ({ children }: { children: React.ReactNode }) => {
         },
         switcher: {
           path: "components/switcher",
-          component: ATHOSCardPage,
+          component: ATHOSSwitcherPage,
           label: "Switcher",
-          icon: <VscScreenFull />,
+          icon: <IoMdSwitch />,
           onClick: () => setPageTitle(AppText.pages.components.switcher),
           onInit: () => setPageTitle(AppText.pages.components.switcher),
         },
         tabs: {
           path: "components/tabs",
-          component: ATHOSCardPage,
-          label: "Switcher",
-          icon: <VscScreenFull />,
-          onClick: () => setPageTitle(AppText.pages.components.switcher),
-          onInit: () => setPageTitle(AppText.pages.components.switcher),
+          component: ATHOSTabsPage,
+          label: "Tabs",
+          icon: <MdOutlineTab />,
+          onClick: () => setPageTitle(AppText.pages.components.tabs),
+          onInit: () => setPageTitle(AppText.pages.components.tabs),
         },
         toast: {
           path: "components/toast",
-          component: ATHOSCardPage,
-          label: "Switcher",
-          icon: <VscScreenFull />,
-          onClick: () => setPageTitle(AppText.pages.components.switcher),
-          onInit: () => setPageTitle(AppText.pages.components.switcher),
+          component: ATHOSToastPage,
+          label: "Toast",
+          icon: <MdOutlineNotificationsActive />,
+          onClick: () => setPageTitle(AppText.pages.components.toast),
+          onInit: () => setPageTitle(AppText.pages.components.toast),
         },
         tooltip: {
           path: "components/tooltip",
-          component: ATHOSCardPage,
-          label: "Switcher",
-          icon: <VscScreenFull />,
-          onClick: () => setPageTitle(AppText.pages.components.switcher),
-          onInit: () => setPageTitle(AppText.pages.components.switcher),
+          component: ATHOSTooltipPage,
+          label: "Tooltip",
+          icon: <MdOutlineInfo />,
+          onClick: () => setPageTitle(AppText.pages.components.tooltip),
+          onInit: () => setPageTitle(AppText.pages.components.tooltip),
         },
         virtualDiv: {
           path: "components/virtualDiv",

@@ -1,6 +1,5 @@
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import { useClickOutside } from "../../hooks/useClickOutside";
 
 export const CollapseTransition = {
   duration: 0.35,
@@ -116,9 +115,19 @@ export const ATHOSCollapse = ({
       onToggle(!isOpen);
     }
   };
-  const onWrapperClick = () => {
+  const onWrapperClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (disableClick) return;
     if (!autoOpen) return;
+
+    // Handle click outside - only close if clicking directly on wrapper, not children
+    if (hideOnClickOutside && e.target === e.currentTarget) {
+      setIsOpen(false);
+      if (onToggle) {
+        onToggle(undefined);
+      }
+      return;
+    }
+
     if (toggleOnWrapperClick) {
       setIsOpen(!isOpen);
       if (onToggle) {
@@ -126,17 +135,6 @@ export const ATHOSCollapse = ({
       }
     }
   };
-  if (hideOnClickOutside) {
-    useClickOutside({
-      callback: () => {
-        setIsOpen(false);
-        if (onToggle) {
-          onToggle(undefined);
-        }
-      },
-      refs: [childRef, childRef, wrapperRef],
-    });
-  }
   const close = () => {
     setIsOpen(false);
   };

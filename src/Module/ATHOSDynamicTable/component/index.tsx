@@ -1,11 +1,11 @@
 import { Provider } from "react-redux";
-import { ATHOSResizableDiv } from "../../ATHOSResizableDiv";
 
 import { DynamicTableProps } from "./interfaces";
 import { ADTTableWrapper } from "./styled";
 
 import { configureStore } from "@reduxjs/toolkit";
 import { useContext, useEffect, useMemo, useState } from "react";
+import { ATHOSResizableDiv } from "../../ATHOSResizableDiv/component";
 import useSelectors_ADTSelectedRowsToast from "./components/ADTSelectedRowsToast/useSelectors";
 import { ATHOSDynamicTableContext } from "./context";
 import { PropsContextProvider } from "./contexts/propsContext";
@@ -23,13 +23,7 @@ import ADTNav from "./Table/ADTNav";
  * but if provided, it will use the keys in the order of the array.
  */
 
-const Comp = ({
-  props,
-  stly,
-}: {
-  stly?: boolean;
-  props: DynamicTableProps<any>;
-}) => {
+const Comp = ({ props, stly }: { stly?: boolean; props: DynamicTableProps<any> }) => {
   const { selectedRows } = useSelectors_ADTSelectedRowsToast();
   const { tableName, data } = props;
   const tableContext = useContext(ATHOSDynamicTableContext);
@@ -113,10 +107,7 @@ export function ATHOSDynamicTable<T>(props: DynamicTableProps<T>) {
   return (
     //loading={!hasMounted || props.loading}
     <Provider store={store}>
-      <ATHOSDynamicTableProv
-        {...props}
-        loading={!hasMounted || props.loading}
-      />
+      <ATHOSDynamicTableProv {...props} loading={!hasMounted || props.loading} />
     </Provider>
   );
 }

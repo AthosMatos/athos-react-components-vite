@@ -1,29 +1,14 @@
 import { memo, useMemo } from "react";
-import { ATHOSTooltip } from "../../../../../ATHOSTooltip";
+
+import { ATHOSTooltip } from "../../../../../ATHOSTooltip/component";
 import { usePropsContext } from "../../../contexts/propsContext";
 import { ADTCellColWrapper } from "../../../styled";
 import { getCellWrapperStyle, tdClassName } from "../../funcs";
 import useADTCellCol from "./hooks";
 import { ADTCellColumnProps } from "./interfaces";
 
-const ADTCellColumn = ({
-  row,
-  rowIndex,
-  hasExtraCols,
-  index,
-  isLastRow,
-  isCheck,
-  col,
-  isLastCol,
-}: ADTCellColumnProps) => {
-  const {
-    persistPrimaryColumn,
-    extraColumns,
-    spacingBetweenColumns,
-    spacingBetweenCells,
-    tableStyle,
-    paddingInCells,
-  } = usePropsContext();
+const ADTCellColumn = ({ row, rowIndex, hasExtraCols, index, isLastRow, isCheck, col, isLastCol }: ADTCellColumnProps) => {
+  const { persistPrimaryColumn, extraColumns, spacingBetweenColumns, spacingBetweenCells, tableStyle, paddingInCells } = usePropsContext();
 
   const selectedColor = tableStyle?.selected;
 
@@ -58,9 +43,7 @@ const ADTCellColumn = ({
   });
   const cellWrapperProps = {
     id,
-    className: `${tdClassName(index, persistPrimaryColumn)} ${
-      isLastRow && !isCheck && persistPrimaryColumn ? "rounded-ee-md" : ""
-    }`,
+    className: `${tdClassName(index, persistPrimaryColumn)} ${isLastRow && !isCheck && persistPrimaryColumn ? "rounded-ee-md" : ""}`,
     style: {
       color: textColor,
       paddingTop: paddingInCells,
@@ -73,21 +56,14 @@ const ADTCellColumn = ({
       /* borderBottomRightRadius: isLastCol && !hasExtraCols && "6px",
       borderTopRightRadius: isLastCol && !hasExtraCols && "6px", */
       left: index === 0 ? "36px" : undefined,
-      borderTopColor:
-        index === 0 && typeof persistPrimaryColumn == "object"
-          ? persistPrimaryColumn.backgroundColor
-          : rowSpacingColor,
+      borderTopColor: index === 0 && typeof persistPrimaryColumn == "object" ? persistPrimaryColumn.backgroundColor : rowSpacingColor,
       borderTopWidth: spacingBetweenCells,
       ...persistStyle,
     },
     animate: {
       ...(isCheck && {
-        boxShadow: `0 1px 0 ${rowBorderColor || rowColor} inset, 0 -1px 0  ${
-          rowBorderColor || rowColor
-        } inset ${
-          isLastCol && !hasExtraCols
-            ? `, -1px 0 0 ${rowBorderColor || rowColor} inset`
-            : ""
+        boxShadow: `0 1px 0 ${rowBorderColor || rowColor} inset, 0 -1px 0  ${rowBorderColor || rowColor} inset ${
+          isLastCol && !hasExtraCols ? `, -1px 0 0 ${rowBorderColor || rowColor} inset` : ""
         }`,
       }),
       ...(isCheck && {
@@ -99,17 +75,9 @@ const ADTCellColumn = ({
   const tooltipContent = row[actualcolumn];
 
   return (
-    <ADTCellColWrapper
-      persistent={!!persistPrimaryColumn}
-      {...cellWrapperProps}
-    >
+    <ADTCellColWrapper persistent={!!persistPrimaryColumn} {...cellWrapperProps}>
       {showTooltip ? (
-        <ATHOSTooltip
-          className="max-w-80"
-          followCursor
-          tooltipContent={tooltipContent}
-          forceOpen={touch}
-        >
+        <ATHOSTooltip className="max-w-80" followCursor tooltipContent={tooltipContent} forceOpen={touch}>
           {Cell}
         </ATHOSTooltip>
       ) : (

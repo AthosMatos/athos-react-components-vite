@@ -48,6 +48,7 @@
     "chroma-js": "^3.1.2",
     "classnames": "^2.5.1",
     "daisyui": "^5.0.43",
+    "jotai": "^2.16.0",
     "motion": "^12.15.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-hook-form": "^7.56.4",

@@ -1,6 +1,6 @@
 import { TbResize } from "react-icons/tb";
 import styled from "styled-components";
-import { ATHOSColors } from "../colors/colors";
+import { ATHOSColors } from "../../colors/colors";
 
 export const highlightBorder = (color?: string) => `3px solid ${color || ATHOSColors.aqua.default}`;
 

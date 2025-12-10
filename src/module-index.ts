@@ -26,13 +26,13 @@ export { ATHOSDynamicTableProvider, useATHOSDynamicTableContext } from "./Module
 /* Table */
 export { ATHOSInput } from "./Module/ATHOSInput/component";
 export type { ATHOSInputType } from "./Module/ATHOSInput/component/interfaces";
-export { ATHOSResizableDiv } from "./Module/ATHOSResizableDiv";
-export { ATHOSSwitcher } from "./Module/ATHOSSwitcher";
-export { ATHOSTabs } from "./Module/ATHOSTabs";
+export { ATHOSResizableDiv } from "./Module/ATHOSResizableDiv/component";
+export { ATHOSSwitcher } from "./Module/ATHOSSwitcher/component";
+export { ATHOSTabs } from "./Module/ATHOSTabs/component";
 export { ATHOSVirtualDiv } from "./Module/ATHOSVirtualDiv/component";
 /* TOAST */
-export { ATHOSToast } from "./Module/ATHOSToast";
-export { useATHOSToast } from "./Module/ATHOSToast/useToast";
+export { ATHOSToast } from "./Module/ATHOSToast/component";
+export { useATHOSToast } from "./Module/ATHOSToast/component/useToast";
 /* TOAST */
 
 /* MODAL */
@@ -40,7 +40,7 @@ export { ATHOSModal } from "./Module/ATHOSModal/component";
 export { useATHOSModal } from "./Module/ATHOSModal/component/useModal";
 /* MODAL */
 
-export { ATHOSTooltip } from "./Module/ATHOSTooltip";
+export { ATHOSTooltip } from "./Module/ATHOSTooltip/component";
 
 /* Utils */
 
@@ -50,11 +50,10 @@ export { adaptSize, convertRemToPixels, getUnitWithoutValue, getValueWithoutUnit
 
 export { ATHOSColors } from "./Module/colors/colors";
 
-export { ATHOSMenu } from "./Module/ATHOSMenu";
+export { ATHOSMenu } from "./Module/ATHOSMenu/component";
 
 /* Hooks */
 
-export { useClickOutside } from "./Module/hooks/useClickOutside";
 export { useWindowDimensions } from "./Module/hooks/useWindowSize";
 
 /* Funcs */

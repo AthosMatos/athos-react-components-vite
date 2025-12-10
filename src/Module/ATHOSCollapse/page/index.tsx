@@ -1,5 +1,5 @@
 import CodeWrapper from "../../../components/CodeWrapper";
-import { ATHOSTabs } from "../../ATHOSTabs";
+import { ATHOSTabs } from "../../ATHOSTabs/component";
 
 import { ATHOSCollapse } from "../component";
 import { collapsecodestrings } from "./codeStrings";

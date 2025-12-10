@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import styled from "styled-components";
 import { ATHOSCollapse } from "../../ATHOSCollapse/component";
-import { ATHOSTooltip } from "../../ATHOSTooltip";
+import { ATHOSTooltip } from "../../ATHOSTooltip/component";
 import type { ATHOSButtonProps } from "./interfaces";
 /**
 

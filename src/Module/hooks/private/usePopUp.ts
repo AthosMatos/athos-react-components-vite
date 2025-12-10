@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { v4 } from "uuid";
-import { useClickOutside } from "../useClickOutside";
 
 export type PopUpPosition =
   | "top"
@@ -68,19 +67,19 @@ export const usePopUp = ({ position = "top", onClickOutside, spacing = 6, onTogg
   const childRef = useRef<HTMLButtonElement>(null);
   const contentRef = useRef<HTMLUListElement>(null);
 
-  useClickOutside({
-    callback: () => {
+  // Handle backdrop/outside click - only close if clicking directly on backdrop, not content
+  const handleBackdropClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (e.target === e.currentTarget) {
       setIsOpened(false);
-      console.log("Popup closed");
       if (onClickOutside) onClickOutside();
-    },
-    refs: [childRef, contentRef],
-  });
+    }
+  };
 
   useEffect(() => {
     if (onToggle) onToggle(isOpened);
   }, [isOpened]);
-  return { id, pos, gap, childRef, contentRef, setIsOpened, isOpened };
+
+  return { id, pos, gap, childRef, contentRef, setIsOpened, isOpened, handleBackdropClick };
 };
 
 export type usePopUpHookReturn = ReturnType<typeof usePopUp>;
