@@ -22,6 +22,31 @@ const importPatterns = [
     regex: /from\s+["']\.\.\/(?:\.\.\/)*([^"'\/]+)\/component\/([^"']+)["']/g,
     replacement: 'from "../$1/$2"',
   },
+  // Fix imports like: from "../../hooks/something" or from "../hooks/something" (shared folders)
+  {
+    regex: /from\s+["']\.\.\/(?:\.\.\/)*hooks\/([^"']+)["']/g,
+    replacement: 'from "../hooks/$1"',
+  },
+  // Fix imports like: from "../../utils/something" or from "../utils/something"
+  {
+    regex: /from\s+["']\.\.\/(?:\.\.\/)*utils\/([^"']+)["']/g,
+    replacement: 'from "../utils/$1"',
+  },
+  // Fix imports like: from "../../colors/something" or from "../colors/something"
+  {
+    regex: /from\s+["']\.\.\/(?:\.\.\/)*colors\/([^"']+)["']/g,
+    replacement: 'from "../colors/$1"',
+  },
+  // Fix imports like: from "../../interfaces/something" or from "../interfaces/something"
+  {
+    regex: /from\s+["']\.\.\/(?:\.\.\/)*interfaces\/([^"']+)["']/g,
+    replacement: 'from "../interfaces/$1"',
+  },
+  // Fix imports like: from "../../interfaces" or from "../interfaces" (no subpath)
+  {
+    regex: /from\s+["']\.\.\/(?:\.\.\/)*interfaces["']/g,
+    replacement: 'from "../interfaces"',
+  },
   // Fix imports like: from "../types" (LightModule types)
   {
     regex: /from\s+["']\.\.\/types["']/g,
